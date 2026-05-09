@@ -44,3 +44,22 @@ export interface Alert {
   linkTo: string;
   drawerTrigger: string;
 }
+
+export interface CashFlowTimeline {
+  date: string;
+  cashBalance: number;
+  netBurn: number;
+}
+
+export interface PnLLineItem {
+  id: string;
+  name: string;
+  amount: number;
+  isSubItem: boolean;
+  isTotal?: boolean;
+}
+
+export interface ProfitabilityData {
+  metrics: MetricAnchor[];
+  pnl: PnLLineItem[];
+}
