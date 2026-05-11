@@ -4,9 +4,6 @@
 Dashboard/
 ├── .claude/
 │   └── settings.local.json
-├── .playwright-mcp/
-│   ├── console-2026-05-09T02-40-26-999Z.log
-│   └── page-2026-05-09T02-40-27-534Z.yml
 ├── public/
 │   ├── file.svg
 │   ├── globe.svg
@@ -28,6 +25,8 @@ Dashboard/
 │   │   ├── scenarios/
 │   │   │   └── page.tsx
 │   │   ├── scorecards/
+│   │   │   ├── april-2026/
+│   │   │   │   └── page.tsx
 │   │   │   └── page.tsx
 │   │   ├── settings/
 │   │   │   └── page.tsx
@@ -39,7 +38,10 @@ Dashboard/
 │   │   ├── drawers/
 │   │   │   ├── action-center-drawer.tsx
 │   │   │   ├── ar-intelligence-drawer.tsx
-│   │   │   └── client-ledger-drawer.tsx
+│   │   │   ├── client-ledger-drawer.tsx
+│   │   │   └── global-drawers.tsx
+│   │   ├── scenarios/
+│   │   │   └── sandbox-takeover.tsx
 │   │   ├── ui/
 │   │   │   ├── custom/
 │   │   │   │   └── financial-chart.tsx
@@ -47,16 +49,23 @@ Dashboard/
 │   │   │   ├── button.tsx
 │   │   │   ├── card.tsx
 │   │   │   ├── chart.tsx
+│   │   │   ├── checkbox.tsx
 │   │   │   ├── dropdown-menu.tsx
 │   │   │   ├── input.tsx
 │   │   │   ├── select.tsx
 │   │   │   ├── sheet.tsx
 │   │   │   ├── slider.tsx
-│   │   │   └── table.tsx
+│   │   │   ├── table.tsx
+│   │   │   └── tabs.tsx
+│   │   ├── cash-forecast-chart.tsx
+│   │   ├── cash-page-content.tsx
 │   │   ├── co-pilot-alert.tsx
 │   │   ├── global-drawer.tsx
 │   │   ├── global-sidebar.tsx
 │   │   ├── metric-anchor.tsx
+│   │   ├── metrics-grid.tsx
+│   │   ├── month-selector.tsx
+│   │   ├── profitability-page-content.tsx
 │   │   ├── theme-provider.tsx
 │   │   └── theme-toggle.tsx
 │   └── lib/
@@ -65,11 +74,13 @@ Dashboard/
 │       │   ├── mock-db.ts
 │       │   ├── services.ts
 │       │   └── types.ts
+│       ├── mock-data.ts
 │       └── utils.ts
 ├── .gitignore
 ├── AGENTS.md
 ├── ARCHITECTURE.md
 ├── CLAUDE.md
+├── FIZZY_PACKER_AUDIT_REPORT.md
 ├── README.md
 ├── components.json
 ├── eslint.config.mjs
@@ -78,6 +89,7 @@ Dashboard/
 ├── package-lock.json
 ├── package.json
 ├── postcss.config.mjs
+├── project-structure.md
 ├── tsconfig.json
 └── tsconfig.tsbuildinfo
 ```

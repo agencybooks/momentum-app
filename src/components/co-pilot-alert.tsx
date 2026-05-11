@@ -3,13 +3,18 @@ import { Alert as AlertType } from "@/lib/db/types"
 import { cn } from "@/lib/utils"
 import { AlertTriangle, AlertCircle, CheckCircle, ChevronRight } from "lucide-react"
 
+interface CoPilotAlertProps extends Partial<AlertType> {
+  actions?: React.ReactNode
+}
+
 export function CoPilotAlert({
   title,
   message,
   type,
   linkTo,
   drawerTrigger,
-}: AlertType) {
+  actions,
+}: CoPilotAlertProps) {
   const isCritical = type === "critical"
   const isWarning = type === "warning"
   const isSuccess = type === "success"
@@ -17,32 +22,27 @@ export function CoPilotAlert({
   return (
     <div
       className={cn(
-        "flex w-full items-start gap-3 rounded-lg border p-4 text-sm transition-colors",
-        isCritical && "border-destructive/20 bg-destructive/10 text-foreground",
-        isWarning && "border-border bg-muted/50 text-foreground",
-        isSuccess && "border-success/20 bg-success/10 text-success",
-        !isCritical && !isWarning && !isSuccess && "border-border bg-card text-foreground"
+        "flex w-full flex-col sm:flex-row sm:items-center justify-between p-3 px-4 mb-6 text-sm transition-colors text-foreground",
+        isCritical && "border border-destructive/20 bg-destructive/5 dark:bg-destructive/10 rounded-lg",
+        isWarning && "border border-amber-500/20 bg-amber-500/5 rounded-lg",
+        isSuccess && "border border-success/20 bg-success/5 rounded-lg",
+        !isCritical && !isWarning && !isSuccess && "bg-muted/50 rounded-lg"
       )}
     >
-      <div className="mt-0.5 shrink-0">
-        {isCritical && <AlertTriangle className="h-5 w-5 text-destructive" />}
-        {isWarning && <AlertCircle className="h-5 w-5 text-muted-foreground" />}
-        {isSuccess && <CheckCircle className="h-5 w-5" />}
+      <div className="flex items-start sm:items-center gap-3">
+        {isCritical && <AlertTriangle className="w-4 h-4 text-destructive shrink-0 mt-0.5 sm:mt-0" />}
+        {isWarning && <AlertCircle className="w-5 h-5 text-amber-500 mt-0.5 sm:mt-0 shrink-0" />}
+        {isSuccess && <CheckCircle className="w-5 h-5 text-success mt-0.5 sm:mt-0 shrink-0" />}
+        <div>
+          <p className="text-sm font-medium text-foreground">{title}</p>
+          <p className="text-sm text-muted-foreground ml-0 sm:ml-2">
+            {message}
+          </p>
+        </div>
       </div>
-      <div className="flex-1 space-y-1">
-        <p className="font-medium leading-none">{title}</p>
-        <p className={cn(
-          "leading-snug",
-          isCritical && "text-foreground/80",
-          isWarning && "text-muted-foreground",
-          isSuccess && "text-success/80",
-          !isCritical && !isWarning && !isSuccess && "text-muted-foreground"
-        )}>
-          {message}
-        </p>
-      </div>
-      {(linkTo || drawerTrigger) && (
-        <div className="mt-0.5 shrink-0 opacity-70">
+      {actions && <div className="shrink-0">{actions}</div>}
+      {(linkTo || drawerTrigger) && !actions && (
+        <div className="shrink-0 opacity-70">
           <ChevronRight className="h-5 w-5" />
         </div>
       )}

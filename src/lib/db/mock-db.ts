@@ -88,7 +88,7 @@ export const transactions: Transaction[] = [
 // ---------------------------------------------------------------------------
 
 export const metricAnchors: MetricAnchor[] = [
-  { id: 'ma_01', title: 'Monthly Recurring Revenue', value: 40000,  target: 45000,  isHealthy: false, trendText: '+2.3% vs prior month' },
+  { id: 'ma_01', title: 'Monthly Recurring Revenue', value: 40000,  target: 45000,  isHealthy: false, trendUp: true, trendText: '+2.3% vs prior month' },
   { id: 'ma_02', title: 'Net Margin',                value: 0.54,   target: 0.60,   isHealthy: false, trendText: '-1.2pp vs prior month' },
   { id: 'ma_03', title: 'Cash Runway',               value: 4.8,    target: 6.0,    isHealthy: false, trendText: '-0.4 months vs prior' },
   { id: 'ma_04', title: 'A/R Aging (>60 days)',       value: 25000,  target: 0,      isHealthy: false, trendText: '$25K overdue >60 days' },

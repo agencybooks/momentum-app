@@ -1,116 +1,122 @@
-import React from "react"
+import Link from "next/link"
+import { ArrowUpRight, ChevronDown } from "lucide-react"
 import { Card } from "@/components/ui/card"
-import { MetricAnchor } from "@/components/metric-anchor"
+import { Button } from "@/components/ui/button"
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table"
 
 export default function ScorecardsPage() {
   return (
-    <div className="p-8 flex flex-col gap-8">
-      {/* Zone 1: Executive Narrative */}
-      <section>
-        <h2 className="text-xl font-semibold tracking-tight mb-4">Executive Narrative</h2>
-        <Card className="p-6 border-none shadow-sm ring-1 ring-border/50">
-          <div className="space-y-3 text-sm leading-relaxed">
-            <p>
-              <span className="text-success font-medium mr-2">🟢 On Track:</span> 
-              April was highly efficient. Hit 8 of 13 targets, with Gross Margin and Ending Cash outperforming baseline projections.
-            </p>
-            <p>
-              <span className="text-destructive font-medium mr-2">🔴 Warning:</span>
-              Net Margin missed our 20% target, primarily driven by unoptimized server infrastructure costs.
-            </p>
-          </div>
-        </Card>
-      </section>
+    <div className="flex flex-col gap-8">
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-semibold tracking-tight">Scorecards</h1>
+        <p className="text-muted-foreground mt-1">Your closed financial periods and annual reviews.</p>
+      </div>
 
-      {/* Zone 2: The Final Snapshot */}
-      <section>
-        <h2 className="text-xl font-semibold tracking-tight mb-4">The Final Snapshot</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <MetricAnchor
-            title="Revenue"
-            value="$125,000"
-            target="$120k"
-            isHealthy={true}
-            trendText="Target Beat"
-          />
-          <MetricAnchor
-            title="Gross Margin"
-            value="68.0%"
-            target="65%"
-            isHealthy={true}
-            trendText="Target Beat"
-          />
-          <MetricAnchor
-            title="Net Profit"
-            value="16.4%"
-            target="20%"
-            isHealthy={false}
-            trendText="Missed"
-          />
-          <MetricAnchor
-            title="Ending Cash"
-            value="$222,800"
-            target="$200k"
-            isHealthy={true}
-            trendText="Target Beat"
-          />
+      {/* Zone 1: Current Active Month */}
+      <Card className="p-6 border-dashed bg-muted/30 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-left">
+        <div className="text-left">
+          <div className="flex items-center gap-2 font-semibold text-sm mb-1">May 2026 (In Progress)</div>
+          <p className="text-sm text-muted-foreground">Books remain open. 14 days remaining in period.</p>
         </div>
-      </section>
+        <Button variant="outline" size="sm">View Live Dashboard</Button>
+      </Card>
 
-      {/* Zone 3: The Goals Matrix (Exception Reporting) */}
-      <section>
-        <h2 className="text-xl font-semibold tracking-tight mb-4">The Goals Matrix</h2>
-        <Card className="flex flex-col border-none shadow-sm ring-1 ring-border/50 overflow-hidden">
-          
-          {/* Section A: OFF TRACK */}
-          <div className="bg-destructive/5 px-6 py-4 border-b border-border">
-            <h3 className="font-semibold text-destructive flex items-center gap-2 tracking-tight">
-              🚨 OFF TRACK (Action Required)
-            </h3>
-          </div>
-          <div className="flex flex-col px-6">
-            <div className="flex items-center justify-between py-4 border-b border-border last:border-0">
-              <span className="font-medium text-sm">Net Margin</span>
-              <div className="text-right">
-                <span className="text-destructive font-bold tabular-nums tracking-tight text-lg mr-3">16.4%</span>
-                <span className="text-muted-foreground text-sm tabular-nums">vs 20.0% Target</span>
-              </div>
-            </div>
-          </div>
+      {/* Zone 2: 2026 YTD */}
+      <div className="flex flex-col gap-4">
+        <div className="flex justify-between items-end">
+          <h2 className="text-xl font-semibold tracking-tight">2026 (Year to Date)</h2>
+          <Button variant="ghost" size="sm">Export YTD</Button>
+        </div>
+        <div className="text-sm text-muted-foreground">Rev: $155.5K | Margin: 48.0% | Cash Added: +$14K</div>
+        <Link href="/scorecards/annual/2026" className="text-sm font-medium text-primary hover:underline flex items-center">
+          <ArrowUpRight className="h-4 w-4 mr-1" /> View 2026 YTD Annual Scorecard
+        </Link>
+        <Card className="overflow-hidden p-0">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Period</TableHead>
+              <TableHead className="text-right">Revenue</TableHead>
+              <TableHead className="text-right">Gr. Margin</TableHead>
+              <TableHead className="text-right">Op. Income</TableHead>
+              <TableHead className="text-right">Goals Hit</TableHead>
+              <TableHead className="text-right">Action</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell className="font-medium">April 2026</TableCell>
+              <TableCell className="text-right tabular-nums">$41,500</TableCell>
+              <TableCell className="text-right tabular-nums"><span className="inline-block w-2 h-2 rounded-full bg-success mr-2"></span>50.1%</TableCell>
+              <TableCell className="text-right tabular-nums">$7,900</TableCell>
+              <TableCell className="text-right tabular-nums"><span className="inline-block w-2 h-2 rounded-full bg-success mr-2"></span>8/13</TableCell>
+              <TableCell className="text-right"><Link href="/scorecards/april-2026"><Button variant="outline" size="sm">View Brief</Button></Link></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="font-medium">March 2026</TableCell>
+              <TableCell className="text-right tabular-nums">$38,000</TableCell>
+              <TableCell className="text-right tabular-nums"><span className="inline-block w-2 h-2 rounded-full bg-warning mr-2"></span>48.2%</TableCell>
+              <TableCell className="text-right tabular-nums">$5,400</TableCell>
+              <TableCell className="text-right tabular-nums"><span className="inline-block w-2 h-2 rounded-full bg-warning mr-2"></span>6/13</TableCell>
+              <TableCell className="text-right"><Button variant="outline" size="sm">View Brief</Button></TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </Card>
+      </div>
 
-          {/* Section B: ON TRACK */}
-          <div className="bg-success/5 px-6 py-4 border-y border-border mt-0">
-            <h3 className="font-semibold text-success flex items-center gap-2 tracking-tight">
-              🟢 ON TRACK (Healthy)
-            </h3>
-          </div>
-          <div className="flex flex-col px-6">
-            <div className="flex items-center justify-between py-4 border-b border-border">
-              <span className="font-medium text-sm">Revenue</span>
-              <div className="text-right">
-                <span className="text-success font-bold tabular-nums tracking-tight text-lg mr-3">$125,000</span>
-                <span className="text-muted-foreground text-sm tabular-nums">vs $120,000 Target</span>
-              </div>
-            </div>
-            <div className="flex items-center justify-between py-4 border-b border-border">
-              <span className="font-medium text-sm">Gross Margin</span>
-              <div className="text-right">
-                <span className="text-success font-bold tabular-nums tracking-tight text-lg mr-3">68.0%</span>
-                <span className="text-muted-foreground text-sm tabular-nums">vs 65.0% Target</span>
-              </div>
-            </div>
-            <div className="flex items-center justify-between py-4 border-b border-border last:border-0">
-              <span className="font-medium text-sm">Ending Cash</span>
-              <div className="text-right">
-                <span className="text-success font-bold tabular-nums tracking-tight text-lg mr-3">$222,800</span>
-                <span className="text-muted-foreground text-sm tabular-nums">vs $200,000 Target</span>
-              </div>
-            </div>
-          </div>
-
+      {/* Zone 3: 2025 Closed Year */}
+      <div className="flex flex-col gap-4">
+        <div className="flex justify-between items-end">
+          <h2 className="text-xl font-semibold tracking-tight">2025 (Closed Year)</h2>
+          <Button variant="ghost" size="sm">Export PDF</Button>
+        </div>
+        <div className="text-sm text-muted-foreground">Rev: $499.2K | Margin: 45.2% | Cash Added: +$42K</div>
+        <Link href="/scorecards/annual/2025" className="text-sm font-medium text-primary hover:underline flex items-center">
+          <ArrowUpRight className="h-4 w-4 mr-1" /> View 2025 Annual Scorecard (Year in Review)
+        </Link>
+        <Card className="overflow-hidden p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Period</TableHead>
+                <TableHead className="text-right">Revenue</TableHead>
+                <TableHead className="text-right">Gr. Margin</TableHead>
+                <TableHead className="text-right">Op. Income</TableHead>
+                <TableHead className="text-right">Goals Hit</TableHead>
+                <TableHead className="text-right">Action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell className="font-medium">December 2025</TableCell>
+                <TableCell className="text-right tabular-nums">$44,200</TableCell>
+                <TableCell className="text-right tabular-nums"><span className="inline-block w-2 h-2 rounded-full bg-success mr-2"></span>51.0%</TableCell>
+                <TableCell className="text-right tabular-nums">$9,100</TableCell>
+                <TableCell className="text-right tabular-nums"><span className="inline-block w-2 h-2 rounded-full bg-success mr-2"></span>9/13</TableCell>
+                <TableCell className="text-right"><Button variant="outline" size="sm">View Brief</Button></TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">November 2025</TableCell>
+                <TableCell className="text-right tabular-nums">$40,800</TableCell>
+                <TableCell className="text-right tabular-nums"><span className="inline-block w-2 h-2 rounded-full bg-warning mr-2"></span>47.5%</TableCell>
+                <TableCell className="text-right tabular-nums">$6,200</TableCell>
+                <TableCell className="text-right tabular-nums"><span className="inline-block w-2 h-2 rounded-full bg-warning mr-2"></span>7/13</TableCell>
+                <TableCell className="text-right"><Button variant="outline" size="sm">View Brief</Button></TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
         </Card>
-      </section>
-
+        <div className="text-center text-sm font-medium text-muted-foreground py-4 cursor-pointer hover:text-primary transition-colors">View all 12 months <ChevronDown className="h-3 w-3 inline" /></div>
+      </div>
     </div>
   )
 }

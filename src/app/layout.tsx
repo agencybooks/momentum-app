@@ -1,14 +1,17 @@
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Suspense } from "react"
+import { Inter, Geist_Mono } from "next/font/google"
 import { NuqsAdapter } from "nuqs/adapters/next/app"
 import { ThemeProvider } from "@/components/theme-provider"
 import { GlobalSidebar } from "@/components/global-sidebar"
+import { TopHeader } from "@/components/top-header"
 import { GlobalDrawer } from "@/components/global-drawer"
+import { GlobalDrawers } from "@/components/drawers/global-drawers"
 import "./globals.css"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
+  variable: "--font-sans",
 })
 
 const geistMono = Geist_Mono({
@@ -29,10 +32,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable}`}
+      className={`${inter.variable} ${geistMono.variable}`}
       suppressHydrationWarning
     >
-      <body className="bg-background text-foreground antialiased">
+      <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         <NuqsAdapter>
           <ThemeProvider
             attribute="class"
@@ -42,11 +45,15 @@ export default function RootLayout({
           >
             <div className="flex h-screen">
               <GlobalSidebar />
-              <main className="ml-64 flex-1 overflow-y-auto p-8">
-                {children}
-              </main>
+              <div className="ml-64 flex-1 flex flex-col overflow-hidden">
+                <TopHeader />
+                <main className="flex-1 overflow-y-auto p-8 bg-zinc-50/40 dark:bg-black">
+                  {children}
+                </main>
+              </div>
             </div>
-            <GlobalDrawer />
+            <Suspense><GlobalDrawer /></Suspense>
+            <Suspense fallback={null}><GlobalDrawers /></Suspense>
           </ThemeProvider>
         </NuqsAdapter>
       </body>

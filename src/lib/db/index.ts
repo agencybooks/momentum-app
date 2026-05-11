@@ -1,4 +1,4 @@
-export type { Client, Invoice, Transaction, MetricAnchor, Alert } from './types';
+export type { Client, Invoice, Transaction, MetricAnchor, Alert, RevenueExpenseTimeline } from './types';
 export {
   getClients,
   getClient,
@@ -8,4 +8,5 @@ export {
   getTransactions,
   getAlerts,
   getMetricAnchors,
+  getRevenueExpenseTimeline,
 } from './services';

@@ -1,107 +1,129 @@
 "use client"
 
-import React, { useState, useMemo } from "react"
+import { Plus, ArrowUpRight, ShieldAlert, Rocket } from "lucide-react"
+import { useQueryState } from "nuqs"
+import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Slider } from "@/components/ui/slider"
-import { MetricAnchor } from "@/components/metric-anchor"
-import { FinancialChart } from "@/components/ui/custom/financial-chart"
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@/components/ui/table"
+import SandboxTakeover from "@/components/scenarios/sandbox-takeover"
+import { BaselineTrajectoryChart } from "@/components/scenarios/baseline-trajectory-chart"
 
 export default function ScenariosPage() {
-  const [newHires, setNewHires] = useState(0)
-  const [serverSavings, setServerSavings] = useState(0)
-
-  const { adjustedBurn, adjustedRunway, chartData } = useMemo(() => {
-    const baseCash = 222800
-    const baseBurn = 41200
-    const burn = baseBurn + (newHires * 12000) - serverSavings
-    const runway = burn > 0 ? baseCash / burn : 0
-
-    const data = []
-    let currentBalance = baseCash
-    const today = new Date()
-    
-    for (let i = 0; i < 6; i++) {
-      const date = new Date(today.getFullYear(), today.getMonth() + i, 1)
-      data.push({
-        date: date.toISOString(),
-        cashBalance: currentBalance,
-        netBurn: burn
-      })
-      currentBalance -= burn
-    }
-
-    return { adjustedBurn: burn, adjustedRunway: runway, chartData: data }
-  }, [newHires, serverSavings])
+  const [sandbox, setSandbox] = useQueryState('sandbox')
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 p-8">
-      <div className="lg:col-span-4 flex flex-col gap-4">
-        <h2 className="text-xl font-semibold tracking-tight">Zone A: The Levers</h2>
-        <Card className="p-6 flex flex-col gap-8 border-none shadow-sm ring-1 ring-border/50">
-          <div>
-            <h3 className="text-lg font-medium mb-4 tracking-tight">Headcount Planning</h3>
-            <div className="space-y-4">
-              <div className="text-sm font-medium tabular-nums">
-                New Hires: {newHires}
-              </div>
-              <Slider
-                min={0}
-                max={10}
-                step={1}
-                value={[newHires]}
-                onValueChange={(val) => setNewHires(Array.isArray(val) ? val[0] : val)}
-                className="w-full"
-              />
-              <p className="text-xs text-muted-foreground">Assumes $12k/mo fully loaded cost per hire</p>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-medium mb-4 tracking-tight">Cost Reductions</h3>
-            <div className="space-y-4">
-              <div className="text-sm font-medium tabular-nums">
-                Server Savings: ${serverSavings.toLocaleString()}
-              </div>
-              <Slider
-                min={0}
-                max={10000}
-                step={1000}
-                value={[serverSavings]}
-                onValueChange={(val) => setServerSavings(Array.isArray(val) ? val[0] : val)}
-                className="w-full"
-              />
-              <p className="text-xs text-muted-foreground">Immediate monthly infrastructure savings</p>
-            </div>
-          </div>
-        </Card>
+    <div className="flex flex-col gap-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-semibold tracking-tight">Scenarios & Modeling</h1>
+          <p className="text-muted-foreground mt-1">
+            Simulate financial decisions and forecast runway impact.
+          </p>
+        </div>
+        <Button onClick={() => setSandbox('active')}>
+          <Plus className="h-4 w-4 mr-2" /> Blank Sandbox
+        </Button>
       </div>
 
-      <div className="lg:col-span-8 flex flex-col gap-8">
-        <div className="flex flex-col gap-4">
-          <h2 className="text-xl font-semibold tracking-tight">Zone B: The Real-Time Delta</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <MetricAnchor
-              title="Adjusted Net Burn"
-              value={`$${adjustedBurn.toLocaleString()}`}
-            isHealthy={adjustedBurn <= 41200}
-            trendText={adjustedBurn < 41200 ? "Improved" : adjustedBurn > 41200 ? "Increased" : "Baseline"}
-          />
-          <MetricAnchor
-            title="Projected Runway"
-            value={`${adjustedRunway.toFixed(1)} mo`}
-            isHealthy={adjustedRunway >= 20}
-            trendText={adjustedRunway > 20 ? "Extended" : adjustedRunway < 20 ? "Shortened" : "Baseline"}
-          />
-        </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left Column: Baseline + Saved Sandboxes */}
+        <div className="lg:col-span-2 flex flex-col gap-8">
+          <BaselineTrajectoryChart />
+
+          <div className="flex flex-col gap-4">
+            <h2 className="text-xl font-semibold tracking-tight">Saved Sandboxes</h2>
+            <Card>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead className="text-right">Projected MRR</TableHead>
+                    <TableHead className="text-right">Runway</TableHead>
+                    <TableHead className="text-right">Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell className="font-medium">Aggressive Q3 Growth Plan</TableCell>
+                    <TableCell className="text-right">
+                      <span className="tabular-nums text-success">+$15.9K/mo</span>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <span className="tabular-nums">5.1 mo</span>
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-right">
+                        <Button variant="outline" size="sm" onClick={() => setSandbox('active')}>
+                          Open Sandbox <ArrowUpRight className="ml-2 h-3 w-3" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-medium">Acme Co Churn Defense</TableCell>
+                    <TableCell className="text-right">
+                      <span className="tabular-nums text-destructive">-$12.5K/mo</span>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <span className="tabular-nums">4.2 mo</span>
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-right">
+                        <Button variant="outline" size="sm" onClick={() => setSandbox('active')}>
+                          Open Sandbox <ArrowUpRight className="ml-2 h-3 w-3" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </Card>
+          </div>
         </div>
 
-        <div className="flex flex-col gap-4 h-full">
-          <h2 className="text-xl font-semibold tracking-tight">Zone C: The Visual Projection</h2>
-          <Card className="flex-1 min-h-[400px] flex p-6 items-center justify-center bg-card shadow-sm border ring-1 ring-border/50">
-            <FinancialChart data={chartData} />
+        {/* Right Column: Scenario Templates */}
+        <div className="lg:col-span-1 flex flex-col gap-4">
+          <h2 className="text-xl font-semibold tracking-tight">Start a New Scenario</h2>
+          <Card className="p-6">
+            <div className="flex items-center gap-2 font-semibold mb-4 text-destructive">
+              <ShieldAlert className="w-5 h-5" /> DEFENSE (Survival)
+            </div>
+            <Button variant="outline" className="w-full justify-start mb-2" onClick={() => setSandbox('active')}>
+              Lose Biggest Client
+            </Button>
+            <Button variant="outline" className="w-full justify-start mb-2" onClick={() => setSandbox('active')}>
+              20% Revenue Drop
+            </Button>
+            <Button variant="outline" className="w-full justify-start mb-2" onClick={() => setSandbox('active')}>
+              Collections Slow by 15 Days
+            </Button>
+          </Card>
+
+          <Card className="p-6">
+            <div className="flex items-center gap-2 font-semibold mb-4 text-success">
+              <Rocket className="w-5 h-5" /> OFFENSE (Growth)
+            </div>
+            <Button variant="outline" className="w-full justify-start mb-2" onClick={() => setSandbox('active')}>
+              Hire 2-3 People
+            </Button>
+            <Button variant="outline" className="w-full justify-start mb-2" onClick={() => setSandbox('active')}>
+              Raise Rates by 10%
+            </Button>
+            <Button variant="outline" className="w-full justify-start mb-2" onClick={() => setSandbox('active')}>
+              Land Massive Proposal
+            </Button>
           </Card>
         </div>
       </div>
+
+      {sandbox && <SandboxTakeover onClose={() => setSandbox(null)} />}
     </div>
   )
 }

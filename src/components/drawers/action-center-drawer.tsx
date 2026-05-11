@@ -6,7 +6,7 @@ import { Alert } from "@/lib/db/types"
 import { SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { AlertTriangle, AlertCircle, CheckCircle } from "lucide-react"
+import { AlertTriangle, AlertCircle, CheckCircle, ArrowUpRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export function ActionCenterDrawer() {
@@ -94,7 +94,7 @@ export function ActionCenterDrawer() {
                 <div className="flex justify-end mt-2">
                   <Link href={href} scroll={false}>
                     <Button size="sm" variant={isCritical ? "default" : "secondary"}>
-                      Resolve ↗
+                      Resolve <ArrowUpRight className="h-3 w-3 inline" />
                     </Button>
                   </Link>
                 </div>
