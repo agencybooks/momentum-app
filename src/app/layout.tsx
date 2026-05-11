@@ -9,6 +9,8 @@ import { GlobalDrawer } from "@/components/global-drawer"
 import { GlobalDrawers } from "@/components/drawers/global-drawers"
 import "./globals.css"
 
+export const dynamic = "force-dynamic"
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
