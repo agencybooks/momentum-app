@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import { getCashData, getOpenInvoices, getAlerts, getClients } from "@/lib/db/services"
 import { CashPageContent } from "@/components/cash-page-content"
 
@@ -11,5 +12,9 @@ export default async function CashPage() {
     getClients(),
   ])
 
-  return <CashPageContent cashData={cashData} openInvoices={openInvoices} alerts={alerts} clients={clients} />
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CashPageContent cashData={cashData} openInvoices={openInvoices} alerts={alerts} clients={clients} />
+    </Suspense>
+  )
 }
