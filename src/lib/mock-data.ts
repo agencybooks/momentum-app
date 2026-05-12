@@ -1,20 +1,14 @@
-import type { RevenueExpenseTimeline, CashForecastPoint, Payable, CashFlowTimeline, UnitEconomicsPoint, PipelineOpportunity, BaselineTrajectoryPoint } from "@/lib/db/types"
+import type { RevenueExpenseTimeline, CashForecastPoint, Payable, CashFlowTimeline, UnitEconomicsPoint, PipelineOpportunity, BaselineTrajectoryPoint, RenewalAtRisk, CashActionAlert } from "@/lib/db/types"
 import type { BridgeStep } from "@/components/waterfall/bridge-waterfall-chart"
 
 export const mockChartData: RevenueExpenseTimeline[] = [
-  { date: "Feb 15", revenue: 9400, expenses: 7200 },
-  { date: "Feb 22", revenue: 9600, expenses: 7100 },
-  { date: "Mar 01", revenue: 10500, expenses: 7900 },
-  { date: "Mar 08", revenue: 9100, expenses: 7400 },
-  { date: "Mar 15", revenue: 9300, expenses: 8800 },
-  { date: "Mar 22", revenue: 9500, expenses: 7200 },
-  { date: "Mar 29", revenue: 9400, expenses: 7500 },
-  { date: "Apr 05", revenue: 11200, expenses: 8100 },
-  { date: "Apr 12", revenue: 9800, expenses: 7600 },
-  { date: "Apr 19", revenue: 10100, expenses: 9200 },
-  { date: "Apr 26", revenue: 10400, expenses: 7800 },
-  { date: "May 03", revenue: 11500, expenses: 8400 },
-  { date: "May 10", revenue: 10200, expenses: 7900 },
+  { date: "Nov", revenue: 34200, expenses: 27800 },
+  { date: "Dec", revenue: 33400, expenses: 29000 },
+  { date: "Jan", revenue: 35600, expenses: 29300 },
+  { date: "Feb", revenue: 37800, expenses: 28500 },
+  { date: "Mar", revenue: 38300, expenses: 31300 },
+  { date: "Apr", revenue: 41500, expenses: 32700 },
+  { date: "May", revenue: 43200, expenses: 33600 },
 ]
 
 export const mockCashBurnData: CashFlowTimeline[] = [
@@ -98,6 +92,15 @@ export const netMarginSparkline = [
   { date: "May", value: 16.4 },
 ]
 
+export const revPerFteSparkline = [
+  { date: "Dec", value: 155.0 },
+  { date: "Jan", value: 158.2 },
+  { date: "Feb", value: 161.0 },
+  { date: "Mar", value: 164.3 },
+  { date: "Apr", value: 166.8 },
+  { date: "May", value: 168.5 },
+]
+
 export const PAYROLL_FLOOR = 31000
 
 export const payables: Payable[] = [
@@ -143,6 +146,59 @@ export const pipelineOpportunities: PipelineOpportunity[] = [
   { id: "po_03", clientName: "Horizon Tech",    value: 12000, probability: 50, type: "New Logo" },
   { id: "po_04", clientName: "Vertex Labs",     value: 3200,  probability: 30, type: "Renewal" },
   { id: "po_05", clientName: "Northwind Group", value: 6800,  probability: 15, type: "New Logo" },
+]
+
+export const renewalAtRiskData: RenewalAtRisk[] = [
+  { id: "rar_01", clientName: "Nova Tech",      mrrValue: 12000, daysUntilRenewal: 3,  status: "critical" },
+  { id: "rar_02", clientName: "Apex Studios",    mrrValue: 8500,  daysUntilRenewal: 14, status: "critical" },
+  { id: "rar_03", clientName: "Horizon Media",   mrrValue: 4200,  daysUntilRenewal: 45, status: "warning" },
+  { id: "rar_04", clientName: "Pioneer Labs",    mrrValue: 2100,  daysUntilRenewal: 62, status: "safe" },
+]
+
+// --- Growth KPI Sparklines ---
+
+export const nrrSparkline = [
+  { date: "Oct", value: 108 },
+  { date: "Nov", value: 109 },
+  { date: "Dec", value: 110 },
+  { date: "Jan", value: 110 },
+  { date: "Feb", value: 111 },
+  { date: "Mar", value: 111 },
+  { date: "Apr", value: 112 },
+  { date: "May", value: 112 },
+]
+
+export const blendedCacSparkline = [
+  { date: "Oct", value: 15800 },
+  { date: "Nov", value: 15400 },
+  { date: "Dec", value: 14800 },
+  { date: "Jan", value: 14200 },
+  { date: "Feb", value: 13900 },
+  { date: "Mar", value: 13700 },
+  { date: "Apr", value: 13400 },
+  { date: "May", value: 13200 },
+]
+
+export const cacPaybackSparkline = [
+  { date: "Oct", value: 11.2 },
+  { date: "Nov", value: 10.8 },
+  { date: "Dec", value: 10.3 },
+  { date: "Jan", value: 9.8 },
+  { date: "Feb", value: 9.4 },
+  { date: "Mar", value: 9.1 },
+  { date: "Apr", value: 8.8 },
+  { date: "May", value: 8.5 },
+]
+
+export const ltvCacSparkline = [
+  { date: "Oct", value: 4.9 },
+  { date: "Nov", value: 5.1 },
+  { date: "Dec", value: 5.4 },
+  { date: "Jan", value: 5.7 },
+  { date: "Feb", value: 5.9 },
+  { date: "Mar", value: 6.1 },
+  { date: "Apr", value: 6.3 },
+  { date: "May", value: 6.5 },
 ]
 
 // --- Scorecard Bridge Data ---
@@ -235,4 +291,105 @@ export const annual2026CashBridge: BridgeStep[] = [
   { label: "Software & Tools", value: -28400, type: "subtract" },
   { label: "Other OpEx", value: -21100, type: "subtract" },
   { label: "Ending Cash (Apr)", value: 236800, type: "end" },
+]
+
+export const mrrMovementSteps: BridgeStep[] = [
+  { label: "Starting MRR", value: 85000, type: "start" },
+  { label: "New Logo MRR", value: 12000, type: "add", details: [
+    { label: "Horizon Tech", amount: 7000 },
+    { label: "Drift Marketing", amount: 5000 },
+  ]},
+  { label: "Expansion MRR", value: 3500, type: "add", details: [
+    { label: "Acme Co scope increase", amount: 2000 },
+    { label: "Meridian retainer bump", amount: 1500 },
+  ]},
+  { label: "Contraction MRR", value: -2000, type: "subtract", details: [
+    { label: "Sundial scope reduction", amount: 2000 },
+  ]},
+  { label: "Churned MRR", value: -4500, type: "subtract", details: [
+    { label: "Cobalt Outdoor exit", amount: 4500 },
+  ]},
+  { label: "Ending MRR", value: 94000, type: "end" },
+]
+
+export interface LeverageTrendPoint {
+  month: string
+  acquisitions: number
+  expansionPct: number
+  avgDealSize: number
+  churnRate: number
+}
+
+export const cashActionAlerts: CashActionAlert[] = [
+  {
+    id: "caa_01",
+    severity: "critical",
+    headline: "Payroll vs. Invoice Timing Conflict",
+    body: "Warning: Gusto payroll ($45,200) clears 3 days before Acme Co invoice ($65,000) is due. Projected shortfall: -$12k.",
+    actionLabel: "View Scenario",
+    actionDrawerId: "u3",
+    weekRef: "Week 10",
+  },
+  {
+    id: "caa_02",
+    severity: "warning",
+    headline: "Thin Buffer on Auto-Deduct",
+    body: "AWS Infrastructure ($12,400) auto-deducts on May 15. Buffer is only $4k until pending Stripe payouts clear.",
+    actionLabel: "Defer Payment",
+    actionDrawerId: "u3",
+    weekRef: "Week 2",
+  },
+]
+
+// --- Clients Page KPI Sparklines ---
+
+export const clientsNrrSparkline = [
+  { date: "Dec", value: 108.2 },
+  { date: "Jan", value: 109.0 },
+  { date: "Feb", value: 109.8 },
+  { date: "Mar", value: 110.5 },
+  { date: "Apr", value: 111.2 },
+  { date: "May", value: 112.3 },
+]
+
+export const clientsChurnSparkline = [
+  { date: "Dec", value: 2.8 },
+  { date: "Jan", value: 2.5 },
+  { date: "Feb", value: 2.1 },
+  { date: "Mar", value: 7.0 },
+  { date: "Apr", value: 0.8 },
+  { date: "May", value: 1.0 },
+]
+
+export const clientsConcentrationSparkline = [
+  { date: "Dec", value: 31.0 },
+  { date: "Jan", value: 31.5 },
+  { date: "Feb", value: 32.0 },
+  { date: "Mar", value: 32.5 },
+  { date: "Apr", value: 32.8 },
+  { date: "May", value: 33.0 },
+]
+
+export const clientsMarginLtvSparkline = [
+  { date: "Dec", value: 118000 },
+  { date: "Jan", value: 122000 },
+  { date: "Feb", value: 126000 },
+  { date: "Mar", value: 130000 },
+  { date: "Apr", value: 135000 },
+  { date: "May", value: 139000 },
+]
+
+export const leverageTrendData: LeverageTrendPoint[] = [
+  { month: "Jun 25", acquisitions: 1, expansionPct: 3.2, avgDealSize: 24500, churnRate: 2.8 },
+  { month: "Jul 25", acquisitions: 2, expansionPct: 3.5, avgDealSize: 24800, churnRate: 2.6 },
+  { month: "Aug 25", acquisitions: 1, expansionPct: 4.0, avgDealSize: 25000, churnRate: 2.5 },
+  { month: "Sep 25", acquisitions: 2, expansionPct: 3.8, avgDealSize: 25200, churnRate: 2.3 },
+  { month: "Oct 25", acquisitions: 1, expansionPct: 4.2, avgDealSize: 25500, churnRate: 2.4 },
+  { month: "Nov 25", acquisitions: 2, expansionPct: 4.5, avgDealSize: 25800, churnRate: 2.2 },
+  { month: "Dec 25", acquisitions: 1, expansionPct: 3.0, avgDealSize: 25600, churnRate: 2.1 },
+  { month: "Jan 26", acquisitions: 2, expansionPct: 4.8, avgDealSize: 26000, churnRate: 2.0 },
+  { month: "Feb 26", acquisitions: 2, expansionPct: 5.0, avgDealSize: 26200, churnRate: 1.9 },
+  { month: "Mar 26", acquisitions: 1, expansionPct: 5.2, avgDealSize: 26500, churnRate: 1.8 },
+  { month: "Apr 26", acquisitions: 2, expansionPct: 5.5, avgDealSize: 26800, churnRate: 1.7 },
+  { month: "May 26", acquisitions: 2, expansionPct: 5.0, avgDealSize: 26000, churnRate: 2.0 },
 ]

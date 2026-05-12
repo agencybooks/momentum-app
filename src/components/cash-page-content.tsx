@@ -9,10 +9,14 @@ import { MetricsGrid } from "@/components/metrics-grid"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { ArrowUpRight, ChevronRight, Mail } from "lucide-react"
+import { ArrowUpRight, ChevronRight } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { CashForecastChart } from "@/components/cash-forecast-chart"
-import { payables } from "@/lib/mock-data"
+import { ActionAlertsCard } from "@/components/action-alerts-card"
+import { PageHeader } from "@/components/page-header"
+import { payables, cashActionAlerts } from "@/lib/mock-data"
+import { AgingBucketsSummary } from "@/components/aging-buckets-summary"
+import { PayableActionGroup } from "@/components/payable-action-group"
 import { cn } from "@/lib/utils"
 
 const currencyFmt = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 })
@@ -61,17 +65,26 @@ function groupInvoicesByClient(invoices: Invoice[], clients: Client[]): ClientIn
 const formatValue = (title: string, value: number) => {
   if (title.includes("Runway")) return `${value} mo`
   if (title.includes("DSO")) return `${value} Days`
+  if (title.includes("Burn")) {
+    const abs = Math.abs(value)
+    return `-$${new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(abs)}/mo`
+  }
   return currencyFmt.format(value)
 }
 
 const formatTarget = (title: string, target: number) => {
   if (title.includes("Runway")) return `> ${target}`
   if (title.includes("DSO")) return `< ${target}d`
+  if (title.includes("Burn")) {
+    const abs = Math.abs(target)
+    return `-$${new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(abs)}/mo`
+  }
   return currencyFmt.format(target)
 }
 
 const drawerIdMap: Record<string, string> = {
   ma_cash: "m9",
+  ma_burn: "m2",
   ma_runway: "m1",
   ma_dso: "m3",
 }
@@ -80,6 +93,8 @@ export function CashPageContent({ cashData, openInvoices, alerts, clients }: Cas
   const [, setDrawer] = useQueryState("drawer")
   const [expandedAR, setExpandedAR] = useState<Set<string>>(new Set())
   const [expandedAP, setExpandedAP] = useState<Set<string>>(new Set())
+  const [activeBucket, setActiveBucket] = useState<string | null>(null)
+  const [payableStates, setPayableStates] = useState<Record<string, "idle" | "paid" | "scheduled">>({})
 
   const criticalAlert = alerts.find(a => a.type === "critical" && a.drawerTrigger === "ar-intelligence") || alerts.find(a => a.type === "critical")
   const clientGroups = groupInvoicesByClient(openInvoices, clients)
@@ -88,6 +103,36 @@ export function CashPageContent({ cashData, openInvoices, alerts, clients }: Cas
   const overdueInvoices = openInvoices.filter(i => i.status === "Overdue")
   const overdueTotal = overdueInvoices.reduce((sum, i) => sum + i.amount, 0)
   const currentTotal = totalOpenAR - overdueTotal
+
+  const agingBuckets = (() => {
+    let current = 0
+    let days1to30 = 0
+    let days31to60 = 0
+    let days60plus = 0
+    for (const inv of openInvoices) {
+      if (inv.daysOverdue === 0) current += inv.amount
+      else if (inv.daysOverdue <= 30) days1to30 += inv.amount
+      else if (inv.daysOverdue <= 60) days31to60 += inv.amount
+      else days60plus += inv.amount
+    }
+    return [
+      { label: "Current", amount: current },
+      { label: "1-30 Days", amount: days1to30 },
+      { label: "31-60 Days", amount: days31to60 },
+      { label: "60+ Days", amount: days60plus },
+    ]
+  })()
+
+  const handleBucketClick = (label: string) => {
+    setActiveBucket(prev => prev === label ? null : label)
+  }
+
+  const handlePayableAction = (payableId: string, action: "paid" | "scheduled") => {
+    setPayableStates(prev => ({
+      ...prev,
+      [payableId]: prev[payableId] === action ? "idle" : action,
+    }))
+  }
 
   const toggleAR = (clientId: string) => {
     setExpandedAR(prev => {
@@ -110,27 +155,28 @@ export function CashPageContent({ cashData, openInvoices, alerts, clients }: Cas
   const totalPayablesDue = payables.reduce((sum, p) => sum + p.amount, 0)
 
   return (
-    <div className="flex flex-col gap-8">
-      <div>
-        <h1 className="text-3xl font-semibold tracking-tight">Cash & Treasury</h1>
-        <p className="text-muted-foreground mt-1">Monitor your operational cash position, collections, and payables.</p>
-      </div>
-
-      {criticalAlert && (
-        <CoPilotAlert
-          {...criticalAlert}
-          actions={
-            <Link href="?drawer=u2" scroll={false}>
-              <span className="text-sm font-medium text-foreground hover:text-muted-foreground transition-colors flex items-center gap-1 mt-3 sm:mt-0 cursor-pointer">
-                View Collections <ArrowUpRight className="h-3 w-3" />
-              </span>
-            </Link>
-          }
-        />
-      )}
+    <div className="flex flex-col gap-6">
+      <PageHeader
+        title="Cash & Treasury"
+        subtitle="Monitor your operational cash position, collections, and payables."
+        actions={
+          criticalAlert ? (
+            <CoPilotAlert
+              {...criticalAlert}
+              actions={
+                <Link href="?drawer=u2" scroll={false}>
+                  <span className="text-sm font-medium text-foreground hover:text-muted-foreground transition-colors flex items-center gap-1 mt-3 sm:mt-0 cursor-pointer">
+                    View Collections <ArrowUpRight className="h-3 w-3" />
+                  </span>
+                </Link>
+              }
+            />
+          ) : undefined
+        }
+      />
 
       <MetricsGrid
-        columns={3}
+        columns={4}
         metrics={cashData.map((metric) => ({
           id: metric.id,
           title: metric.title,
@@ -144,17 +190,22 @@ export function CashPageContent({ cashData, openInvoices, alerts, clients }: Cas
         }))}
       />
 
-      {/* Asymmetrical Grid: Projection (left) + Hit List (right) */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* Stage 1: Projection (70%) + Action Alerts (30%) */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <CashForecastChart />
         </div>
+        <div className="lg:col-span-1">
+          <ActionAlertsCard alerts={cashActionAlerts} />
+        </div>
+      </div>
 
-        {/* A/R Collections — Density-optimized Hit List */}
-        <div className="lg:col-span-1 lg:row-span-2 flex flex-col">
+      {/* Stage 2: A/R Collections + Survival Payables (50/50) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="flex flex-col">
           <Card className="flex flex-col border-border bg-card h-full">
             <CardHeader>
-              <CardTitle className="text-lg font-medium text-foreground">A/R Collections</CardTitle>
+              <CardTitle className="text-lg font-medium text-foreground">Cash Inflows (A/R)</CardTitle>
               <div className="flex items-center gap-3 flex-wrap mt-2">
                 <span className="text-sm font-semibold text-foreground font-mono tabular-nums">
                   OPEN A/R: {currencyFmt.format(totalOpenAR)}
@@ -166,6 +217,14 @@ export function CashPageContent({ cashData, openInvoices, alerts, clients }: Cas
                 )}
               </div>
             </CardHeader>
+            <div className="px-6 pb-2">
+              <AgingBucketsSummary
+                buckets={agingBuckets}
+                totalOutstanding={totalOpenAR}
+                activeBucket={activeBucket}
+                onBucketClick={handleBucketClick}
+              />
+            </div>
             <CardContent className="flex-1 overflow-auto">
               <Table className="table-fixed">
                 <TableHeader>
@@ -250,100 +309,101 @@ export function CashPageContent({ cashData, openInvoices, alerts, clients }: Cas
           </Card>
         </div>
 
-        {/* Survival Payables */}
-        <div className="lg:col-span-2">
-          <Card className="flex flex-col border-border bg-card">
-        <CardHeader>
-          <CardTitle className="text-lg font-medium text-foreground">Survival Payables</CardTitle>
-          <p className="text-sm font-semibold text-foreground mt-2 font-mono tabular-nums">
-            UPCOMING 14 DAYS: {currencyFmt.format(totalPayablesDue)} DUE
-          </p>
-        </CardHeader>
-        <CardContent>
-          <Table className="table-fixed">
-            <TableHeader>
-              <TableRow className="border-border hover:bg-transparent">
-                <TableHead className="w-[35%] text-muted-foreground">Vendor / Category</TableHead>
-                <TableHead className="w-[25%] text-muted-foreground">Due Date</TableHead>
-                <TableHead className="w-[20%] text-right text-muted-foreground">Amount</TableHead>
-                <TableHead className="w-[20%] text-right text-muted-foreground">Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {payables.map((p) => {
-                const isExpanded = expandedAP.has(p.id)
-                return (
-                  <Fragment key={p.id}>
-                    <TableRow
-                      onClick={() => toggleAP(p.id)}
-                      aria-expanded={isExpanded}
-                      className={cn(
-                        "cursor-pointer transition-colors hover:bg-muted/50",
-                        isExpanded && "border-b-0 bg-muted/30"
-                      )}
-                    >
-                      <TableCell className="py-2.5 px-4">
-                        <div className="flex items-center gap-2">
-                          <ChevronRight className={cn(
-                            "w-4 h-4 text-muted-foreground shrink-0 transition-transform duration-200",
-                            isExpanded && "rotate-90"
-                          )} />
-                          <span className="font-medium text-foreground">{p.vendor}</span>
-                          {!p.canDelay && (
-                            <Badge variant="outline" className="text-[10px] px-1.5 py-0 text-destructive border-destructive/30">Fixed</Badge>
+        <div className="flex flex-col">
+          <Card className="flex flex-col border-border bg-card h-full">
+            <CardHeader>
+              <CardTitle className="text-lg font-medium text-foreground">Survival Payables</CardTitle>
+              <p className="text-sm font-semibold text-foreground mt-2 font-mono tabular-nums">
+                UPCOMING 14 DAYS: {currencyFmt.format(totalPayablesDue)} DUE
+              </p>
+            </CardHeader>
+            <CardContent>
+              <Table className="table-fixed">
+                <TableHeader>
+                  <TableRow className="border-border hover:bg-transparent">
+                    <TableHead className="w-[32%] text-muted-foreground">Vendor / Category</TableHead>
+                    <TableHead className="w-[20%] text-muted-foreground">Due Date</TableHead>
+                    <TableHead className="w-[20%] text-right text-muted-foreground">Amount</TableHead>
+                    <TableHead className="w-[28%] text-right text-muted-foreground">Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {payables.map((p) => {
+                    const isExpanded = expandedAP.has(p.id)
+                    return (
+                      <Fragment key={p.id}>
+                        <TableRow
+                          onClick={() => toggleAP(p.id)}
+                          aria-expanded={isExpanded}
+                          className={cn(
+                            "group cursor-pointer transition-colors hover:bg-muted/50",
+                            isExpanded && "border-b-0 bg-muted/30"
                           )}
-                        </div>
-                      </TableCell>
-                      <TableCell className="py-2.5 px-4 text-muted-foreground">{p.dueDate}</TableCell>
-                      <TableCell className="py-2.5 px-4 text-right font-mono tabular-nums font-medium">
-                        {currencyFmt.format(p.amount)}
-                      </TableCell>
-                      <TableCell className="py-2.5 px-4 text-right" />
-                    </TableRow>
-                    <tr className={isExpanded ? "border-b border-border" : ""}>
-                      <td colSpan={4} className="p-0">
-                        <div className="accordion-panel" data-open={isExpanded}>
-                          <div>
-                            <div className="bg-zinc-50/40 dark:bg-zinc-900/30 border-l-[3px] border-brand-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.04)]">
-                              <div className="group grid grid-cols-[35%_25%_20%_20%] items-center hover:bg-muted/50 transition-colors py-2.5 px-4">
-                                <div className="pl-6">
-                                  <span className="text-sm text-muted-foreground">
-                                    {p.canDelay ? "Deferral available" : "Non-negotiable — payroll or infrastructure"}
-                                  </span>
-                                </div>
-                                <div className="text-sm text-muted-foreground">Due {p.dueDate}</div>
-                                <div className="text-right font-mono tabular-nums text-sm font-medium">
-                                  {currencyFmt.format(p.amount)}
-                                </div>
-                                <div className="text-right">
-                                  {p.canDelay ? (
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      className="h-7 text-xs opacity-0 group-hover:opacity-100 transition-opacity"
-                                      onClick={(e) => { e.stopPropagation(); setDrawer("u3") }}
-                                    >
-                                      <Mail className="h-3 w-3" />
-                                      Request Deferral
-                                    </Button>
-                                  ) : (
-                                    <Button variant="outline" size="sm" className="h-7 text-xs" disabled>
-                                      Cannot Delay
-                                    </Button>
-                                  )}
+                        >
+                          <TableCell className="py-2.5 px-4">
+                            <div className="flex items-center gap-2">
+                              <ChevronRight className={cn(
+                                "w-4 h-4 text-muted-foreground shrink-0 transition-transform duration-200",
+                                isExpanded && "rotate-90"
+                              )} />
+                              <span className="font-medium text-foreground">{p.vendor}</span>
+                              {!p.canDelay && (
+                                <Badge variant="outline" className="text-[10px] px-1.5 py-0 text-destructive border-destructive/30">Fixed</Badge>
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell className="py-2.5 px-4 text-muted-foreground">{p.dueDate}</TableCell>
+                          <TableCell className="py-2.5 px-4 text-right font-mono tabular-nums font-medium">
+                            {currencyFmt.format(p.amount)}
+                          </TableCell>
+                          <TableCell className="py-2.5 px-4 text-right">
+                            <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                              <PayableActionGroup
+                                canDelay={p.canDelay}
+                                status={payableStates[p.id] || "idle"}
+                                onPay={() => handlePayableAction(p.id, "paid")}
+                                onSchedule={() => handlePayableAction(p.id, "scheduled")}
+                                onDelay={() => setDrawer("u3")}
+                              />
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                        <tr className={isExpanded ? "border-b border-border" : ""}>
+                          <td colSpan={4} className="p-0">
+                            <div className="accordion-panel" data-open={isExpanded}>
+                              <div>
+                                <div className="bg-zinc-50/40 dark:bg-zinc-900/30 border-l-[3px] border-brand-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.04)]">
+                                  <div className="grid grid-cols-[32%_20%_20%_28%] items-center hover:bg-muted/50 transition-colors py-2.5 px-4">
+                                    <div className="pl-6">
+                                      <span className="text-sm text-muted-foreground">
+                                        {p.canDelay ? "Deferral available" : "Non-negotiable — payroll or infrastructure"}
+                                      </span>
+                                    </div>
+                                    <div className="text-sm text-muted-foreground">Due {p.dueDate}</div>
+                                    <div className="text-right font-mono tabular-nums text-sm font-medium">
+                                      {currencyFmt.format(p.amount)}
+                                    </div>
+                                    <div className="text-right">
+                                      <PayableActionGroup
+                                        canDelay={p.canDelay}
+                                        status={payableStates[p.id] || "idle"}
+                                        onPay={() => handlePayableAction(p.id, "paid")}
+                                        onSchedule={() => handlePayableAction(p.id, "scheduled")}
+                                        onDelay={() => setDrawer("u3")}
+                                      />
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </Fragment>
-                )
-              })}
-            </TableBody>
-          </Table>
-        </CardContent>
+                          </td>
+                        </tr>
+                      </Fragment>
+                    )
+                  })}
+                </TableBody>
+              </Table>
+            </CardContent>
           </Card>
         </div>
       </div>

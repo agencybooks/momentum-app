@@ -4,7 +4,7 @@ export interface Client {
   mrr: number;
   tenure_months: number;
   margin: number;
-  status: 'Healthy' | 'At Risk';
+  status: 'Healthy' | 'At Risk' | 'Churned';
 }
 
 export interface Invoice {
@@ -149,6 +149,25 @@ export interface ProfitabilityTrendPoint {
   grossMargin: number;
   opMargin: number;
   netMargin: number;
+  revPerFte: number;
+}
+
+export interface GrowthTrendPoint {
+  month: string;
+  nrr: number;
+  blendedCac: number;
+  cacPayback: number;
+  ltvCacRatio: number;
+}
+
+export interface CashTrendPoint {
+  month: string;
+  totalCash: number;
+  inflows: number;
+  outflows: number;
+  netBurn: number;
+  runway: number;
+  dso: number;
 }
 
 export interface UnitEconomicsPoint {
@@ -165,8 +184,101 @@ export interface PipelineOpportunity {
   type: "New Logo" | "Expansion" | "Renewal"
 }
 
+export interface RenewalAtRisk {
+  id: string
+  clientName: string
+  mrrValue: number
+  daysUntilRenewal: number
+  status: 'critical' | 'warning' | 'safe'
+}
+
 export interface BaselineTrajectoryPoint {
   week: string
   cash?: number
   projected?: number
+}
+
+export interface ARAgingBucket {
+  label: string;
+  amount: number;
+}
+
+export interface ARAgingSummary {
+  buckets: ARAgingBucket[];
+  totalOutstanding: number;
+}
+
+export interface ScorecardMonth {
+  month: string;
+  isCurrent: boolean;
+  revenue: number;
+  revenueTrend: string;
+  grossMarginPct: number;
+  grossMarginTrend: string;
+  netIncome: number;
+  netIncomeTrend: string;
+  href: string;
+}
+
+export interface CashActionAlert {
+  id: string
+  severity: "critical" | "warning" | "info"
+  headline: string
+  body: string
+  actionLabel: string
+  actionDrawerId: string
+  weekRef?: string
+}
+
+// ---------------------------------------------------------------------------
+// Clients Page — enriched types
+// ---------------------------------------------------------------------------
+
+export interface EnrichedClient extends Client {
+  displayStatus: 'Active' | 'At Risk' | 'Churned'
+  priorMrr: number
+  mrrChange: number
+  revenue90d: number
+  grossProfit: number
+  marginLTV: number
+  runwayImpact: number
+  concentrationPct: number
+  cohortYear: number
+  riskTags: { label: string; variant: 'amber' | 'destructive' }[]
+  shockTest: {
+    revenueImpact: string
+    annualizedImpact: string
+    runwayBefore: string
+    runwayAfter: string
+    runwayDelta: string
+    newTopClient: string
+    newTopClientPct: string
+  }
+}
+
+export interface ClientMrrSnapshot {
+  month: string
+  mrr: number
+  gains: number
+  losses: number
+  details: { name: string; amount: number }[]
+}
+
+export interface CohortMargin {
+  year: number
+  avgMargin: number
+  clientCount: number
+  totalMrr: number
+}
+
+export interface ClientsPageData {
+  clients: EnrichedClient[]
+  totalMrr: number
+  nrr: number
+  grossMrrChurn: number
+  topClientConcentration: number
+  avgMarginLTV: number
+  mrrHistory: ClientMrrSnapshot[]
+  cohortMargins: CohortMargin[]
+  alert: { title: string; message: string; type: 'critical' | 'warning' | 'success' } | null
 }

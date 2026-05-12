@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { type WaterfallRow, type RowType, BarCell, ConnectorRow, currencyFmt } from "./shared"
+import { cn } from "@/lib/utils"
 
 export interface BridgeStep {
   label: string
@@ -68,7 +69,11 @@ function buildBridgeRows(steps: BridgeStep[]): { rows: WaterfallRow[]; connector
       displayValue = currencyFmt.format(step.value)
       const netChange = ((step.value - startValue) / startValue) * 100
       const sign = netChange >= 0 ? "+" : ""
-      percentLabel = { pct: `${sign}${netChange.toFixed(1)}%`, sub: "NET CHANGE" }
+      percentLabel = {
+        pct: `${sign}${netChange.toFixed(1)}%`,
+        sub: "NET CHANGE",
+        colorClass: netChange >= 0 ? "text-emerald-500" : "text-destructive",
+      }
     } else if (step.type === "add") {
       left = (prevRunning / maxValue) * 100
       width = (step.value / maxValue) * 100
@@ -155,10 +160,10 @@ export function BridgeWaterfallChart({ steps }: BridgeWaterfallProps) {
                 details={stepDetails}
               />
 
-              <div className="pl-4 min-w-[70px]">
+              <div className="pl-2 min-w-[60px]">
                 {row.percentLabel ? (
                   <div className="text-right">
-                    <div className="text-sm font-semibold tabular-nums">{row.percentLabel.pct}</div>
+                    <div className={cn("text-sm font-semibold tabular-nums", row.percentLabel.colorClass)}>{row.percentLabel.pct}</div>
                     <div className="text-[10px] tracking-wider text-muted-foreground">{row.percentLabel.sub}</div>
                   </div>
                 ) : null}

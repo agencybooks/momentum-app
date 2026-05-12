@@ -1,4 +1,4 @@
-import type { Client, Invoice, Transaction, MetricAnchor, Alert } from './types';
+import type { Client, Invoice, Transaction, MetricAnchor, Alert, ScorecardMonth, ClientMrrSnapshot } from './types';
 
 // ---------------------------------------------------------------------------
 // CLIENTS — 10 clients, ~$40K total MRR
@@ -16,8 +16,77 @@ export const clients: Client[] = [
   { id: 'cl_08', name: 'Bloom & Branch',       mrr: 1900,  tenure_months: 6,  margin: 0.44, status: 'Healthy' },
   { id: 'cl_09', name: 'Ironclad Legal',       mrr: 2200,  tenure_months: 30, margin: 0.57, status: 'Healthy' },
   { id: 'cl_10', name: 'Sundial Analytics',    mrr: 1500,  tenure_months: 4,  margin: 0.38, status: 'Healthy' },
+  { id: 'cl_11', name: 'Redwood Analytics',   mrr: 0,     tenure_months: 12, margin: 0,    status: 'Churned' },
 ];
 // Total MRR = 40,000 | Acme Co = 13,200 → 33.0%
+
+// ---------------------------------------------------------------------------
+// CLIENT PRIOR MRR — previous month MRR per client (for NRR / churn calcs)
+// ---------------------------------------------------------------------------
+
+export const clientPriorMrr: Record<string, number> = {
+  cl_01: 12800,  // Acme grew +400
+  cl_02: 4500,   // Cobalt contracted -300
+  cl_03: 5100,   // Meridian flat
+  cl_04: 3200,   // Prism grew +200
+  cl_05: 2800,   // TerraVerde flat
+  cl_06: 3000,   // Nightfall grew +100
+  cl_07: 2600,   // Atlas flat
+  cl_08: 1700,   // Bloom grew +200
+  cl_09: 2200,   // Ironclad flat
+  cl_10: 1500,   // Sundial flat
+  cl_11: 2400,   // Redwood churned (was $2.4K)
+};
+
+// ---------------------------------------------------------------------------
+// CLIENT MRR HISTORY — trailing 3-month snapshots for churn waterfall
+// ---------------------------------------------------------------------------
+
+export const clientMrrHistory: ClientMrrSnapshot[] = [
+  {
+    month: "Mar '26",
+    mrr: 38400,
+    gains: 1500,
+    losses: -2700,
+    details: [
+      { name: 'Acme Co', amount: 400 },
+      { name: 'Prism Studios', amount: 200 },
+      { name: 'Bloom & Branch', amount: 200 },
+      { name: 'Nightfall Media', amount: 100 },
+      { name: 'Atlas Fintech', amount: 600 },
+      { name: 'Cobalt Outdoor', amount: -300 },
+      { name: 'Redwood Analytics', amount: -2400 },
+    ],
+  },
+  {
+    month: "Apr '26",
+    mrr: 39500,
+    gains: 1400,
+    losses: -300,
+    details: [
+      { name: 'Acme Co', amount: 400 },
+      { name: 'Prism Studios', amount: 200 },
+      { name: 'Nightfall Media', amount: 100 },
+      { name: 'Bloom & Branch', amount: 200 },
+      { name: 'Atlas Fintech', amount: 500 },
+      { name: 'Cobalt Outdoor', amount: -300 },
+    ],
+  },
+  {
+    month: "May '26",
+    mrr: 40000,
+    gains: 900,
+    losses: -400,
+    details: [
+      { name: 'Acme Co', amount: 400 },
+      { name: 'Prism Studios', amount: 200 },
+      { name: 'Nightfall Media', amount: 100 },
+      { name: 'Bloom & Branch', amount: 200 },
+      { name: 'Cobalt Outdoor', amount: -300 },
+      { name: 'Sundial Analytics', amount: -100 },
+    ],
+  },
+];
 
 // ---------------------------------------------------------------------------
 // INVOICES
@@ -57,6 +126,28 @@ export const invoices: Invoice[] = [
 
   // Sundial Analytics — overdue
   { id: 'inv_13', clientId: 'cl_10', invoiceNumber: 'INV-1010', amount: 1500,  dueDate: '2026-04-22', status: 'Overdue', daysOverdue: 16 },
+
+  // --- Additional invoices for scroll density & bucket coverage ---
+
+  // Current (daysOverdue = 0)
+  { id: 'inv_14', clientId: 'cl_01', invoiceNumber: 'INV-1003', amount: 14800, dueDate: '2026-05-15', status: 'Open',    daysOverdue: 0 },
+  { id: 'inv_15', clientId: 'cl_04', invoiceNumber: 'INV-4002', amount: 6250,  dueDate: '2026-05-18', status: 'Open',    daysOverdue: 0 },
+  { id: 'inv_16', clientId: 'cl_07', invoiceNumber: 'INV-7002', amount: 3800,  dueDate: '2026-05-20', status: 'Open',    daysOverdue: 0 },
+  { id: 'inv_17', clientId: 'cl_10', invoiceNumber: 'INV-1011', amount: 1850,  dueDate: '2026-05-14', status: 'Open',    daysOverdue: 0 },
+
+  // 1-30 Days overdue
+  { id: 'inv_18', clientId: 'cl_01', invoiceNumber: 'INV-1004', amount: 11500, dueDate: '2026-04-29', status: 'Overdue', daysOverdue: 12 },
+  { id: 'inv_19', clientId: 'cl_03', invoiceNumber: 'INV-3003', amount: 4750,  dueDate: '2026-04-19', status: 'Overdue', daysOverdue: 22 },
+  { id: 'inv_20', clientId: 'cl_06', invoiceNumber: 'INV-6002', amount: 2900,  dueDate: '2026-04-13', status: 'Overdue', daysOverdue: 28 },
+
+  // 31-60 Days overdue
+  { id: 'inv_21', clientId: 'cl_04', invoiceNumber: 'INV-4003', amount: 7200,  dueDate: '2026-03-28', status: 'Overdue', daysOverdue: 44 },
+  { id: 'inv_22', clientId: 'cl_05', invoiceNumber: 'INV-5002', amount: 3600,  dueDate: '2026-03-19', status: 'Overdue', daysOverdue: 53 },
+  { id: 'inv_23', clientId: 'cl_09', invoiceNumber: 'INV-9002', amount: 5400,  dueDate: '2026-04-03', status: 'Overdue', daysOverdue: 38 },
+
+  // 60+ Days overdue
+  { id: 'inv_24', clientId: 'cl_07', invoiceNumber: 'INV-7003', amount: 1950,  dueDate: '2026-03-01', status: 'Overdue', daysOverdue: 71 },
+  { id: 'inv_25', clientId: 'cl_08', invoiceNumber: 'INV-8002', amount: 1200,  dueDate: '2026-03-07', status: 'Overdue', daysOverdue: 65 },
 ];
 
 // ---------------------------------------------------------------------------
@@ -91,7 +182,7 @@ export const metricAnchors: MetricAnchor[] = [
   { id: 'ma_01', title: 'Monthly Recurring Revenue', value: 40000,  target: 45000,  isHealthy: false, trendUp: true, trendText: '+2.3% vs prior month' },
   { id: 'ma_02', title: 'Net Margin',                value: 0.54,   target: 0.60,   isHealthy: false, trendText: '-1.2pp vs prior month' },
   { id: 'ma_03', title: 'Cash Runway',               value: 4.8,    target: 6.0,    isHealthy: false, trendText: '-0.4 months vs prior' },
-  { id: 'ma_04', title: 'A/R Aging (>60 days)',       value: 25000,  target: 0,      isHealthy: false, trendText: '$25K overdue >60 days' },
+  { id: 'ma_04', title: 'A/R Aging (>60 days)',       value: 28150,  target: 0,      isHealthy: false, trendText: '$28.2K overdue >60 days' },
   { id: 'ma_05', title: 'Revenue Concentration',      value: 0.33,   target: 0.20,   isHealthy: false, trendText: 'Acme Co = 33% of MRR' },
   { id: 'ma_06', title: 'Client Count',               value: 10,     target: 12,     isHealthy: true,  trendText: '+1 vs prior month' },
 ];
@@ -132,5 +223,45 @@ export const alerts: Alert[] = [
     type: 'warning',
     linkTo: '/profitability',
     drawerTrigger: 'category-dive',
+  },
+];
+
+// ---------------------------------------------------------------------------
+// RECENT SCORECARDS — 3 most recent months for the dashboard footer
+// ---------------------------------------------------------------------------
+
+export const recentScorecards: ScorecardMonth[] = [
+  {
+    month: 'April 2026',
+    isCurrent: true,
+    revenue: 41500,
+    revenueTrend: '↑ 9%',
+    grossMarginPct: 50.1,
+    grossMarginTrend: '↑ 1.8 pts',
+    netIncome: 7900,
+    netIncomeTrend: '↑ 4.2%',
+    href: '/scorecards/april-2026',
+  },
+  {
+    month: 'March 2026',
+    isCurrent: false,
+    revenue: 38100,
+    revenueTrend: '↑ 4.4%',
+    grossMarginPct: 48.3,
+    grossMarginTrend: '↑ 1.6 pts',
+    netIncome: 6200,
+    netIncomeTrend: '↑ 3.8%',
+    href: '/scorecards',
+  },
+  {
+    month: 'February 2026',
+    isCurrent: false,
+    revenue: 36500,
+    revenueTrend: '↑ 3.2%',
+    grossMarginPct: 46.7,
+    grossMarginTrend: '↑ 1.1 pts',
+    netIncome: 5400,
+    netIncomeTrend: '↑ 2.1%',
+    href: '/scorecards',
   },
 ];

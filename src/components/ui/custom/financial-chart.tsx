@@ -47,12 +47,52 @@ export const GROSS_PROFIT_SERIES: ChartSeries[] = [
   { dataKey: "cogs", label: "Direct Costs", color: "var(--color-destructive)", fillOpacity: 0.1, renderAs: "line" },
 ]
 
+export const REV_PER_FTE_SERIES: ChartSeries[] = [
+  { dataKey: "revPerFte", label: "Revenue per FTE", color: "#8b5cf6", fillOpacity: 0.2 },
+]
+
+export const NRR_SERIES: ChartSeries[] = [
+  { dataKey: "nrr", label: "Net Revenue Retention", color: "#22c55e", fillOpacity: 0.2 },
+]
+
+export const BLENDED_CAC_SERIES: ChartSeries[] = [
+  { dataKey: "blendedCac", label: "Blended CAC", color: "var(--color-brand-500)", fillOpacity: 0.2 },
+]
+
+export const CAC_PAYBACK_SERIES: ChartSeries[] = [
+  { dataKey: "cacPayback", label: "CAC Payback", color: "#f59e0b", fillOpacity: 0.2 },
+]
+
+export const LTV_CAC_RATIO_SERIES: ChartSeries[] = [
+  { dataKey: "ltvCacRatio", label: "LTV:CAC Ratio", color: "#8b5cf6", fillOpacity: 0.2 },
+]
+
+export const EXPENSE_AMOUNT_SERIES: ChartSeries[] = [
+  { dataKey: "amount", label: "Monthly Spend", color: "var(--color-brand-500)", fillOpacity: 0.15 },
+]
+
+export const TOTAL_CASH_SERIES: ChartSeries[] = [
+  { dataKey: "totalCash", label: "Total Cash", color: "var(--color-primary)", fillOpacity: 0.3 },
+]
+
+export const NET_BURN_TREND_SERIES: ChartSeries[] = [
+  { dataKey: "netBurn", label: "Net Burn", color: "var(--color-destructive)", fillOpacity: 0.2 },
+]
+
+export const RUNWAY_SERIES: ChartSeries[] = [
+  { dataKey: "runway", label: "Runway", color: "#f59e0b", fillOpacity: 0.2 },
+]
+
+export const DSO_SERIES: ChartSeries[] = [
+  { dataKey: "dso", label: "Days Sales Outstanding", color: "#8b5cf6", fillOpacity: 0.2 },
+]
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface FinancialChartProps {
   data: any[]
   series: ChartSeries[]
   xAxisKey?: string
-  yAxisFormat?: "currency" | "percent"
+  yAxisFormat?: "currency" | "percent" | "months" | "multiplier" | "days"
   hideLegend?: boolean
 }
 
@@ -84,8 +124,17 @@ export function FinancialChart({ data, series, xAxisKey = "date", yAxisFormat = 
           <Legend
             verticalAlign="top"
             align="right"
-            iconType="circle"
             wrapperStyle={{ fontSize: '12px', paddingBottom: '16px', opacity: 0.8 }}
+            content={() => (
+              <div className="flex justify-end gap-4">
+                {series.map((s) => (
+                  <div key={s.dataKey} className="flex items-center gap-1.5">
+                    <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ backgroundColor: s.color }} />
+                    <span className="text-xs text-muted-foreground">{s.label}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           />
         )}
         <XAxis
@@ -107,6 +156,12 @@ export function FinancialChart({ data, series, xAxisKey = "date", yAxisFormat = 
           tickFormatter={(value) =>
             yAxisFormat === "percent"
               ? `${(value * 100).toFixed(0)}%`
+              : yAxisFormat === "months"
+              ? `${value} mo`
+              : yAxisFormat === "multiplier"
+              ? `${value}x`
+              : yAxisFormat === "days"
+              ? `${value} d`
               : `$${(value / 1000).toFixed(0)}k`
           }
           width={50}
@@ -119,6 +174,12 @@ export function FinancialChart({ data, series, xAxisKey = "date", yAxisFormat = 
               formatter={(value, name, item, index) => {
                 const formattedValue = yAxisFormat === "percent"
                   ? `${((value as number) * 100).toFixed(1)}%`
+                  : yAxisFormat === "months"
+                  ? `${(value as number).toFixed(1)} mo`
+                  : yAxisFormat === "multiplier"
+                  ? `${(value as number).toFixed(1)}x`
+                  : yAxisFormat === "days"
+                  ? `${(value as number).toFixed(0)} days`
                   : currencyFmt.format(value as number)
 
                 const row = (
@@ -138,7 +199,7 @@ export function FinancialChart({ data, series, xAxisKey = "date", yAxisFormat = 
                   </div>
                 )
 
-                if (yAxisFormat === "percent") return row
+                if (yAxisFormat !== "currency") return row
                 if (index !== series.length - 1) return row
 
                 const payload = item.payload as Record<string, number>
@@ -173,7 +234,7 @@ export function FinancialChart({ data, series, xAxisKey = "date", yAxisFormat = 
               dataKey={s.dataKey}
               stroke={s.color}
               strokeWidth={2}
-              strokeDasharray="4 4"
+
               dot={false}
             />
           ) : (

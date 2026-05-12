@@ -131,7 +131,7 @@ export function PremiumWaterfallChart({ data, details }: PremiumWaterfallProps) 
                 details={rowDetails}
               />
 
-              <div className="pl-4 min-w-[70px]">
+              <div className="pl-2 min-w-[60px]">
                 {row.percentLabel ? (
                   <div className="text-right">
                     <div className="text-sm font-semibold tabular-nums">{row.percentLabel.pct}</div>

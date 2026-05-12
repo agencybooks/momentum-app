@@ -1,6 +1,6 @@
 "use client"
 
-import { Fragment } from "react"
+import { Fragment, type ReactNode } from "react"
 import { useQueryState } from "nuqs"
 import {
   Table,
@@ -37,47 +37,74 @@ function fillColor(categoryId: string) {
   return "bg-muted-foreground/10"
 }
 
+function CellContent({ collapsed, children }: { collapsed: boolean; children: ReactNode }) {
+  return (
+    <div className={cn(
+      "grid transition-[grid-template-rows,opacity] duration-200 ease-out",
+      collapsed ? "grid-rows-[0fr] opacity-0" : "grid-rows-[1fr] opacity-100"
+    )}>
+      <div className="overflow-hidden">{children}</div>
+    </div>
+  )
+}
+
+const cellTransition = "transition-[padding] duration-200 ease-out"
+
 function SubItemRow({
   item,
   categoryId,
   isRevenue,
+  collapsed = false,
 }: {
   item: PnLSubItem
   categoryId: string
   isRevenue: boolean
+  collapsed?: boolean
 }) {
   const [, setDrawer] = useQueryState("drawer")
 
   return (
     <TableRow
-      onClick={() => setDrawer(item.drawerId)}
-      className="group cursor-pointer hover:bg-muted/30 transition-colors border-0"
+      onClick={collapsed ? undefined : () => setDrawer(item.drawerId)}
+      className={cn(
+        "group transition-colors border-0",
+        collapsed ? "pointer-events-none" : "cursor-pointer hover:bg-muted/30"
+      )}
+      aria-hidden={collapsed || undefined}
     >
-      <TableCell className="py-3 pl-10 pr-6">
-        <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
-          {item.name}
-        </span>
-      </TableCell>
-      <TableCell className="py-3 px-6 text-right font-mono tabular-nums text-sm text-muted-foreground">
-        {currencyFmt.format(item.amount)}
-      </TableCell>
-      <TableCell className={cn("py-3 px-6 text-right tabular-nums text-sm font-medium", varianceColor(item.variance, isRevenue))}>
-        {formatVariance(item.variance)}
-      </TableCell>
-      <TableCell className="py-3 px-6">
-        <div className="relative overflow-hidden rounded-sm">
-          {item.revenueWeight > 0 && (
-            <div
-              className={cn("absolute inset-y-0 right-0", fillColor(categoryId))}
-              style={{ width: `${Math.min(item.revenueWeight * 100, 100)}%` }}
-            />
-          )}
-          <span className="relative text-sm font-mono tabular-nums text-muted-foreground text-right block">
-            {item.revenueWeight > 0
-              ? `${(item.revenueWeight * 100).toFixed(1)}%`
-              : "—"}
+      <TableCell className={cn("pl-8 pr-4", cellTransition, collapsed ? "py-0" : "py-3")}>
+        <CellContent collapsed={collapsed}>
+          <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+            {item.name}
           </span>
-        </div>
+        </CellContent>
+      </TableCell>
+      <TableCell className={cn("px-4 text-right font-mono tabular-nums text-sm text-muted-foreground", cellTransition, collapsed ? "py-0" : "py-3")}>
+        <CellContent collapsed={collapsed}>
+          {currencyFmt.format(item.amount)}
+        </CellContent>
+      </TableCell>
+      <TableCell className={cn("px-4 text-right tabular-nums text-sm font-medium", cellTransition, collapsed ? "py-0" : "py-3", varianceColor(item.variance, isRevenue))}>
+        <CellContent collapsed={collapsed}>
+          {formatVariance(item.variance)}
+        </CellContent>
+      </TableCell>
+      <TableCell className={cn("px-4", cellTransition, collapsed ? "py-0" : "py-3")}>
+        <CellContent collapsed={collapsed}>
+          <div className="relative overflow-hidden rounded-sm">
+            {item.revenueWeight > 0 && (
+              <div
+                className={cn("absolute inset-y-0 right-0", fillColor(categoryId))}
+                style={{ width: `${Math.min(item.revenueWeight * 100, 100)}%` }}
+              />
+            )}
+            <span className="relative text-sm font-mono tabular-nums text-muted-foreground text-right block">
+              {item.revenueWeight > 0
+                ? `${(item.revenueWeight * 100).toFixed(1)}%`
+                : "—"}
+            </span>
+          </div>
+        </CellContent>
       </TableCell>
     </TableRow>
   )
@@ -99,19 +126,20 @@ export function PnlTable({ categories, revenue, view }: PnlTableProps) {
   const [, setDrawer] = useQueryState("drawer")
 
   return (
+    <div>
     <Table className="table-fixed">
       <TableHeader>
         <TableRow className="hover:bg-transparent">
-          <TableHead className="text-xs font-semibold uppercase tracking-wider text-muted-foreground py-3 px-6">
+          <TableHead className="text-xs font-semibold uppercase tracking-wider text-muted-foreground py-3 px-4">
             Category
           </TableHead>
-          <TableHead className="w-[140px] text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground py-3 px-6">
+          <TableHead className="w-[110px] text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground py-3 px-4">
             May 2026
           </TableHead>
-          <TableHead className="w-[120px] text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground py-3 px-6">
+          <TableHead className="w-[90px] text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground py-3 px-4">
             vs April
           </TableHead>
-          <TableHead className="w-[100px] text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground py-3 px-6">
+          <TableHead className="w-[80px] text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground py-3 px-4">
             % Rev
           </TableHead>
         </TableRow>
@@ -135,17 +163,17 @@ export function PnlTable({ categories, revenue, view }: PnlTableProps) {
                 onClick={highlightDrawerId ? () => setDrawer(highlightDrawerId) : undefined}
               >
                 <TableCell className={cn(
-                  "py-3.5 px-6",
+                  "py-4 px-4",
                   isNetIncome ? "font-bold text-emerald-600 dark:text-emerald-500" : "font-semibold text-brand-500 dark:text-brand-400"
                 )}>{cat.name}</TableCell>
                 <TableCell className={cn(
-                  "py-3.5 px-6 text-right font-mono tabular-nums",
+                  "py-4 px-4 text-right font-mono tabular-nums",
                   isNetIncome ? "font-bold text-emerald-600 dark:text-emerald-500" : "font-semibold text-brand-500 dark:text-brand-400"
                 )}>
                   {currencyFmt.format(cat.amount)}
                 </TableCell>
                 <TableCell className={cn(
-                  "py-3.5 px-6 text-right tabular-nums text-sm",
+                  "py-4 px-4 text-right tabular-nums text-sm",
                   isNetIncome ? "font-bold" : "font-semibold"
                 )}>
                   {cat.variance && (
@@ -154,7 +182,7 @@ export function PnlTable({ categories, revenue, view }: PnlTableProps) {
                     </span>
                   )}
                 </TableCell>
-                <TableCell className="py-3.5 px-6">
+                <TableCell className="py-4 px-4">
                   <div className="relative overflow-hidden rounded-sm">
                     {revenue > 0 && (
                       <div
@@ -196,25 +224,25 @@ export function PnlTable({ categories, revenue, view }: PnlTableProps) {
                 onClick={catDrawerId ? () => setDrawer(catDrawerId) : undefined}
               >
                 <TableCell className={cn(
-                  "py-3.5 px-6 text-foreground",
+                  "py-4 px-4 text-foreground",
                   isRevenueRow ? "font-bold" : "font-semibold"
                 )}>
                   {cat.name}
                 </TableCell>
                 <TableCell className={cn(
-                  "py-3.5 px-6 text-right font-mono tabular-nums text-foreground",
+                  "py-4 px-4 text-right font-mono tabular-nums text-foreground",
                   isRevenueRow ? "font-bold" : "font-semibold"
                 )}>
                   {currencyFmt.format(cat.amount)}
                 </TableCell>
-                <TableCell className="py-3.5 px-6 text-right tabular-nums text-sm font-semibold">
+                <TableCell className="py-4 px-4 text-right tabular-nums text-sm font-semibold">
                   {cat.variance && (
                     <span className={varianceColor(cat.variance, isRevenue)}>
                       {formatVariance(cat.variance)}
                     </span>
                   )}
                 </TableCell>
-                <TableCell className="py-3.5 px-6">
+                <TableCell className="py-4 px-4">
                   <div className="relative overflow-hidden rounded-sm">
                     {revenue > 0 && (
                       <div
@@ -230,13 +258,14 @@ export function PnlTable({ categories, revenue, view }: PnlTableProps) {
                   </div>
                 </TableCell>
               </TableRow>
-              {showChildren &&
+              {hasChildren &&
                 cat.children.map((child) => (
                   <SubItemRow
                     key={child.id}
                     item={child}
                     categoryId={cat.id}
                     isRevenue={isRevenue}
+                    collapsed={!showChildren}
                   />
                 ))}
             </Fragment>
@@ -244,5 +273,6 @@ export function PnlTable({ categories, revenue, view }: PnlTableProps) {
         })}
       </TableBody>
     </Table>
+    </div>
   )
 }

@@ -21,6 +21,19 @@ export interface MetricAnchorProps {
   sentiment?: "positive" | "negative" | "neutral"
 }
 
+function condenseTarget(target: string): string {
+  return target.replace(/(-\$|\$|-)?(\d{1,3})(,\d{3})+/g, (match, prefix) => {
+    const numStr = match.replace(/[^0-9]/g, "")
+    const num = parseInt(numStr, 10)
+    if (!isNaN(num) && num >= 1000) {
+      const kValue = num / 1000
+      const kString = kValue % 1 === 0 ? kValue.toString() : kValue.toFixed(1)
+      return `${prefix || ""}${kString}K`
+    }
+    return match
+  })
+}
+
 export function MetricAnchor({
   title,
   value,
@@ -79,7 +92,7 @@ export function MetricAnchor({
               })()}
               {target && (
                 <span className="text-[10px] text-muted-foreground font-medium whitespace-nowrap">
-                  (Goal: {target})
+                  (Goal: {condenseTarget(target)})
                 </span>
               )}
             </div>
@@ -129,3 +142,4 @@ export function MetricAnchor({
     </Card>
   )
 }
+

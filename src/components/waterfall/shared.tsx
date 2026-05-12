@@ -16,7 +16,7 @@ export interface WaterfallRow {
   type: RowType
   left: number
   width: number
-  percentLabel?: { pct: string; sub: string }
+  percentLabel?: { pct: string; sub: string; colorClass?: string }
 }
 
 export const currencyFmt = new Intl.NumberFormat("en-US", {

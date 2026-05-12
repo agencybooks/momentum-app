@@ -30,6 +30,7 @@ const tabsListVariants = cva(
       variant: {
         default: "bg-muted",
         line: "gap-1 bg-transparent",
+        "drawer-period": "gap-0 bg-transparent rounded-none p-0",
       },
     },
     defaultVariants: {
@@ -62,6 +63,7 @@ function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
         "group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent",
         "data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground",
         "after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-horizontal/tabs:after:inset-x-0 group-data-horizontal/tabs:after:bottom-[-5px] group-data-horizontal/tabs:after:h-0.5 group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:-right-1 group-data-vertical/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100",
+        "group-data-[variant=drawer-period]/tabs-list:after:hidden group-data-[variant=drawer-period]/tabs-list:rounded-none group-data-[variant=drawer-period]/tabs-list:border-b-2 group-data-[variant=drawer-period]/tabs-list:border-b-transparent group-data-[variant=drawer-period]/tabs-list:bg-transparent group-data-[variant=drawer-period]/tabs-list:shadow-none group-data-[variant=drawer-period]/tabs-list:px-3 group-data-[variant=drawer-period]/tabs-list:py-1.5 group-data-[variant=drawer-period]/tabs-list:text-sm group-data-[variant=drawer-period]/tabs-list:font-medium group-data-[variant=drawer-period]/tabs-list:transition-all group-data-[variant=drawer-period]/tabs-list:duration-200 group-data-[variant=drawer-period]/tabs-list:hover:text-foreground group-data-[variant=drawer-period]/tabs-list:hover:bg-muted/30 group-data-[variant=drawer-period]/tabs-list:data-active:text-foreground group-data-[variant=drawer-period]/tabs-list:data-active:border-b-brand-500 group-data-[variant=drawer-period]/tabs-list:data-active:bg-transparent group-data-[variant=drawer-period]/tabs-list:data-active:border-t-transparent group-data-[variant=drawer-period]/tabs-list:data-active:border-x-transparent dark:group-data-[variant=drawer-period]/tabs-list:data-active:bg-transparent dark:group-data-[variant=drawer-period]/tabs-list:data-active:border-t-transparent dark:group-data-[variant=drawer-period]/tabs-list:data-active:border-x-transparent",
         className
       )}
       {...props}

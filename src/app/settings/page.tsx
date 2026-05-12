@@ -14,16 +14,15 @@ import {
   TableCell,
 } from "@/components/ui/table"
 import { AlertTriangle, Database, Shield, CheckCircle2, LayoutTemplate, Target, LogOut } from "lucide-react"
+import { PageHeader } from "@/components/page-header"
 
 export default function SettingsPage() {
   return (
     <div className="flex flex-col gap-8">
-      <div>
-        <h1 className="text-3xl font-semibold tracking-tight">Workspace Settings</h1>
-        <p className="text-muted-foreground mt-1">
-          Manage your data integrations, chart of accounts, and financial targets.
-        </p>
-      </div>
+      <PageHeader
+        title="Workspace Settings"
+        subtitle="Manage your data integrations, chart of accounts, and financial targets."
+      />
 
       <Tabs defaultValue="workspace" className="w-full">
         <TabsList className="mb-8">

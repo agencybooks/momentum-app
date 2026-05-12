@@ -1,8 +1,11 @@
 "use client"
 
+import { useQueryState } from "nuqs"
 import { SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { Separator } from "@/components/ui/separator"
 import { AlertTriangle, TrendingUp, ArrowDown, ArrowUp } from "lucide-react"
+import { DrawerPeriodSelector } from "@/components/ui/custom/drawer-period-selector"
+import { filterByPeriod, periodLabel, DEFAULT_PERIOD, computePeriodAverage } from "@/lib/period-utils"
 import {
   FinancialChart,
   GROSS_MARGIN_SERIES,
@@ -11,8 +14,11 @@ import {
   REVENUE_TREND_SERIES,
   COGS_TREND_SERIES,
   GROSS_PROFIT_SERIES,
+  REV_PER_FTE_SERIES,
   type ChartSeries,
 } from "@/components/ui/custom/financial-chart"
+import { MathEquation, type MathStep } from "./math-equation"
+import { VarianceLedger } from "./variance-ledger"
 import type { ProfitabilityTrendPoint } from "@/lib/db/types"
 
 export const PROFITABILITY_TREND_DRAWER_IDS = [
@@ -22,26 +28,20 @@ export const PROFITABILITY_TREND_DRAWER_IDS = [
   "revenue-trend",
   "cogs-trend",
   "gross-profit-trend",
+  "rev-per-fte-trend",
 ] as const
 
 const trendData: ProfitabilityTrendPoint[] = [
-  { month: "Dec", revenue: 48000, cogs: 22800, grossProfit: 25200, opex: 15200, operatingProfit: 10000, otherExpenses: 1430, netIncome: 8570, grossMargin: 0.525, opMargin: 0.208, netMargin: 0.179 },
-  { month: "Jan", revenue: 49500, cogs: 23500, grossProfit: 26000, opex: 15600, operatingProfit: 10400, otherExpenses: 1430, netIncome: 8970, grossMargin: 0.525, opMargin: 0.210, netMargin: 0.181 },
-  { month: "Feb", revenue: 51000, cogs: 24200, grossProfit: 26800, opex: 16000, operatingProfit: 10800, otherExpenses: 1430, netIncome: 9370, grossMargin: 0.525, opMargin: 0.212, netMargin: 0.184 },
-  { month: "Mar", revenue: 52500, cogs: 25000, grossProfit: 27500, opex: 16400, operatingProfit: 11100, otherExpenses: 1430, netIncome: 9670, grossMargin: 0.524, opMargin: 0.211, netMargin: 0.184 },
-  { month: "Apr", revenue: 53800, cogs: 26300, grossProfit: 27500, opex: 16200, operatingProfit: 11300, otherExpenses: 1430, netIncome: 9870, grossMargin: 0.511, opMargin: 0.210, netMargin: 0.183 },
-  { month: "May", revenue: 55000, cogs: 27445, grossProfit: 27555, opex: 17105, operatingProfit: 10450, otherExpenses: 1430, netIncome: 9020, grossMargin: 0.501, opMargin: 0.190, netMargin: 0.164 },
+  { month: "Dec", revenue: 48000, cogs: 22800, grossProfit: 25200, opex: 15200, operatingProfit: 10000, otherExpenses: 1430, netIncome: 8570, grossMargin: 0.525, opMargin: 0.208, netMargin: 0.179, revPerFte: 155000 },
+  { month: "Jan", revenue: 49500, cogs: 23500, grossProfit: 26000, opex: 15600, operatingProfit: 10400, otherExpenses: 1430, netIncome: 8970, grossMargin: 0.525, opMargin: 0.210, netMargin: 0.181, revPerFte: 158200 },
+  { month: "Feb", revenue: 51000, cogs: 24200, grossProfit: 26800, opex: 16000, operatingProfit: 10800, otherExpenses: 1430, netIncome: 9370, grossMargin: 0.525, opMargin: 0.212, netMargin: 0.184, revPerFte: 161000 },
+  { month: "Mar", revenue: 52500, cogs: 25000, grossProfit: 27500, opex: 16400, operatingProfit: 11100, otherExpenses: 1430, netIncome: 9670, grossMargin: 0.524, opMargin: 0.211, netMargin: 0.184, revPerFte: 164300 },
+  { month: "Apr", revenue: 53800, cogs: 26300, grossProfit: 27500, opex: 16200, operatingProfit: 11300, otherExpenses: 1430, netIncome: 9870, grossMargin: 0.511, opMargin: 0.210, netMargin: 0.183, revPerFte: 166800 },
+  { month: "May", revenue: 55000, cogs: 27445, grossProfit: 27555, opex: 17105, operatingProfit: 10450, otherExpenses: 1430, netIncome: 9020, grossMargin: 0.501, opMargin: 0.190, netMargin: 0.164, revPerFte: 168500 },
 ]
 
 const currencyFmt = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 })
 const compactCurrency = (v: number) => `$${(v / 1000).toFixed(1)}K`
-
-interface MathStep {
-  left: { value: string; label: string }
-  operator: "plus" | "minus" | "divided by"
-  right: { value: string; label: string }
-  result: { value: string; label: string }
-}
 
 interface DrawerAction {
   label: string
@@ -209,6 +209,36 @@ function getDrawerSpec(drawerId: string): DrawerSpec {
           { label: "Audit Vendor Costs", variant: "primary" },
         ],
       }
+    case "rev-per-fte-trend":
+      return {
+        title: "Revenue per FTE Trend",
+        alertType: "success",
+        alertMessage: `Revenue per FTE grew ${compactCurrency(current.revPerFte - first.revPerFte)} over 6 months (${compactCurrency(first.revPerFte)} → ${compactCurrency(current.revPerFte)}). Steady improvement driven by revenue growth outpacing headcount.`,
+        series: REV_PER_FTE_SERIES,
+        yAxisFormat: "currency",
+        headerValue: currencyFmt.format(current.revPerFte),
+        headerDelta: `+${compactCurrency(current.revPerFte - prior.revPerFte)}`,
+        headerDeltaDirection: "up",
+        proofLabel: "Revenue per FTE Calculation",
+        mathSteps: [
+          {
+            left: { value: compactCurrency(current.revenue), label: "Monthly Rev." },
+            operator: "times",
+            right: { value: "12", label: "Months" },
+            result: { value: compactCurrency(current.revenue * 12), label: "Annualized" },
+          },
+          {
+            left: { value: compactCurrency(current.revenue * 12), label: "Annual Rev." },
+            operator: "divided by",
+            right: { value: "3.92", label: "Avg FTEs" },
+            result: { value: compactCurrency(current.revPerFte), label: "Rev/FTE" },
+          },
+        ],
+        actions: [
+          { label: "Review Headcount Plan", variant: "outline" },
+          { label: "Optimize Utilization", variant: "primary" },
+        ],
+      }
     case "gross-profit-trend":
     default:
       return {
@@ -237,120 +267,11 @@ function getDrawerSpec(drawerId: string): DrawerSpec {
   }
 }
 
-function MathEquation({ steps, label }: { steps: MathStep[]; label: string }) {
-  return (
-    <div className="mt-8">
-      <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-        {label}
-      </h3>
-      <div className="rounded-xl border border-border/40 bg-zinc-100/60 dark:bg-black/40 px-5 py-4">
-        <div className="flex flex-col">
-          {steps.map((step, i) => (
-            <div key={i} className="flex flex-col">
-              {i > 0 && <hr className="border-border/40 my-4" />}
-              <div className="flex items-center justify-center gap-8">
-                <div className="text-center">
-                  <div className="text-xs text-muted-foreground mb-0.5">{step.left.label}</div>
-                  <div className="text-lg font-medium font-mono tabular-nums">{step.left.value}</div>
-                </div>
-                <div className="w-6 h-6 rounded-full bg-zinc-200/80 dark:bg-zinc-800/50 flex items-center justify-center shrink-0">
-                  <span className="text-xs text-muted-foreground">
-                    {step.operator === "plus" ? "+" : step.operator === "minus" ? "−" : "÷"}
-                  </span>
-                </div>
-                <div className="text-center">
-                  <div className="text-xs text-muted-foreground mb-0.5">{step.right.label}</div>
-                  <div className="text-lg font-medium font-mono tabular-nums">{step.right.value}</div>
-                </div>
-                <div className="w-6 h-6 rounded-full bg-zinc-200/80 dark:bg-zinc-800/50 flex items-center justify-center shrink-0">
-                  <span className="text-xs text-muted-foreground">=</span>
-                </div>
-                <div className="text-center">
-                  <div className="text-xs text-muted-foreground mb-0.5">{step.result.label}</div>
-                  <div className="text-lg font-medium font-mono tabular-nums text-brand-500">{step.result.value}</div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function VarianceLedger({ data, spec }: { data: ProfitabilityTrendPoint[]; spec: DrawerSpec }) {
-  const dataKey = spec.series[0].dataKey as keyof ProfitabilityTrendPoint
-  const isPercent = spec.yAxisFormat === "percent"
-
-  return (
-    <div className="mt-8">
-      <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-        Period Comparison
-      </h3>
-      <table className="w-full table-fixed text-sm">
-        <thead>
-          <tr className="border-b border-border/50">
-            <th className="text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider pb-2 w-16">Month</th>
-            <th className="text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider pb-2">
-              {isPercent ? "Margin %" : "Amount"}
-            </th>
-            <th className="text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider pb-2 w-24">
-              MoM Δ
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {[...data].reverse().map((point, i) => {
-            const originalIndex = data.length - 1 - i
-            const value = point[dataKey] as number
-            const isFirst = i === 0
-            const prevValue = originalIndex > 0 ? (data[originalIndex - 1][dataKey] as number) : null
-
-            let delta: string
-            let deltaColor: string
-            if (prevValue === null) {
-              delta = "—"
-              deltaColor = "text-muted-foreground"
-            } else if (isPercent) {
-              const diff = (value - prevValue) * 100
-              delta = `${diff >= 0 ? "+" : ""}${diff.toFixed(1)}pp`
-              deltaColor = diff > 0 ? "text-emerald-600 dark:text-emerald-400" : diff < 0 ? "text-destructive" : "text-muted-foreground"
-            } else {
-              const diff = value - prevValue
-              delta = `${diff >= 0 ? "+" : ""}$${(Math.abs(diff) / 1000).toFixed(1)}K`
-              if (diff < 0) delta = `-$${(Math.abs(diff) / 1000).toFixed(1)}K`
-              deltaColor = diff > 0 ? "text-emerald-600 dark:text-emerald-400" : diff < 0 ? "text-destructive" : "text-muted-foreground"
-            }
-
-            const formattedValue = isPercent
-              ? `${(value * 100).toFixed(1)}%`
-              : `$${(value / 1000).toFixed(1)}K`
-
-            return (
-              <tr
-                key={point.month}
-                className={`border-b border-border/30 last:border-0 ${isFirst ? "bg-accent/30" : ""}`}
-              >
-                <td className={`py-2 font-mono tabular-nums ${isFirst ? "font-bold text-foreground" : "text-muted-foreground"}`}>
-                  {point.month}
-                </td>
-                <td className={`py-2 text-right font-mono tabular-nums ${isFirst ? "font-bold text-foreground" : ""}`}>
-                  {formattedValue}
-                </td>
-                <td className={`py-2 text-right font-mono tabular-nums ${deltaColor} ${isFirst ? "font-bold" : ""}`}>
-                  {delta}
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-    </div>
-  )
-}
-
 export function ProfitabilityTrendDrawerContent({ drawerId }: { drawerId: string }) {
+  const [period, setPeriod] = useQueryState("period", { defaultValue: DEFAULT_PERIOD })
+  const filteredData = filterByPeriod(trendData, period)
   const spec = getDrawerSpec(drawerId)
+  const periodAverage = computePeriodAverage(filteredData, spec.series[0].dataKey, spec.yAxisFormat)
   const isWarning = spec.alertType === "warning"
 
   return (
@@ -402,14 +323,16 @@ export function ProfitabilityTrendDrawerContent({ drawerId }: { drawerId: string
           </span>
         </div>
 
+        <DrawerPeriodSelector value={period} onValueChange={setPeriod} periodAverage={periodAverage} />
+
         {/* Hero chart */}
         <div>
           <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-            Trailing 6 Months
+            {periodLabel(period)}
           </h3>
           <div className="w-full min-h-[280px]">
             <FinancialChart
-              data={trendData}
+              data={filteredData}
               series={spec.series}
               xAxisKey="month"
               yAxisFormat={spec.yAxisFormat}
@@ -422,7 +345,7 @@ export function ProfitabilityTrendDrawerContent({ drawerId }: { drawerId: string
         <MathEquation steps={spec.mathSteps} label={spec.proofLabel} />
 
         {/* Variance ledger */}
-        <VarianceLedger data={trendData} spec={spec} />
+        <VarianceLedger data={filteredData} dataKey={spec.series[0].dataKey} format={spec.yAxisFormat} downIsGood={false} />
       </div>
 
     </div>

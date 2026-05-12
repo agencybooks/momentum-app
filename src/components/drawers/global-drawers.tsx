@@ -7,219 +7,29 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Maximize2, Minimize2, AlertCircle, Mail, ArrowRight, ArrowUpRight, ArrowDownRight, Lightbulb, Shield, Zap, CheckCircle2, AlertTriangle, Search, Clock, Check, RotateCcw, ChevronDown, CornerDownRight, TrendingUp, Plus, Minus, Equal, Flame, UserMinus, Landmark, Divide } from "lucide-react"
+import { Maximize2, Minimize2, AlertCircle, ArrowRight, ArrowUpRight, ArrowDownRight, Lightbulb, CheckCircle2, AlertTriangle, Search, Clock, Check, RotateCcw, ChevronDown, CornerDownRight, TrendingUp, Plus, Minus, Equal } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
 import { ProfitabilityTrendDrawerContent, PROFITABILITY_TREND_DRAWER_IDS } from "./profitability-trend-drawers"
+import { ExpenseDepartmentDrawerContent, EXPENSE_DEPARTMENT_DRAWER_IDS } from "./expense-department-drawers"
+import { GrowthTrendDrawerContent, GROWTH_TREND_DRAWER_IDS } from "./growth-trend-drawers"
+import { CashTrendDrawerContent, CASH_TREND_DRAWER_IDS } from "./cash-trend-drawers"
 
 function DrawerContent({ drawer, setDrawer }: { drawer: string; setDrawer: (v: string | null) => void }) {
   switch (drawer) {
-    case "m1":
-      return (
-        <>
-          <SheetHeader>
-            <SheetTitle className="text-xl font-semibold tracking-tight">
-              Cash Runway Forecast
-            </SheetTitle>
-            <SheetDescription className="mt-1">
-              Current: 5.4 Months | Zero-Cash Date: Late Oct 2026
-            </SheetDescription>
-          </SheetHeader>
-
-          <Separator className="my-6" />
-
-          <div className="flex flex-col px-4 pb-6">
-            <div className="w-full border border-amber-500/20 bg-amber-500/5 dark:bg-amber-500/10 rounded-lg flex items-start gap-3 p-3 mb-8">
-              <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-500 mt-0.5 shrink-0" />
-              <span className="text-sm font-medium text-amber-800 dark:text-amber-400">
-                Runway tightened by 0.6 months due to a $15K increase in Q2 marketing spend and $25K delayed AR.
-              </span>
-            </div>
-
-            <div>
-              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-                Mathematical Proof
-              </h3>
-              <div className="flex items-center justify-between w-full bg-accent/30 rounded-lg p-4 border border-border/50">
-                <div className="flex flex-col gap-1 items-center">
-                  <span className="text-xs text-muted-foreground">Operating Cash</span>
-                  <span className="text-sm font-medium tabular-nums text-foreground">$222.8K</span>
-                </div>
-                <Divide className="w-4 h-4 mt-5 text-muted-foreground/40 dark:text-muted-foreground/60 shrink-0" />
-                <div className="flex flex-col gap-1 items-center">
-                  <span className="text-xs text-muted-foreground">Avg Net Burn</span>
-                  <span className="text-sm font-medium tabular-nums text-foreground">$41.2K/mo</span>
-                </div>
-                <Equal className="w-4 h-4 mt-5 text-muted-foreground/40 dark:text-muted-foreground/60 shrink-0" />
-                <div className="flex flex-col gap-1 items-center">
-                  <span className="text-xs text-muted-foreground">Runway</span>
-                  <span className="text-sm font-medium tabular-nums text-amber-600 dark:text-amber-500">5.4 mos</span>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mt-8 mb-4">
-                Survival Playbook
-              </h3>
-              <div>
-                <div className="group flex items-center justify-between py-3 border-b border-border/50 last:border-0 hover:bg-accent/50 transition-colors -mx-2 px-2 rounded-md cursor-pointer">
-                  <span className="text-sm font-medium"><Mail className="w-4 h-4 text-muted-foreground mr-2 inline" />Collect $25K Cobalt AR</span>
-                  <span className="text-sm font-medium tabular-nums text-emerald-600 dark:text-emerald-400">+0.6 mo</span>
-                </div>
-                <div className="group flex items-center justify-between py-3 border-b border-border/50 last:border-0 hover:bg-accent/50 transition-colors -mx-2 px-2 rounded-md cursor-pointer">
-                  <span className="text-sm font-medium"><UserMinus className="w-4 h-4 text-muted-foreground mr-2 inline" />Pause planned Q3 hiring</span>
-                  <span className="text-sm font-medium tabular-nums text-emerald-600 dark:text-emerald-400">+1.2 mo</span>
-                </div>
-                <div className="group flex items-center justify-between py-3 border-b border-border/50 last:border-0 hover:bg-accent/50 transition-colors -mx-2 px-2 rounded-md cursor-pointer">
-                  <span className="text-sm font-medium"><Landmark className="w-4 h-4 text-muted-foreground mr-2 inline" />Draw $50K on line of credit</span>
-                  <span className="text-sm font-medium tabular-nums text-emerald-600 dark:text-emerald-400">+1.2 mo</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </>
-      )
-
+    case "m9":
     case "m2":
-      return (
-        <>
-          <SheetHeader>
-            <SheetTitle className="text-xl font-semibold tracking-tight">
-              Net Burn Waterfall
-            </SheetTitle>
-            <SheetDescription className="mt-1">
-              Trailing 30 Days (April 2026)
-            </SheetDescription>
-          </SheetHeader>
-
-          <Separator className="my-6" />
-
-          <div className="flex flex-col px-4 pb-6">
-            <div className="w-full border border-destructive/20 bg-destructive/5 dark:bg-destructive/10 rounded-lg flex items-start gap-3 p-3 mb-8">
-              <Flame className="w-4 h-4 text-destructive mt-0.5 shrink-0" />
-              <span className="text-sm font-medium text-destructive dark:text-red-400">
-                Net Burn accelerated to -$15.2K this month. Driven by $25K miss in A/R.
-              </span>
-            </div>
-
-            <div>
-              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-                Cash Flow Waterfall
-              </h3>
-              <div className="flex items-center justify-between w-full bg-accent/30 rounded-lg p-4 border border-border/50">
-                <div className="flex flex-col gap-1 items-center">
-                  <span className="text-xs text-muted-foreground">Inflows</span>
-                  <span className="text-sm font-medium tabular-nums text-emerald-600">$41.5K</span>
-                </div>
-                <Minus className="w-4 h-4 mt-5 text-muted-foreground/40 dark:text-muted-foreground/60 shrink-0" />
-                <div className="flex flex-col gap-1 items-center">
-                  <span className="text-xs text-muted-foreground">Outflows</span>
-                  <span className="text-sm font-medium tabular-nums text-destructive">$56.7K</span>
-                </div>
-                <Equal className="w-4 h-4 mt-5 text-muted-foreground/40 dark:text-muted-foreground/60 shrink-0" />
-                <div className="flex flex-col gap-1 items-center">
-                  <span className="text-xs text-muted-foreground">Net Burn</span>
-                  <span className="text-sm font-medium tabular-nums text-destructive">-$15.2K</span>
-                </div>
-              </div>
-              <p className="text-xs text-muted-foreground text-right mt-2">Starting Cash: $238.0K → Ending Cash: $222.8K</p>
-            </div>
-
-            <div>
-              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mt-8 mb-4">
-                High-Level Movements
-              </h3>
-              <div>
-                <div className="group flex items-center justify-between py-3 border-b border-border/50 hover:bg-accent/50 transition-colors -mx-2 px-2 rounded-md cursor-pointer">
-                  <span className="text-sm font-medium">Cash Inflows</span>
-                  <span className="text-sm font-medium tabular-nums text-emerald-600 dark:text-emerald-500">+$41.5K</span>
-                </div>
-                <div className="group flex items-center justify-between py-3 border-b border-border/50 hover:bg-accent/50 transition-colors -mx-2 px-2 rounded-md cursor-pointer">
-                  <span className="text-sm font-medium">Cash Outflows</span>
-                  <span className="text-sm font-medium tabular-nums text-destructive">-$56.7K</span>
-                </div>
-                <div className="group flex items-center justify-between py-3 border-b border-border/50 hover:bg-accent/50 transition-colors -mx-2 px-2 rounded-md cursor-pointer">
-                  <span className="text-sm font-medium ml-4 text-muted-foreground">Payroll</span>
-                  <span className="text-sm tabular-nums text-muted-foreground">$31.0K</span>
-                </div>
-                <div className="group flex items-center justify-between py-3 border-b border-border/50 last:border-0 hover:bg-accent/50 transition-colors -mx-2 px-2 rounded-md cursor-pointer">
-                  <span className="text-sm font-medium ml-4 text-muted-foreground">Operations</span>
-                  <span className="text-sm tabular-nums text-muted-foreground">$25.7K</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </>
-      )
-
+    case "m1":
     case "m3":
-      return (
-        <>
-          <SheetHeader>
-            <SheetTitle className="text-lg font-semibold tracking-tight uppercase">
-              Days Sales Outstanding
-            </SheetTitle>
-            <SheetDescription>
-              Cash Conversion Efficiency
-            </SheetDescription>
-          </SheetHeader>
-
-          <div className="flex flex-col gap-6 px-4 pb-6">
-            <div>
-              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-                Mathematical Proof
-              </h3>
-              <Card className="p-4 space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Total Open A/R</span>
-                  <span className="font-mono font-medium tabular-nums">$112,000</span>
-                </div>
-                <div className="flex justify-between border-b border-border pb-2">
-                  <span className="text-muted-foreground">&divide; Annual Rev</span>
-                  <span className="font-mono font-medium tabular-nums">$1,000,000</span>
-                </div>
-                <div className="flex justify-between border-b border-border pb-2 pt-1">
-                  <span className="text-muted-foreground">&times; 365</span>
-                  <span className="font-mono font-medium tabular-nums">365</span>
-                </div>
-                <div className="flex justify-between pt-1">
-                  <span className="font-medium">= DSO</span>
-                  <span className="font-mono font-bold tabular-nums text-lg">41 Days</span>
-                </div>
-              </Card>
-            </div>
-
-            <div className="bg-destructive/10 text-destructive p-4 rounded-md my-4">
-              DSO increased by 3 days. Cash conversion is slowing down.
-            </div>
-
-            <div>
-              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-                Action Playbook
-              </h3>
-              <div className="flex flex-col gap-2">
-                <Button variant="outline" className="justify-start h-auto py-3 px-4">
-                  <Shield className="h-4 w-4 shrink-0" />
-                  <span className="text-sm">Enforce Net-30 on Acme</span>
-                </Button>
-                <Button variant="outline" className="justify-start h-auto py-3 px-4">
-                  <Zap className="h-4 w-4 shrink-0" />
-                  <span className="text-sm">Automate Follow-ups</span>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </>
-      )
+      return <CashTrendDrawerContent drawerId={drawer} />
 
     case "m4":
       return (
         <>
           <SheetHeader>
             <SheetTitle className="text-xl font-semibold tracking-tight">
-              Revenue Movement
+              MRR Movement
             </SheetTitle>
             <SheetDescription className="mt-1">
               This Month (May 2026) vs Last Month
@@ -240,23 +50,23 @@ function DrawerContent({ drawer, setDrawer }: { drawer: string; setDrawer: (v: s
               <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
                 Revenue Bridge
               </h3>
-              <div className="flex items-center justify-between w-full bg-accent/30 rounded-lg p-4 border border-border/50">
-                <div className="flex flex-col gap-1 items-center">
+              <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)] items-center w-full bg-accent/30 rounded-lg p-4 border border-border/50">
+                <div className="flex flex-col gap-1 items-center justify-self-center">
                   <span className="text-xs text-muted-foreground">April Rev</span>
                   <span className="text-sm font-medium tabular-nums text-foreground">$38.0K</span>
                 </div>
-                <Plus className="w-4 h-4 mt-5 text-muted-foreground/40 dark:text-muted-foreground/60 shrink-0" />
-                <div className="flex flex-col gap-1 items-center">
+                <Plus className="w-4 h-4 mt-5 text-muted-foreground/40 dark:text-muted-foreground/60 shrink-0 justify-self-center" />
+                <div className="flex flex-col gap-1 items-center justify-self-center">
                   <span className="text-xs text-muted-foreground">Gains</span>
                   <span className="text-sm font-medium tabular-nums text-emerald-600">+$3.5K</span>
                 </div>
-                <Minus className="w-4 h-4 mt-5 text-muted-foreground/40 dark:text-muted-foreground/60 shrink-0" />
-                <div className="flex flex-col gap-1 items-center">
+                <Minus className="w-4 h-4 mt-5 text-muted-foreground/40 dark:text-muted-foreground/60 shrink-0 justify-self-center" />
+                <div className="flex flex-col gap-1 items-center justify-self-center">
                   <span className="text-xs text-muted-foreground">Losses</span>
                   <span className="text-sm font-medium tabular-nums text-foreground">$0</span>
                 </div>
-                <Equal className="w-4 h-4 mt-5 text-muted-foreground/40 dark:text-muted-foreground/60 shrink-0" />
-                <div className="flex flex-col gap-1 items-center">
+                <Equal className="w-4 h-4 mt-5 text-muted-foreground/40 dark:text-muted-foreground/60 shrink-0 justify-self-center" />
+                <div className="flex flex-col gap-1 items-center justify-self-center">
                   <span className="text-xs text-muted-foreground">May Rev</span>
                   <span className="text-sm font-medium tabular-nums text-foreground">$41.5K</span>
                 </div>
@@ -314,18 +124,18 @@ function DrawerContent({ drawer, setDrawer }: { drawer: string; setDrawer: (v: s
               <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
                 Margin Calculation
               </h3>
-              <div className="flex items-center justify-between w-full bg-accent/30 rounded-lg p-4 border border-border/50">
-                <div className="flex flex-col gap-1 items-center">
+              <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)] items-center w-full bg-accent/30 rounded-lg p-4 border border-border/50">
+                <div className="flex flex-col gap-1 items-center justify-self-center">
                   <span className="text-xs text-muted-foreground">Revenue</span>
                   <span className="text-sm font-medium tabular-nums text-foreground">$41.5K</span>
                 </div>
-                <Minus className="w-4 h-4 mt-5 text-muted-foreground/40 dark:text-muted-foreground/60 shrink-0" />
-                <div className="flex flex-col gap-1 items-center">
+                <Minus className="w-4 h-4 mt-5 text-muted-foreground/40 dark:text-muted-foreground/60 shrink-0 justify-self-center" />
+                <div className="flex flex-col gap-1 items-center justify-self-center">
                   <span className="text-xs text-muted-foreground">Total COGS</span>
                   <span className="text-sm font-medium tabular-nums text-foreground">$20.7K</span>
                 </div>
-                <Equal className="w-4 h-4 mt-5 text-muted-foreground/40 dark:text-muted-foreground/60 shrink-0" />
-                <div className="flex flex-col gap-1 items-center">
+                <Equal className="w-4 h-4 mt-5 text-muted-foreground/40 dark:text-muted-foreground/60 shrink-0 justify-self-center" />
+                <div className="flex flex-col gap-1 items-center justify-self-center">
                   <span className="text-xs text-muted-foreground">Gross Profit</span>
                   <span className="text-sm font-medium tabular-nums text-foreground">$20.8K</span>
                 </div>
@@ -426,146 +236,6 @@ function DrawerContent({ drawer, setDrawer }: { drawer: string; setDrawer: (v: s
               <div className="border rounded-md bg-card text-sm divide-y"><div className="flex justify-between p-3 items-center"><div><span className="font-medium block">Drift Marketing</span><span className="text-muted-foreground text-xs">Expansion</span></div><div className="text-right"><span className="font-mono tabular-nums block font-medium text-success">+$5,000/mo</span><span className="text-muted-foreground font-medium text-xs">70% Prob</span></div></div><div className="flex justify-between p-3 items-center"><div><span className="font-medium block">Horizon Tech</span><span className="text-muted-foreground text-xs">New Logo</span></div><div className="text-right"><span className="font-mono tabular-nums block font-medium text-success">+$12,000/mo</span><span className="text-muted-foreground font-medium text-xs">50% Prob</span></div></div></div>
             </div>
           </div>
-        </>
-      )
-
-    case "m9":
-      return (
-        <>
-          <SheetHeader className="px-6 pt-6 mb-6">
-            <SheetTitle className="text-lg font-semibold tracking-tight uppercase">
-              Current Cash Position
-            </SheetTitle>
-            <SheetDescription>
-              $125,000 as of May 2026 | Target: $200,000
-            </SheetDescription>
-          </SheetHeader>
-
-          <div className="flex flex-col gap-6 px-4 pb-6">
-            <div className="bg-destructive/10 text-destructive border border-destructive/20 p-4 rounded-md text-sm flex items-start gap-3">
-              <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
-              <div>
-                <strong className="block mb-1 font-sans">Below Operating Target</strong>
-                Current cash is $75K below the $200K target. At current burn rate ($15.2K/mo net), you have 5.4 months of runway remaining.
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-xs font-semibold text-muted-foreground tracking-wider uppercase mb-3">Cash Position Breakdown</h4>
-              <div className="flex items-center justify-between w-full bg-accent/30 rounded-lg p-4 border border-border/50">
-                <div className="flex flex-col gap-1 items-center">
-                  <span className="text-xs text-muted-foreground">Cash On Hand</span>
-                  <span className="text-sm font-medium tabular-nums text-foreground font-mono">$125,000</span>
-                </div>
-                <Minus className="h-4 w-4 text-muted-foreground" />
-                <div className="flex flex-col gap-1 items-center">
-                  <span className="text-xs text-muted-foreground">Payables (14d)</span>
-                  <span className="text-sm font-medium tabular-nums text-destructive font-mono">$42,500</span>
-                </div>
-                <Plus className="h-4 w-4 text-muted-foreground" />
-                <div className="flex flex-col gap-1 items-center">
-                  <span className="text-xs text-muted-foreground">Expected A/R</span>
-                  <span className="text-sm font-medium tabular-nums text-success font-mono">$29,300</span>
-                </div>
-                <Equal className="h-4 w-4 text-muted-foreground" />
-                <div className="flex flex-col gap-1 items-center">
-                  <span className="text-xs text-muted-foreground">Net Position</span>
-                  <span className="text-sm font-medium tabular-nums text-foreground font-mono">$111,800</span>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-xs font-semibold text-muted-foreground tracking-wider uppercase mb-3">Account Summary</h4>
-              <div className="border rounded-md bg-card text-sm divide-y">
-                <div className="flex justify-between p-3 items-center">
-                  <div>
-                    <span className="font-medium block">Operating Account</span>
-                    <span className="text-muted-foreground text-xs">Chase Business Checking</span>
-                  </div>
-                  <span className="font-mono tabular-nums font-medium">$105,000</span>
-                </div>
-                <div className="flex justify-between p-3 items-center">
-                  <div>
-                    <span className="font-medium block">Reserve Account</span>
-                    <span className="text-muted-foreground text-xs">Chase Business Savings</span>
-                  </div>
-                  <span className="font-mono tabular-nums font-medium">$20,000</span>
-                </div>
-                <div className="flex justify-between p-3 items-center">
-                  <div>
-                    <span className="font-medium block">Available Credit Line</span>
-                    <span className="text-muted-foreground text-xs">Chase Business LOC — Untapped</span>
-                  </div>
-                  <span className="font-mono tabular-nums font-medium text-muted-foreground">$50,000</span>
-                </div>
-              </div>
-            </div>
-
-            <Button variant="outline" className="w-full" onClick={() => setDrawer("universal-ledger")}>
-              View Full Transaction Ledger
-            </Button>
-          </div>
-        </>
-      )
-
-    case "u5":
-      return (
-        <>
-          <SheetHeader>
-            <SheetTitle className="text-lg font-semibold tracking-tight uppercase">
-              LEVER 1: ACQUISITION
-            </SheetTitle>
-          </SheetHeader>
-          <div className="mt-4 px-4 text-sm">Need 100 Raw Leads based on 10% meeting conversion and 20% close rate.</div>
-        </>
-      )
-
-    case "u6":
-      return (
-        <>
-          <SheetHeader>
-            <SheetTitle className="text-lg font-semibold tracking-tight uppercase">
-              LEVER 2: EXPANSION
-            </SheetTitle>
-          </SheetHeader>
-          <div className="mt-4 px-4 text-sm">Acme Co (Prime for scope expansion)</div>
-        </>
-      )
-
-    case "u7":
-      return (
-        <>
-          <SheetHeader>
-            <SheetTitle className="text-lg font-semibold tracking-tight uppercase">
-              LEVER 3: DEAL SIZE
-            </SheetTitle>
-          </SheetHeader>
-          <div className="mt-4 px-4 text-sm">Establish a strict 5% discount floor.</div>
-        </>
-      )
-
-    case "u8":
-      return (
-        <>
-          <SheetHeader>
-            <SheetTitle className="text-lg font-semibold tracking-tight uppercase">
-              LEVER 4: RETENTION
-            </SheetTitle>
-          </SheetHeader>
-          <div className="mt-4 px-4 text-sm">Cobalt Outdoor ($8.3K MRR, 75 days overdue)</div>
-        </>
-      )
-
-    case "u9":
-      return (
-        <>
-          <SheetHeader>
-            <SheetTitle className="text-lg font-semibold tracking-tight uppercase">
-              SAVE SCENARIO
-            </SheetTitle>
-          </SheetHeader>
-          <div className="mt-4 px-4 text-sm">Scenario Name: Aggressive Q3 Growth</div>
         </>
       )
 
@@ -1497,7 +1167,112 @@ function DrawerContent({ drawer, setDrawer }: { drawer: string; setDrawer: (v: s
     case "revenue-trend":
     case "cogs-trend":
     case "gross-profit-trend":
+    case "rev-per-fte-trend":
       return <ProfitabilityTrendDrawerContent drawerId={drawer} />
+
+    case "payroll-delivery":
+    case "payroll-marketing":
+    case "payroll-sales":
+    case "payroll-admin":
+    case "software-delivery":
+    case "software-marketing":
+    case "software-sales":
+    case "software-admin":
+      return <ExpenseDepartmentDrawerContent drawerId={drawer} />
+
+    case "nrr-trend":
+    case "blended-cac-trend":
+    case "cac-payback-trend":
+    case "ltv-cac-trend":
+      return <GrowthTrendDrawerContent drawerId={drawer} />
+
+    case "clients-nrr":
+      return (
+        <>
+          <SheetHeader className="pb-6 border-b border-border">
+            <SheetTitle>Net Revenue Retention</SheetTitle>
+            <SheetDescription>Tracks total MRR growth from existing clients, including expansion and contraction.</SheetDescription>
+          </SheetHeader>
+          <div className="p-6 space-y-4">
+            <div className="bg-muted/30 rounded-lg p-4">
+              <p className="text-sm text-muted-foreground">NRR measures whether your existing client base is growing or shrinking in dollar terms. A value above 100% means expansion revenue is outpacing churn — you&apos;re growing even without new logos.</p>
+            </div>
+            <div className="text-sm font-mono tabular-nums text-muted-foreground">
+              <p>Formula: (Current MRR from existing clients / Prior MRR) × 100</p>
+            </div>
+          </div>
+        </>
+      )
+
+    case "clients-churn":
+      return (
+        <>
+          <SheetHeader className="pb-6 border-b border-border">
+            <SheetTitle>Gross MRR Churn</SheetTitle>
+            <SheetDescription>Monthly recurring revenue lost from downgrades and cancellations.</SheetDescription>
+          </SheetHeader>
+          <div className="p-6 space-y-4">
+            <div className="bg-muted/30 rounded-lg p-4">
+              <p className="text-sm text-muted-foreground">Gross churn isolates the bleeding — how much MRR walked out the door this period, before counting any expansion. A healthy agency keeps this under 5% monthly.</p>
+            </div>
+            <div className="text-sm font-mono tabular-nums text-muted-foreground">
+              <p>Formula: (Lost MRR / Prior Total MRR) × 100</p>
+            </div>
+          </div>
+        </>
+      )
+
+    case "clients-concentration":
+      return (
+        <>
+          <SheetHeader className="pb-6 border-b border-border">
+            <SheetTitle>Top Client Concentration</SheetTitle>
+            <SheetDescription>Revenue dependency on your largest client.</SheetDescription>
+          </SheetHeader>
+          <div className="p-6 space-y-4">
+            <div className="bg-amber-500/5 border border-amber-500/20 rounded-lg p-4">
+              <p className="text-sm text-amber-700 dark:text-amber-400">When any single client exceeds 25% of total MRR, losing them becomes an existential risk to cash runway. Diversify by growing mid-tier accounts or adding new logos.</p>
+            </div>
+            <div className="text-sm font-mono tabular-nums text-muted-foreground">
+              <p>Formula: (Top Client MRR / Total MRR) × 100</p>
+            </div>
+          </div>
+        </>
+      )
+
+    case "clients-margin-ltv":
+      return (
+        <>
+          <SheetHeader className="pb-6 border-b border-border">
+            <SheetTitle>Average Margin LTV</SheetTitle>
+            <SheetDescription>Revenue-weighted lifetime gross profit value across active clients.</SheetDescription>
+          </SheetHeader>
+          <div className="p-6 space-y-4">
+            <div className="bg-muted/30 rounded-lg p-4">
+              <p className="text-sm text-muted-foreground">Margin LTV captures the total gross profit a client has generated over their tenure. Revenue-weighting ensures large clients appropriately influence the average. Higher Margin LTV means your retention and pricing are compounding effectively.</p>
+            </div>
+            <div className="text-sm font-mono tabular-nums text-muted-foreground">
+              <p>Formula: MRR × Margin × Tenure (months)</p>
+              <p>Weighted: Σ(LTV × MRR) / Σ(MRR)</p>
+            </div>
+          </div>
+        </>
+      )
+
+    case "clients-churn-waterfall":
+      return (
+        <>
+          <SheetHeader className="pb-6 border-b border-border">
+            <SheetTitle>Churn Impact Detail</SheetTitle>
+            <SheetDescription>Trailing 90-day breakdown of MRR gains and losses by client.</SheetDescription>
+          </SheetHeader>
+          <div className="p-6 space-y-4">
+            <div className="bg-muted/30 rounded-lg p-4">
+              <p className="text-sm text-muted-foreground">This view isolates the specific dollar movements in your client base over the past 3 months — which clients expanded, which contracted, and what the net effect was on total MRR.</p>
+            </div>
+          </div>
+        </>
+      )
 
     default:
       return null
@@ -1506,6 +1281,7 @@ function DrawerContent({ drawer, setDrawer }: { drawer: string; setDrawer: (v: s
 
 export function GlobalDrawers() {
   const [drawer, setDrawer] = useQueryState("drawer")
+  const [, setPeriod] = useQueryState("period")
   const [isFullscreen, setIsFullscreen] = useState(false)
 
   useEffect(() => {
@@ -1523,7 +1299,7 @@ export function GlobalDrawers() {
   const isHandledByGlobalDrawer = globalDrawerIds.includes(drawer ?? "")
 
   return (
-    <Sheet open={!!drawer && !isHandledByGlobalDrawer} onOpenChange={(open) => { if (!open) { setDrawer(null); setIsFullscreen(false) } }}>
+    <Sheet open={!!drawer && !isHandledByGlobalDrawer} onOpenChange={(open) => { if (!open) { setDrawer(null); setPeriod(null); setIsFullscreen(false) } }}>
       <SheetContent
         className={cn(
           "overflow-y-auto",

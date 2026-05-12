@@ -10,15 +10,15 @@ import {
   TableRow,
   TableCell,
 } from "@/components/ui/table"
+import { PageHeader } from "@/components/page-header"
 
 export default function ScorecardsPage() {
   return (
     <div className="flex flex-col gap-8">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-semibold tracking-tight">Scorecards</h1>
-        <p className="text-muted-foreground mt-1">Your closed financial periods and annual reviews.</p>
-      </div>
+      <PageHeader
+        title="Scorecards"
+        subtitle="Your closed financial periods and annual reviews."
+      />
 
       {/* Zone 1: Current Active Month */}
       <Card className="p-6 border-dashed bg-muted/30 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-left">
