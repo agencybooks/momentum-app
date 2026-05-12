@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { useQueryState } from "nuqs"
 import { Sparkles } from "lucide-react"
 import { SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import {
@@ -55,7 +54,6 @@ const mockInsights: Insight[] = [
 
 export function CopilotFeedDrawer() {
   const router = useRouter()
-  const [, setDrawer] = useQueryState("drawer")
   const [clearedIds, setClearedIds] = useState<Set<string>>(new Set())
 
   const activeInsights = mockInsights.filter((i) => !clearedIds.has(i.id))
@@ -66,7 +64,6 @@ export function CopilotFeedDrawer() {
   }
 
   const handleNavigate = (route: string) => {
-    setDrawer(null)
     router.push(route)
   }
 
