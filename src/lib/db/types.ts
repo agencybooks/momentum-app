@@ -5,6 +5,7 @@ export interface Client {
   tenure_months: number;
   margin: number;
   status: 'Healthy' | 'At Risk' | 'Churned';
+  hasTimeTracking: boolean;
 }
 
 export interface Invoice {
@@ -234,6 +235,18 @@ export interface CashActionAlert {
 // Clients Page — enriched types
 // ---------------------------------------------------------------------------
 
+export interface ClientUnitEconomics {
+  directLaborCost: number
+  softwareAdSpend: number
+  netClientProfit: number
+  netMarginPct: number
+}
+
+export interface ClientMrrHistoryPoint {
+  month: string
+  mrr: number
+}
+
 export interface EnrichedClient extends Client {
   displayStatus: 'Active' | 'At Risk' | 'Churned'
   priorMrr: number
@@ -254,6 +267,12 @@ export interface EnrichedClient extends Client {
     newTopClient: string
     newTopClientPct: string
   }
+  unitEconomics: ClientUnitEconomics
+  marginTrend90d: { month: string; margin: number }[]
+  profitRank: number
+  totalInvoiced: number
+  avgDaysToPay: number
+  clientMrrHistory: ClientMrrHistoryPoint[]
 }
 
 export interface ClientMrrSnapshot {
@@ -264,11 +283,20 @@ export interface ClientMrrSnapshot {
   details: { name: string; amount: number }[]
 }
 
-export interface CohortMargin {
+export interface CohortRetainedMrr {
   year: number
-  avgMargin: number
-  clientCount: number
+  retainedMrr: number
+  activeClientCount: number
+}
+
+export interface ClientMrrTrendPoint {
+  month: string
   totalMrr: number
+}
+
+export interface ClientMarginTrendPoint {
+  month: string
+  blendedMargin: number
 }
 
 export interface ClientsPageData {
@@ -278,7 +306,114 @@ export interface ClientsPageData {
   grossMrrChurn: number
   topClientConcentration: number
   avgMarginLTV: number
+  blendedGrossMargin: number
+  topClientProfitConcentration: number
+  mrrTrend: ClientMrrTrendPoint[]
+  marginTrend: ClientMarginTrendPoint[]
   mrrHistory: ClientMrrSnapshot[]
-  cohortMargins: CohortMargin[]
+  cohortRetainedMrr: CohortRetainedMrr[]
   alert: { title: string; message: string; type: 'critical' | 'warning' | 'success' } | null
+}
+
+// ---------------------------------------------------------------------------
+// Calibration Page
+// ---------------------------------------------------------------------------
+
+export interface Integration {
+  id: string
+  name: string
+  iconName: string
+  status: 'connected' | 'syncing' | 'delayed' | 'disconnected'
+  lastSync: string | null
+  scoreWeight: number
+}
+
+export interface COAAccount {
+  id: string
+  accountNumber: string
+  accountName: string
+  ytdTotal: number
+  group: string | null
+  subCategory: string | null
+  floatingAmount: number
+}
+
+export interface TeamMember {
+  id: string
+  name: string
+  monthlyCost: number
+  role: string
+  allocations: { department: string; percent: number }[]
+}
+
+export interface SoftwareItem {
+  id: string
+  vendor: string
+  trailing30DayCost: number
+  category: 'overhead' | 'shared-delivery' | 'direct-client' | null
+}
+
+export interface FinancialTarget {
+  id: string
+  metric: string
+  group: 'cash' | 'profitability' | 'efficiency' | 'growth'
+  floor: number | null
+  ceiling: number | null
+  unit: '%' | '$' | 'months' | 'days' | 'x'
+  currentValue: number
+}
+
+export interface CalibrationData {
+  integrations: Integration[]
+  coaAccounts: COAAccount[]
+  unmappedTotal: number
+  teamMembers: TeamMember[]
+  softwareItems: SoftwareItem[]
+  financialTargets: FinancialTarget[]
+}
+
+// ---------------------------------------------------------------------------
+// Settings & Administration
+// ---------------------------------------------------------------------------
+
+export interface SettingsTeamMember {
+  id: string
+  name: string
+  email: string
+  role: "Admin" | "Manager" | "Viewer"
+  status: "Active" | "Invited"
+  avatarUrl?: string
+}
+
+export interface BillingInvoice {
+  id: string
+  date: string
+  amount: number
+  status: "Paid" | "Pending" | "Failed"
+}
+
+export interface UserProfile {
+  firstName: string
+  lastName: string
+  email: string
+  theme: "light" | "dark" | "system"
+  timezone: string
+}
+
+export interface SettingsData {
+  profile: UserProfile
+  team: SettingsTeamMember[]
+  billing: {
+    plan: { name: string; price: number; interval: string }
+    paymentMethod: { last4: string; brand: string; expiry: string }
+    invoices: BillingInvoice[]
+  }
+  notifications: {
+    emailDigestDaily: boolean
+    emailDigestWeekly: boolean
+    slackConnected: boolean
+  }
+  security: {
+    twoFactorEnabled: boolean
+  }
 }

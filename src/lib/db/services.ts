@@ -1,11 +1,13 @@
-import type { Client, Invoice, Transaction, MetricAnchor, Alert, ARAgingSummary, ScorecardMonth, ClientsPageData, EnrichedClient } from './types';
-import { clients, invoices, transactions, metricAnchors, alerts, recentScorecards, clientPriorMrr, clientMrrHistory } from './mock-db';
+import type { Client, Invoice, Transaction, MetricAnchor, Alert, ARAgingSummary, ScorecardMonth, ClientsPageData, EnrichedClient, CalibrationData, SettingsData } from './types';
+import { clients, invoices, transactions, metricAnchors, alerts, recentScorecards, clientPriorMrr, clientMrrHistory, clientUnitEconomics, clientMarginTrend90d, clientMrrHistoryPerClient, clientAvgDaysToPay } from './mock-db';
+import { integrations, coaAccounts, teamMembers, softwareItems, financialTargets } from './calibration-data';
+import { settingsData } from './settings-data';
 import {
   CASH_BALANCE, MONTHLY_OUTFLOW, CURRENT_RUNWAY,
   computeConcentrationPct, computeRevenue90d, computeGrossProfit,
   computeMarginLTV, computeAvgMarginLTV, computeRunwayImpact,
   computeNRR, computeGrossChurn, deriveRiskTagsWithMrrChange,
-  computeShockTest, deriveCohortYear, computeCohortMargins,
+  computeShockTest, deriveCohortYear, computeCohortRetainedMrr,
 } from '@/lib/client-metrics';
 
 export const DEPARTMENT_ORDER = ['Delivery', 'Marketing', 'Sales', 'Admin'] as const;
@@ -285,6 +287,9 @@ export async function getClientsPageData(): Promise<ClientsPageData> {
     else if (client.status === 'At Risk') displayStatus = 'At Risk';
     else displayStatus = 'Active';
 
+    const ue = clientUnitEconomics[client.id] ?? { directLaborCost: 0, softwareAdSpend: 0 };
+    const netClientProfit = client.mrr - ue.directLaborCost - ue.softwareAdSpend;
+
     return {
       ...client,
       displayStatus,
@@ -298,16 +303,31 @@ export async function getClientsPageData(): Promise<ClientsPageData> {
       cohortYear,
       riskTags: deriveRiskTagsWithMrrChange(client, clientInvoices, concentrationPct, mrrChange),
       shockTest: computeShockTest(client, rawClients, totalMrr, CURRENT_RUNWAY, MONTHLY_OUTFLOW, CASH_BALANCE),
+      unitEconomics: {
+        ...ue,
+        netClientProfit,
+        netMarginPct: client.mrr > 0 ? netClientProfit / client.mrr : 0,
+      },
+      marginTrend90d: clientMarginTrend90d[client.id] ?? [],
+      profitRank: 0,
+      totalInvoiced: clientInvoices.reduce((sum, inv) => sum + inv.amount, 0),
+      avgDaysToPay: clientAvgDaysToPay[client.id] ?? 0,
+      clientMrrHistory: clientMrrHistoryPerClient[client.id] ?? [],
     };
   });
+
+  const activeByProfit = enriched
+    .filter(c => c.mrr > 0)
+    .sort((a, b) => b.unitEconomics.netClientProfit - a.unitEconomics.netClientProfit);
+  activeByProfit.forEach((c, i) => { c.profitRank = i + 1; });
 
   enriched.sort((a, b) => b.runwayImpact - a.runwayImpact);
 
   const topConcentration = enriched.length > 0 ? enriched.reduce((max, c) => Math.max(max, c.concentrationPct), 0) : 0;
   const topClientName = enriched.find(c => c.concentrationPct === topConcentration)?.name ?? '';
 
-  const cohortMargins = computeCohortMargins(
-    enriched.map(c => ({ mrr: c.mrr, margin: c.margin, cohortYear: c.cohortYear }))
+  const cohortRetainedMrr = computeCohortRetainedMrr(
+    enriched.map(c => ({ mrr: c.mrr, cohortYear: c.cohortYear }))
   );
 
   const alert = topConcentration >= 25
@@ -318,6 +338,23 @@ export async function getClientsPageData(): Promise<ClientsPageData> {
       }
     : null;
 
+  const totalGrossProfit = activeClients.reduce((sum, c) => sum + c.mrr * c.margin, 0);
+  const blendedGrossMargin = totalMrr > 0 ? totalGrossProfit / totalMrr : 0;
+
+  const topProfitClient = enriched
+    .filter(c => c.mrr > 0)
+    .sort((a, b) => b.grossProfit - a.grossProfit)[0];
+  const topClientProfitConcentration = topProfitClient && totalGrossProfit > 0
+    ? (topProfitClient.grossProfit / totalGrossProfit) * 100
+    : 0;
+
+  const mrrTrendData = clientMrrHistory.map(h => ({ month: h.month, totalMrr: h.mrr }));
+  const offsets = [-0.008, 0.003, 0.0];
+  const marginTrendData = clientMrrHistory.map((h, i) => ({
+    month: h.month,
+    blendedMargin: Math.round((blendedGrossMargin + offsets[i % offsets.length]) * 1000) / 1000,
+  }));
+
   return delay({
     clients: enriched,
     totalMrr,
@@ -325,8 +362,39 @@ export async function getClientsPageData(): Promise<ClientsPageData> {
     grossMrrChurn: computeGrossChurn(totalLostMrr, priorTotalMrr),
     topClientConcentration: topConcentration,
     avgMarginLTV: computeAvgMarginLTV(activeClients),
+    blendedGrossMargin,
+    topClientProfitConcentration,
+    mrrTrend: mrrTrendData,
+    marginTrend: marginTrendData,
     mrrHistory: clientMrrHistory,
-    cohortMargins,
+    cohortRetainedMrr,
     alert,
   });
+}
+
+export async function getClientProfileData(clientId: string): Promise<{ client: EnrichedClient; activeClientCount: number } | null> {
+  const data = await getClientsPageData();
+  const client = data.clients.find(c => c.id === clientId);
+  if (!client) return null;
+  const activeClientCount = data.clients.filter(c => c.mrr > 0).length;
+  return { client, activeClientCount };
+}
+
+export async function getCalibrationData(): Promise<CalibrationData> {
+  const unmappedTotal = coaAccounts
+    .filter(a => a.group === null)
+    .reduce((sum, a) => sum + a.floatingAmount, 0);
+
+  return delay({
+    integrations,
+    coaAccounts,
+    unmappedTotal,
+    teamMembers,
+    softwareItems,
+    financialTargets,
+  });
+}
+
+export async function getSettingsData(): Promise<SettingsData> {
+  return delay(settingsData);
 }
