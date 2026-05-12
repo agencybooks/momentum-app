@@ -1,8 +1,11 @@
 "use client"
 
-import { Search, Bell } from "lucide-react"
+import { Search, Sparkles } from "lucide-react"
+import { useQueryState } from "nuqs"
 
 export function TopHeader() {
+  const [, setDrawer] = useQueryState("drawer")
+
   return (
     <header className="sticky top-0 z-40 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:bg-zinc-950 dark:border-white/10 flex h-14 items-center justify-between px-4 sm:px-6">
       <button
@@ -20,10 +23,11 @@ export function TopHeader() {
 
       <div className="flex items-center gap-4">
         <button
-          onClick={() => { window.location.href = '?drawer=action-center' }}
-          className="hover:bg-accent p-2 rounded-full cursor-pointer transition-colors"
+          onClick={() => setDrawer("copilot-feed")}
+          className="relative hover:bg-accent p-2 rounded-full cursor-pointer transition-colors"
         >
-          <Bell className="h-4 w-4" />
+          <Sparkles className="h-4 w-4" />
+          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary animate-pulse" />
         </button>
         <div className="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold border border-primary/20">
           DA
