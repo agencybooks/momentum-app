@@ -94,9 +94,7 @@ export function ProfitabilityContent({ data }: Props) {
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Executive Summary Zone */}
-      <div className="flex flex-col gap-6">
-        <PageHeader
+      <PageHeader
           title="Profitability"
           subtitle="Diagnose margin compression and operating inefficiencies."
           actions={
@@ -128,7 +126,6 @@ export function ProfitabilityContent({ data }: Props) {
             />
           ))}
         </div>
-      </div>
 
       {/* Deep Dive Zone */}
       <Card className="overflow-hidden">

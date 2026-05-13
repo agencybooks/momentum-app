@@ -35,7 +35,7 @@ export function ActionAlertsCard({ alerts }: ActionAlertsCardProps) {
   return (
     <Card className="flex flex-col border-border bg-card h-full shadow-sm">
       <CardHeader className="p-6 pb-4">
-        <CardTitle className="text-lg font-medium text-foreground">Action Alerts</CardTitle>
+        <CardTitle className="text-lg font-medium text-foreground tracking-tight">Action Alerts</CardTitle>
       </CardHeader>
       <CardContent className="p-0 flex-1">
         <div className="flex flex-col">

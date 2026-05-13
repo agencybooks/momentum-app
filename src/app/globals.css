@@ -52,6 +52,9 @@
   --color-brand-500: #2AAADA;
   --color-brand-600: #1d88b0;
   --color-brand-700: #166d8d;
+  --color-trend-1: #2AAADA;
+  --color-trend-2: #6366f1;
+  --color-trend-3: #a855f7;
 }
 
 :root {
@@ -90,6 +93,7 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
   --drawer-width-context: 400px;
+  --drawer-width-copilot: clamp(400px, 30vw, 600px);
   --drawer-width-master: clamp(500px, 45vw, 800px);
 }
 
@@ -151,4 +155,19 @@
 }
 .accordion-panel > div {
   overflow: hidden;
+}
+
+.stripe-subtle {
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 3px, oklch(0 0 0 / 4%) 3px, oklch(0 0 0 / 4%) 6px);
+}
+:is(.dark) .stripe-subtle {
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 3px, oklch(1 0 0 / 5%) 3px, oklch(1 0 0 / 5%) 6px);
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
 }

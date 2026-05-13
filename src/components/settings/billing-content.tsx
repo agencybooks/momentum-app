@@ -88,13 +88,13 @@ export function BillingContent({
           <CardDescription>Download past invoices for your records.</CardDescription>
         </CardHeader>
         <CardContent className="p-0">
-          <Table>
+          <Table className="table-fixed">
             <TableHeader>
               <TableRow>
-                <TableHead>Date</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="w-12" />
+                <TableHead className="text-sm font-medium text-muted-foreground border-b bg-transparent">Date</TableHead>
+                <TableHead className="text-sm font-medium text-muted-foreground border-b bg-transparent text-right">Amount</TableHead>
+                <TableHead className="text-sm font-medium text-muted-foreground border-b bg-transparent">Status</TableHead>
+                <TableHead className="w-12 text-sm font-medium text-muted-foreground border-b bg-transparent" />
               </TableRow>
             </TableHeader>
             <TableBody>

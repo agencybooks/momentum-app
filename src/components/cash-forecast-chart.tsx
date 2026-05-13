@@ -72,7 +72,7 @@ function CashTooltipContent({ active, payload, label }: { active?: boolean; payl
 export function CashForecastChart() {
   return (
     <Card className="border-border bg-card">
-      <CardHeader>
+      <CardHeader className="p-6 pb-4">
         <CardTitle className="text-lg font-medium text-foreground tracking-tight">13-Week Cash Forecast</CardTitle>
         <CardDescription>Weekly cash position with inflow/outflow breakdown</CardDescription>
       </CardHeader>

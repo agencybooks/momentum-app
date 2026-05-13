@@ -136,6 +136,7 @@ export interface Payable {
   vendor: string;
   amount: number;
   canDelay: boolean;
+  daysUntilDue: number;
 }
 
 export interface ProfitabilityTrendPoint {
@@ -193,12 +194,6 @@ export interface RenewalAtRisk {
   status: 'critical' | 'warning' | 'safe'
 }
 
-export interface BaselineTrajectoryPoint {
-  week: string
-  cash?: number
-  projected?: number
-}
-
 export interface ARAgingBucket {
   label: string;
   amount: number;
@@ -229,6 +224,65 @@ export interface CashActionAlert {
   actionLabel: string
   actionDrawerId: string
   weekRef?: string
+}
+
+// ---------------------------------------------------------------------------
+// Strategic CFO Scorecards — Anti-P&L Snapshot
+// ---------------------------------------------------------------------------
+
+export interface LivePulseData {
+  daysToClose: number
+  cashRunwayMonths: number
+  unmappedTransactions: number
+}
+
+export interface SnapshotLedgerEntry {
+  id: string
+  period: string
+  slug: string
+  netMomentum: number
+  cashDelta: number
+  targetsHit: number
+  targetsTotal: number
+  isLocked: boolean
+}
+
+export interface AntiPnLQuadrant {
+  heroLabel: string
+  heroValue: string
+  heroTrend?: "up" | "down" | "flat"
+  secondaryLabel: string
+  secondaryValue: string
+  warningThreshold?: boolean
+}
+
+export interface TargetYieldGoal {
+  metric: string
+  actual: string
+  variance: string
+}
+
+export interface AntiPnLSnapshot {
+  period: string
+  slug: string
+  executiveSummary: {
+    insights: string[]
+    topPriority: { label: string; detail: string }
+  }
+  varianceDrift: boolean
+  driftMessage?: string
+  quadrants: {
+    clientRev: AntiPnLQuadrant
+    growth: AntiPnLQuadrant
+    efficiency: AntiPnLQuadrant
+    liquidity: AntiPnLQuadrant
+  }
+  targetYield?: {
+    met: number
+    total: number
+    offTrack: TargetYieldGoal[]
+    onTrack: TargetYieldGoal[]
+  }
 }
 
 // ---------------------------------------------------------------------------

@@ -18,6 +18,12 @@ interface AgingBucketsSummaryProps {
   totalOutstanding: number
   activeBucket: string | null
   onBucketClick: (label: string) => void
+  colorMap?: Record<string, string>
+}
+
+const defaultColorMap: Record<string, string> = {
+  "60+ Days": "bg-destructive",
+  "31-60 Days": "bg-amber-500",
 }
 
 export function AgingBucketsSummary({
@@ -25,6 +31,7 @@ export function AgingBucketsSummary({
   totalOutstanding,
   activeBucket,
   onBucketClick,
+  colorMap = defaultColorMap,
 }: AgingBucketsSummaryProps) {
   return (
     <div className="grid grid-cols-4 gap-3">
@@ -54,11 +61,7 @@ export function AgingBucketsSummary({
               <div
                 className={cn(
                   "h-full rounded-full transition-all",
-                  bucket.label === "60+ Days"
-                    ? "bg-destructive"
-                    : bucket.label === "31-60 Days"
-                      ? "bg-amber-500"
-                      : "bg-brand-500"
+                  colorMap[bucket.label] || "bg-brand-500"
                 )}
                 style={{ width: `${barWidth}%` }}
               />

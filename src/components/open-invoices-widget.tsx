@@ -40,7 +40,7 @@ export function OpenInvoicesWidget({
 
   return (
     <Card className="flex flex-col border-border bg-card h-full">
-      <CardHeader>
+      <CardHeader className="p-6 pb-4">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-medium text-foreground tracking-tight">Accounts Receivable</CardTitle>
           <Link href="/cash">

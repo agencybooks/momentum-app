@@ -72,7 +72,10 @@ export function MetricAnchor({
     >
       <div className="flex flex-col p-4 pb-0 relative z-10 bg-gradient-to-b from-card via-card/90 to-transparent">
         <div className="flex justify-between items-start mb-1">
-          <span className="text-xs font-medium text-muted-foreground tracking-wider uppercase">
+          <span
+            className="text-xs font-medium text-muted-foreground tracking-wider uppercase min-w-0 truncate"
+            title={title}
+          >
             {title}
           </span>
           {(trendText || target) && (

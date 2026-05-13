@@ -100,13 +100,13 @@ export function ClientLedgerDrawer({ clientId }: ClientLedgerDrawerProps) {
       <div className="flex flex-col gap-4">
         <h3 className="text-lg font-medium text-foreground tracking-tight">Invoice History</h3>
         <div className="rounded-md border border-border bg-card overflow-hidden">
-          <Table>
+          <Table className="table-fixed">
             <TableHeader>
               <TableRow className="border-border hover:bg-transparent">
-                <TableHead className="text-muted-foreground">Invoice #</TableHead>
-                <TableHead className="text-muted-foreground">Status</TableHead>
-                <TableHead className="text-muted-foreground">Due Date</TableHead>
-                <TableHead className="text-right text-muted-foreground">Amount</TableHead>
+                <TableHead className="text-sm font-medium text-muted-foreground border-b bg-transparent">Invoice #</TableHead>
+                <TableHead className="text-sm font-medium text-muted-foreground border-b bg-transparent">Status</TableHead>
+                <TableHead className="text-sm font-medium text-muted-foreground border-b bg-transparent">Due Date</TableHead>
+                <TableHead className="text-right text-sm font-medium text-muted-foreground border-b bg-transparent">Amount</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

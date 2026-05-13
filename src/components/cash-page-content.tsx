@@ -94,6 +94,7 @@ export function CashPageContent({ cashData, openInvoices, alerts, clients }: Cas
   const [expandedAR, setExpandedAR] = useState<Set<string>>(new Set())
   const [expandedAP, setExpandedAP] = useState<Set<string>>(new Set())
   const [activeBucket, setActiveBucket] = useState<string | null>(null)
+  const [activeAPBucket, setActiveAPBucket] = useState<string | null>(null)
   const [payableStates, setPayableStates] = useState<Record<string, "idle" | "paid" | "scheduled">>({})
 
   const criticalAlert = alerts.find(a => a.type === "critical" && a.drawerTrigger === "ar-intelligence") || alerts.find(a => a.type === "critical")
@@ -127,6 +128,34 @@ export function CashPageContent({ cashData, openInvoices, alerts, clients }: Cas
     setActiveBucket(prev => prev === label ? null : label)
   }
 
+  const handleAPBucketClick = (label: string) => {
+    setActiveAPBucket(prev => prev === label ? null : label)
+  }
+
+  const apBuckets = (() => {
+    let due7 = 0
+    let days8to14 = 0
+    let days15to30 = 0
+    let days30plus = 0
+    for (const p of payables) {
+      if (p.daysUntilDue <= 7) due7 += p.amount
+      else if (p.daysUntilDue <= 14) days8to14 += p.amount
+      else if (p.daysUntilDue <= 30) days15to30 += p.amount
+      else days30plus += p.amount
+    }
+    return [
+      { label: "Due < 7 Days", amount: due7 },
+      { label: "8-14 Days", amount: days8to14 },
+      { label: "15-30 Days", amount: days15to30 },
+      { label: "30+ Days", amount: days30plus },
+    ]
+  })()
+
+  const apColorMap: Record<string, string> = {
+    "Due < 7 Days": "bg-destructive",
+    "8-14 Days": "bg-amber-500",
+  }
+
   const handlePayableAction = (payableId: string, action: "paid" | "scheduled") => {
     setPayableStates(prev => ({
       ...prev,
@@ -152,10 +181,11 @@ export function CashPageContent({ cashData, openInvoices, alerts, clients }: Cas
     })
   }
 
-  const totalPayablesDue = payables.reduce((sum, p) => sum + p.amount, 0)
+  const totalOpenAP = payables.reduce((sum, p) => sum + p.amount, 0)
+  const urgentAPTotal = payables.filter(p => p.daysUntilDue <= 7).reduce((sum, p) => sum + p.amount, 0)
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       <PageHeader
         title="Cash & Treasury"
         subtitle="Monitor your operational cash position, collections, and payables."
@@ -200,12 +230,12 @@ export function CashPageContent({ cashData, openInvoices, alerts, clients }: Cas
         </div>
       </div>
 
-      {/* Stage 2: A/R Collections + Survival Payables (50/50) */}
+      {/* Stage 2: A/R Collections + A/P Outflows (50/50) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="flex flex-col">
           <Card className="flex flex-col border-border bg-card h-full">
-            <CardHeader>
-              <CardTitle className="text-lg font-medium text-foreground">Cash Inflows (A/R)</CardTitle>
+            <CardHeader className="p-6 pb-4">
+              <CardTitle className="text-lg font-medium text-foreground tracking-tight">Cash Inflows (A/R)</CardTitle>
               <div className="flex items-center gap-3 flex-wrap mt-2">
                 <span className="text-sm font-semibold text-foreground font-mono tabular-nums">
                   OPEN A/R: {currencyFmt.format(totalOpenAR)}
@@ -229,8 +259,8 @@ export function CashPageContent({ cashData, openInvoices, alerts, clients }: Cas
               <Table className="table-fixed">
                 <TableHeader>
                   <TableRow className="border-border hover:bg-transparent">
-                    <TableHead className="w-[65%] text-muted-foreground">Client</TableHead>
-                    <TableHead className="w-[35%] text-right text-muted-foreground">Amount</TableHead>
+                    <TableHead className="w-[65%] text-sm font-medium text-muted-foreground border-b bg-transparent">Client</TableHead>
+                    <TableHead className="w-[35%] text-sm font-medium text-muted-foreground border-b bg-transparent text-right">Amount</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -311,20 +341,36 @@ export function CashPageContent({ cashData, openInvoices, alerts, clients }: Cas
 
         <div className="flex flex-col">
           <Card className="flex flex-col border-border bg-card h-full">
-            <CardHeader>
-              <CardTitle className="text-lg font-medium text-foreground">Survival Payables</CardTitle>
-              <p className="text-sm font-semibold text-foreground mt-2 font-mono tabular-nums">
-                UPCOMING 14 DAYS: {currencyFmt.format(totalPayablesDue)} DUE
-              </p>
+            <CardHeader className="p-6 pb-4">
+              <CardTitle className="text-lg font-medium text-foreground tracking-tight">Cash Outflows (A/P)</CardTitle>
+              <div className="flex items-center gap-3 flex-wrap mt-2">
+                <span className="text-sm font-semibold text-foreground font-mono tabular-nums">
+                  OPEN A/P: {currencyFmt.format(totalOpenAP)}
+                </span>
+                {urgentAPTotal > 0 && (
+                  <Badge variant="destructive" className="gap-1">
+                    Due &lt; 7d {currencyFmt.format(urgentAPTotal)}
+                  </Badge>
+                )}
+              </div>
             </CardHeader>
-            <CardContent>
+            <div className="px-6 pb-2">
+              <AgingBucketsSummary
+                buckets={apBuckets}
+                totalOutstanding={totalOpenAP}
+                activeBucket={activeAPBucket}
+                onBucketClick={handleAPBucketClick}
+                colorMap={apColorMap}
+              />
+            </div>
+            <CardContent className="flex-1 overflow-auto">
               <Table className="table-fixed">
                 <TableHeader>
                   <TableRow className="border-border hover:bg-transparent">
-                    <TableHead className="w-[32%] text-muted-foreground">Vendor / Category</TableHead>
-                    <TableHead className="w-[20%] text-muted-foreground">Due Date</TableHead>
-                    <TableHead className="w-[20%] text-right text-muted-foreground">Amount</TableHead>
-                    <TableHead className="w-[28%] text-right text-muted-foreground">Action</TableHead>
+                    <TableHead className="w-[32%] text-sm font-medium text-muted-foreground border-b bg-transparent">Vendor / Category</TableHead>
+                    <TableHead className="w-[20%] text-sm font-medium text-muted-foreground border-b bg-transparent">Due Date</TableHead>
+                    <TableHead className="w-[20%] text-sm font-medium text-muted-foreground border-b bg-transparent text-right">Amount</TableHead>
+                    <TableHead className="w-[28%] text-sm font-medium text-muted-foreground border-b bg-transparent text-right">Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

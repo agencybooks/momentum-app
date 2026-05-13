@@ -1,4 +1,4 @@
-export type { Client, Invoice, Transaction, MetricAnchor, Alert, RevenueExpenseTimeline } from './types';
+export type { Client, Invoice, Transaction, MetricAnchor, Alert, RevenueExpenseTimeline, LivePulseData, SnapshotLedgerEntry, AntiPnLSnapshot, AntiPnLQuadrant } from './types';
 export {
   getClients,
   getClient,
@@ -9,4 +9,7 @@ export {
   getAlerts,
   getMetricAnchors,
   getRevenueExpenseTimeline,
+  getLivePulseData,
+  getSnapshotLedger,
+  getAntiPnlSnapshot,
 } from './services';

@@ -121,14 +121,14 @@ export function TeamContent({
 
       <Card>
         <CardContent className="p-0">
-          <Table>
+          <Table className="table-fixed">
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="w-12" />
+                <TableHead className="text-sm font-medium text-muted-foreground border-b bg-transparent">Name</TableHead>
+                <TableHead className="text-sm font-medium text-muted-foreground border-b bg-transparent">Email</TableHead>
+                <TableHead className="text-sm font-medium text-muted-foreground border-b bg-transparent">Role</TableHead>
+                <TableHead className="text-sm font-medium text-muted-foreground border-b bg-transparent">Status</TableHead>
+                <TableHead className="w-12 text-sm font-medium text-muted-foreground border-b bg-transparent" />
               </TableRow>
             </TableHeader>
             <TableBody>

@@ -1,4 +1,4 @@
-import type { RevenueExpenseTimeline, CashForecastPoint, Payable, CashFlowTimeline, UnitEconomicsPoint, PipelineOpportunity, BaselineTrajectoryPoint, RenewalAtRisk, CashActionAlert } from "@/lib/db/types"
+import type { RevenueExpenseTimeline, CashForecastPoint, Payable, CashFlowTimeline, UnitEconomicsPoint, PipelineOpportunity, RenewalAtRisk, CashActionAlert } from "@/lib/db/types"
 import type { BridgeStep } from "@/components/waterfall/bridge-waterfall-chart"
 
 export const mockChartData: RevenueExpenseTimeline[] = [
@@ -104,9 +104,14 @@ export const revPerFteSparkline = [
 export const PAYROLL_FLOOR = 31000
 
 export const payables: Payable[] = [
-  { id: "ap_01", dueDate: "May 09", vendor: "Gusto (May Payroll)", amount: 31000, canDelay: false },
-  { id: "ap_02", dueDate: "May 11", vendor: "AWS Hosting", amount: 4200, canDelay: false },
-  { id: "ap_03", dueDate: "May 14", vendor: "HubSpot Annual", amount: 7300, canDelay: true },
+  { id: "ap_01", dueDate: "May 09", vendor: "Gusto (May Payroll)", amount: 31000, canDelay: false, daysUntilDue: -3 },
+  { id: "ap_02", dueDate: "May 11", vendor: "AWS Hosting", amount: 4200, canDelay: false, daysUntilDue: -1 },
+  { id: "ap_03", dueDate: "May 14", vendor: "HubSpot Annual", amount: 7300, canDelay: true, daysUntilDue: 2 },
+  { id: "ap_04", dueDate: "May 22", vendor: "WeWork Office Lease", amount: 8500, canDelay: false, daysUntilDue: 10 },
+  { id: "ap_05", dueDate: "May 25", vendor: "Figma Team License", amount: 1800, canDelay: true, daysUntilDue: 13 },
+  { id: "ap_06", dueDate: "Jun 01", vendor: "Google Workspace", amount: 2400, canDelay: true, daysUntilDue: 20 },
+  { id: "ap_07", dueDate: "Jun 09", vendor: "Gusto (Jun Payroll)", amount: 31000, canDelay: false, daysUntilDue: 28 },
+  { id: "ap_08", dueDate: "Jun 15", vendor: "Slack Enterprise", amount: 3200, canDelay: true, daysUntilDue: 34 },
 ]
 
 export const unitEconomicsTrend: UnitEconomicsPoint[] = [
@@ -124,21 +129,6 @@ export const unitEconomicsTrend: UnitEconomicsPoint[] = [
   { month: "May 26", ltv: 85700, cac: 13200 },
 ]
 
-export const baselineTrajectoryData: BaselineTrajectoryPoint[] = [
-  { week: "W1",  cash: 125000 },
-  { week: "W2",  cash: 118000 },
-  { week: "W3",  cash: 112000 },
-  { week: "W4",  cash: 107000 },
-  { week: "W5",  cash: 99000 },
-  { week: "W6",  cash: 94000 },
-  { week: "W7",  cash: 88000 },
-  { week: "W8",  cash: 82000 },
-  { week: "W9",  cash: 78000, projected: 78000 },
-  { week: "W10", projected: 73000 },
-  { week: "W11", projected: 69000 },
-  { week: "W12", projected: 65000 },
-  { week: "W13", projected: 62000 },
-]
 
 export const pipelineOpportunities: PipelineOpportunity[] = [
   { id: "po_01", clientName: "Apex Studios",    value: 8500,  probability: 85, type: "Expansion" },

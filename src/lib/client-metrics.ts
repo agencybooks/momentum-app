@@ -144,16 +144,15 @@ export function deriveCohortYear(tenureMonths: number, referenceYear: number = 2
   return referenceYear - Math.ceil(tenureMonths / 12)
 }
 
-export function computeCohortMargins(
-  clients: { mrr: number; margin: number; cohortYear: number }[],
-): { year: number; avgMargin: number; clientCount: number; totalMrr: number }[] {
+export function computeCohortRetainedMrr(
+  clients: { mrr: number; cohortYear: number }[],
+): { year: number; retainedMrr: number; activeClientCount: number }[] {
   const active = clients.filter(c => c.mrr > 0)
-  const groups = new Map<number, { mrr: number; weightedMargin: number; count: number }>()
+  const groups = new Map<number, { mrr: number; count: number }>()
 
   for (const c of active) {
-    const existing = groups.get(c.cohortYear) ?? { mrr: 0, weightedMargin: 0, count: 0 }
+    const existing = groups.get(c.cohortYear) ?? { mrr: 0, count: 0 }
     existing.mrr += c.mrr
-    existing.weightedMargin += c.margin * c.mrr
     existing.count += 1
     groups.set(c.cohortYear, existing)
   }
@@ -161,9 +160,8 @@ export function computeCohortMargins(
   return Array.from(groups.entries())
     .map(([year, g]) => ({
       year,
-      avgMargin: g.mrr > 0 ? g.weightedMargin / g.mrr : 0,
-      clientCount: g.count,
-      totalMrr: g.mrr,
+      retainedMrr: g.mrr,
+      activeClientCount: g.count,
     }))
     .sort((a, b) => a.year - b.year)
 }

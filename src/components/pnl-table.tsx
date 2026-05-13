@@ -68,7 +68,7 @@ function SubItemRow({
       onClick={collapsed ? undefined : () => setDrawer(item.drawerId)}
       className={cn(
         "group transition-colors border-0",
-        collapsed ? "pointer-events-none" : "cursor-pointer hover:bg-muted/30"
+        collapsed ? "pointer-events-none" : "cursor-pointer hover:bg-muted/50"
       )}
       aria-hidden={collapsed || undefined}
     >
@@ -130,16 +130,16 @@ export function PnlTable({ categories, revenue, view }: PnlTableProps) {
     <Table className="table-fixed">
       <TableHeader>
         <TableRow className="hover:bg-transparent">
-          <TableHead className="text-xs font-semibold uppercase tracking-wider text-muted-foreground py-3 px-4">
+          <TableHead className="text-sm font-medium text-muted-foreground border-b bg-transparent py-3 px-4">
             Category
           </TableHead>
-          <TableHead className="w-[110px] text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground py-3 px-4">
+          <TableHead className="w-[110px] text-right text-sm font-medium text-muted-foreground border-b bg-transparent py-3 px-4">
             May 2026
           </TableHead>
-          <TableHead className="w-[90px] text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground py-3 px-4">
+          <TableHead className="w-[90px] text-right text-sm font-medium text-muted-foreground border-b bg-transparent py-3 px-4">
             vs April
           </TableHead>
-          <TableHead className="w-[80px] text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground py-3 px-4">
+          <TableHead className="w-[80px] text-right text-sm font-medium text-muted-foreground border-b bg-transparent py-3 px-4">
             % Rev
           </TableHead>
         </TableRow>
@@ -158,7 +158,7 @@ export function PnlTable({ categories, revenue, view }: PnlTableProps) {
                 className={cn(
                   "group border-0",
                   isNetIncome ? "border-t-2 border-border" : "border-t border-border",
-                  highlightDrawerId && "cursor-pointer hover:bg-muted/30"
+                  highlightDrawerId && "cursor-pointer hover:bg-muted/50"
                 )}
                 onClick={highlightDrawerId ? () => setDrawer(highlightDrawerId) : undefined}
               >
@@ -217,7 +217,7 @@ export function PnlTable({ categories, revenue, view }: PnlTableProps) {
               <TableRow
                 className={cn(
                   "group transition-colors border-0",
-                  catDrawerId ? "cursor-pointer hover:bg-muted/30" : "hover:bg-transparent",
+                  catDrawerId ? "cursor-pointer hover:bg-muted/50" : "hover:bg-transparent",
                   !showChildren && !isSummationRow && "border-b border-border/40",
                   isSummationRow && "border-t border-border"
                 )}

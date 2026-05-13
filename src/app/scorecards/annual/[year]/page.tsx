@@ -185,12 +185,12 @@ export default async function AnnualScorecardPage({ params }: Props) {
               <AlertTriangle className="h-4 w-4" /> OFF TRACK
             </h3>
             <Card className="overflow-hidden p-0">
-              <Table>
+              <Table className="table-fixed">
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Metric</TableHead>
-                    <TableHead className="text-right">Actual</TableHead>
-                    <TableHead className="text-right">Gap</TableHead>
+                    <TableHead className="text-sm font-medium text-muted-foreground border-b bg-transparent">Metric</TableHead>
+                    <TableHead className="text-right text-sm font-medium text-muted-foreground border-b bg-transparent">Actual</TableHead>
+                    <TableHead className="text-right text-sm font-medium text-muted-foreground border-b bg-transparent">Gap</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -211,12 +211,12 @@ export default async function AnnualScorecardPage({ params }: Props) {
               <CheckCircle2 className="h-4 w-4" /> ON TRACK
             </h3>
             <Card className="overflow-hidden p-0">
-              <Table>
+              <Table className="table-fixed">
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Metric</TableHead>
-                    <TableHead className="text-right">Actual</TableHead>
-                    <TableHead className="text-right">Gap</TableHead>
+                    <TableHead className="text-sm font-medium text-muted-foreground border-b bg-transparent">Metric</TableHead>
+                    <TableHead className="text-right text-sm font-medium text-muted-foreground border-b bg-transparent">Actual</TableHead>
+                    <TableHead className="text-right text-sm font-medium text-muted-foreground border-b bg-transparent">Gap</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

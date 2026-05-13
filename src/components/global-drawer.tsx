@@ -11,16 +11,20 @@ import { ARIntelligenceDrawer } from "@/components/drawers/ar-intelligence-drawe
 import { ActionCenterDrawer } from "@/components/drawers/action-center-drawer"
 import { ClientLedgerDrawer } from "@/components/drawers/client-ledger-drawer"
 import { ActionInsightDrawer } from "@/components/drawers/action-insight-drawer"
+import { CopilotFeedDrawer } from "@/components/drawers/copilot-feed-drawer"
+import { ClientProfileDrawer } from "@/components/drawers/client-profile-drawer"
 
 export function GlobalDrawer() {
   const [drawer, setDrawer] = useQueryState("drawer")
   const [clientId, setClientId] = useQueryState("clientId")
   const [isFullscreen, setIsFullscreen] = useState(false)
 
-  const globalDrawerIds = ["test", "ar-intelligence", "action-center", "client-ledger", "action-insight"]
+  const globalDrawerIds = ["test", "ar-intelligence", "action-center", "client-ledger", "client-profile", "action-insight", "copilot-feed"]
   const contextDrawerIds = ["test", "action-center"]
   const isOpen = typeof drawer === "string" && globalDrawerIds.includes(drawer)
   const isContextDrawer = contextDrawerIds.includes(drawer ?? "")
+  const isCopilotDrawer = drawer === "copilot-feed"
+  const isClientProfileDrawer = drawer === "client-profile"
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {
@@ -48,15 +52,25 @@ export function GlobalDrawer() {
     case "action-insight":
       content = <ActionInsightDrawer clientId={clientId} />
       break
+    case "client-profile":
+      content = <ClientProfileDrawer clientId={clientId} />
+      break
+    case "copilot-feed":
+      content = <CopilotFeedDrawer />
+      break
     default:
       content = null
   }
 
   const widthClass = isFullscreen
     ? "!left-0 !right-0 !mx-auto !w-[calc(100vw-32px)] !max-w-7xl transition-all duration-300 ease-in-out"
-    : isContextDrawer
-      ? "w-[90vw] sm:w-[var(--drawer-width-context)]"
-      : "w-[95vw] sm:w-[var(--drawer-width-master)]"
+    : isClientProfileDrawer
+      ? "w-[95vw] sm:w-[50vw]"
+      : isCopilotDrawer
+        ? "w-[95vw] sm:w-[var(--drawer-width-copilot)]"
+        : isContextDrawer
+          ? "w-[90vw] sm:w-[var(--drawer-width-context)]"
+          : "w-[95vw] sm:w-[var(--drawer-width-master)]"
 
   return (
     <Sheet open={isOpen} onOpenChange={handleOpenChange}>

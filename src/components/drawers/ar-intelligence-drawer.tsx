@@ -114,12 +114,12 @@ export function ARIntelligenceDrawer({ clientId }: ARIntelligenceDrawerProps) {
       <div className="space-y-3 flex-1 overflow-y-auto">
         <h3 className="text-sm font-medium text-foreground">Active Exposure</h3>
         <div className="rounded-md border border-border bg-card">
-          <Table>
+          <Table className="table-fixed">
             <TableHeader>
               <TableRow className="border-border hover:bg-transparent">
-                <TableHead className="text-xs text-muted-foreground">Invoice</TableHead>
-                <TableHead className="text-xs text-muted-foreground">Status</TableHead>
-                <TableHead className="text-right text-xs text-muted-foreground">Amount</TableHead>
+                <TableHead className="text-sm font-medium text-muted-foreground border-b bg-transparent">Invoice</TableHead>
+                <TableHead className="text-sm font-medium text-muted-foreground border-b bg-transparent">Status</TableHead>
+                <TableHead className="text-right text-sm font-medium text-muted-foreground border-b bg-transparent">Amount</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

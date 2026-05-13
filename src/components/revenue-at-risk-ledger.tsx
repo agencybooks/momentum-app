@@ -35,7 +35,7 @@ export function RevenueAtRiskLedger() {
 
   return (
     <Card className="flex flex-col border-border bg-card h-full">
-      <CardHeader>
+      <CardHeader className="p-6 pb-4">
         <CardTitle className="text-lg font-medium text-foreground tracking-tight">Revenue at Risk</CardTitle>
         <div className="flex items-center gap-3 flex-wrap mt-1">
           <span className="text-sm text-muted-foreground">

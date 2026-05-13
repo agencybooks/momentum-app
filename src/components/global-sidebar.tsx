@@ -9,7 +9,9 @@ import {
   TrendingUp,
   Wallet,
   Rocket,
+  LineChart,
   FlaskConical,
+  Gauge,
   Settings,
   Command,
   ChevronsUpDown,
@@ -17,14 +19,19 @@ import {
 import { cn } from "@/lib/utils"
 import { ThemeToggle } from "@/components/theme-toggle"
 
-const navItems = [
+const mainNavItems = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Scorecards", href: "/scorecards", icon: ClipboardList },
   { label: "Clients", href: "/clients", icon: Users },
   { label: "Profitability", href: "/profitability", icon: TrendingUp },
   { label: "Cash", href: "/cash", icon: Wallet },
   { label: "Growth", href: "/growth", icon: Rocket },
+  { label: "Trends", href: "/trends", icon: LineChart },
   { label: "Scenarios", href: "/scenarios", icon: FlaskConical },
+] as const
+
+const bottomNavItems = [
+  { label: "Calibration", href: "/calibration", icon: Gauge },
   { label: "Settings", href: "/settings", icon: Settings },
 ] as const
 
@@ -43,30 +50,58 @@ export function GlobalSidebar() {
         </div>
       </div>
 
-      <nav className="flex-1 px-1 py-2">
-        {navItems.map(({ label, href, icon: Icon }) => {
-          const isActive = pathname.startsWith(href)
-          return (
-            <Link
-              key={href}
-              href={href}
-              className={cn(
-                "group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all cursor-pointer mb-1 mx-2",
-                isActive
-                  ? "bg-brand-500/10 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300 font-semibold"
-                  : "text-muted-foreground hover:text-foreground hover:bg-accent/50 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-white/5"
-              )}
-            >
-              <Icon className={cn(
-                "h-5 w-5 transition-colors",
-                isActive
-                  ? "text-brand-600 dark:text-brand-400"
-                  : "text-muted-foreground group-hover:text-foreground"
-              )} />
-              {label}
-            </Link>
-          )
-        })}
+      <nav className="flex-1 flex flex-col px-1 py-2">
+        <div className="flex-1">
+          {mainNavItems.map(({ label, href, icon: Icon }) => {
+            const isActive = pathname.startsWith(href)
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={cn(
+                  "group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all cursor-pointer mb-1 mx-2",
+                  isActive
+                    ? "bg-brand-500/10 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300 font-semibold"
+                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-white/5"
+                )}
+              >
+                <Icon className={cn(
+                  "h-5 w-5 transition-colors",
+                  isActive
+                    ? "text-brand-600 dark:text-brand-400"
+                    : "text-muted-foreground group-hover:text-foreground"
+                )} />
+                {label}
+              </Link>
+            )
+          })}
+        </div>
+        <div className="border-t border-border/40 dark:border-white/10 mx-4 my-2" />
+        <div>
+          {bottomNavItems.map(({ label, href, icon: Icon }) => {
+            const isActive = pathname.startsWith(href)
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={cn(
+                  "group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all cursor-pointer mb-1 mx-2",
+                  isActive
+                    ? "bg-brand-500/10 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300 font-semibold"
+                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-white/5"
+                )}
+              >
+                <Icon className={cn(
+                  "h-5 w-5 transition-colors",
+                  isActive
+                    ? "text-brand-600 dark:text-brand-400"
+                    : "text-muted-foreground group-hover:text-foreground"
+                )} />
+                {label}
+              </Link>
+            )
+          })}
+        </div>
       </nav>
 
       <div className="border-t border-sidebar-border px-3 py-3">

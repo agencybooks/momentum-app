@@ -1,7 +1,16 @@
 "use client"
 
-import { Search, Sparkles } from "lucide-react"
+import { Search, Sparkles, User, Bell, Lock, Users, CreditCard, LogOut } from "lucide-react"
 import { useQueryState } from "nuqs"
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuGroup,
+} from "@/components/ui/dropdown-menu"
 
 export function TopHeader() {
   const [, setDrawer] = useQueryState("drawer")
@@ -24,14 +33,47 @@ export function TopHeader() {
       <div className="flex items-center gap-4">
         <button
           onClick={() => setDrawer("copilot-feed")}
-          className="relative hover:bg-accent p-2 rounded-full cursor-pointer transition-colors"
+          className="relative hover:bg-brand-500/10 p-2 rounded-full cursor-pointer transition-colors"
         >
-          <Sparkles className="h-4 w-4" />
-          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary animate-pulse" />
+          <Sparkles className="h-4 w-4 text-brand-500" />
+          <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-destructive ring-2 ring-background animate-pulse" />
         </button>
-        <div className="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold border border-primary/20">
-          DA
-        </div>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
+            <div className="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold border border-primary/20 cursor-pointer transition-colors hover:bg-primary/20">
+              DA
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" sideOffset={8} className="w-64">
+            <DropdownMenuGroup>
+              <DropdownMenuLabel className="p-0">
+                <div className="flex items-center gap-3 px-2 py-3">
+                  <div className="h-9 w-9 shrink-0 rounded-full bg-brand-500/15 text-brand-500 flex items-center justify-center text-xs font-bold border border-brand-500/25">
+                    DA
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-semibold text-foreground">David Aleckson</span>
+                    <span className="text-xs text-muted-foreground">david@agencybooks.io</span>
+                  </div>
+                </div>
+              </DropdownMenuLabel>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem><User />Profile & Preferences</DropdownMenuItem>
+              <DropdownMenuItem><Bell />Notifications</DropdownMenuItem>
+              <DropdownMenuItem><Lock />Security</DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem><Users />Team & Access</DropdownMenuItem>
+              <DropdownMenuItem><CreditCard />Billing & Plan</DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem variant="destructive"><LogOut />Sign Out</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   )

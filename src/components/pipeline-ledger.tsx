@@ -33,9 +33,9 @@ export function PipelineLedger() {
         <Table className="table-fixed">
           <TableHeader>
             <TableRow className="border-border hover:bg-transparent">
-              <TableHead className="w-[45%] text-xs text-muted-foreground uppercase tracking-wider font-semibold">Client</TableHead>
-              <TableHead className="w-[25%] text-right text-xs text-muted-foreground uppercase tracking-wider font-semibold">Value</TableHead>
-              <TableHead className="w-[30%] text-right text-xs text-muted-foreground uppercase tracking-wider font-semibold">Prob</TableHead>
+              <TableHead className="w-[45%] text-sm font-medium text-muted-foreground border-b bg-transparent">Client</TableHead>
+              <TableHead className="w-[25%] text-right text-sm font-medium text-muted-foreground border-b bg-transparent">Value</TableHead>
+              <TableHead className="w-[30%] text-right text-sm font-medium text-muted-foreground border-b bg-transparent">Prob</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

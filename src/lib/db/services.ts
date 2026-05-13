@@ -1,5 +1,5 @@
-import type { Client, Invoice, Transaction, MetricAnchor, Alert, ARAgingSummary, ScorecardMonth, ClientsPageData, EnrichedClient, CalibrationData, SettingsData } from './types';
-import { clients, invoices, transactions, metricAnchors, alerts, recentScorecards, clientPriorMrr, clientMrrHistory, clientUnitEconomics, clientMarginTrend90d, clientMrrHistoryPerClient, clientAvgDaysToPay } from './mock-db';
+import type { Client, Invoice, Transaction, MetricAnchor, Alert, ARAgingSummary, ScorecardMonth, ClientsPageData, EnrichedClient, CalibrationData, SettingsData, LivePulseData, SnapshotLedgerEntry, AntiPnLSnapshot } from './types';
+import { clients, invoices, transactions, metricAnchors, alerts, recentScorecards, clientPriorMrr, clientMrrHistory, clientUnitEconomics, clientMarginTrend90d, clientMrrHistoryPerClient, clientAvgDaysToPay, livePulseData, snapshotLedger, antiPnlSnapshots } from './mock-db';
 import { integrations, coaAccounts, teamMembers, softwareItems, financialTargets } from './calibration-data';
 import { settingsData } from './settings-data';
 import {
@@ -397,4 +397,20 @@ export async function getCalibrationData(): Promise<CalibrationData> {
 
 export async function getSettingsData(): Promise<SettingsData> {
   return delay(settingsData);
+}
+
+// ---------------------------------------------------------------------------
+// Strategic CFO Scorecards
+// ---------------------------------------------------------------------------
+
+export async function getLivePulseData(): Promise<LivePulseData> {
+  return delay(livePulseData);
+}
+
+export async function getSnapshotLedger(): Promise<SnapshotLedgerEntry[]> {
+  return delay(snapshotLedger);
+}
+
+export async function getAntiPnlSnapshot(slug: string): Promise<AntiPnLSnapshot | null> {
+  return delay(antiPnlSnapshots[slug] ?? null);
 }

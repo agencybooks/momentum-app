@@ -46,9 +46,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Executive Summary Zone */}
-      <div className="flex flex-col gap-6">
-        <PageHeader
+      <PageHeader
           title="Mission Control"
           subtitle="Real-time overview of your agency's financial health."
           actions={
@@ -82,8 +80,6 @@ export default async function DashboardPage() {
           }))} />
         </Suspense>
 
-      </div>
-
       {/* Deep Dive Zone */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Side: Cash vs Net Burn AreaChart */}
@@ -100,7 +96,7 @@ export default async function DashboardPage() {
         {/* Right Side: Worth Doing This Week */}
         <Card className="lg:col-span-1 flex flex-col border-border bg-card shadow-sm">
           <CardHeader className="p-6 pb-4">
-            <CardTitle className="text-lg font-medium text-foreground">Worth Doing This Week</CardTitle>
+            <CardTitle className="text-lg font-medium text-foreground tracking-tight">Worth Doing This Week</CardTitle>
           </CardHeader>
           <CardContent className="p-0 flex-1">
             <div className="flex flex-col">

@@ -15,6 +15,8 @@ import { ProfitabilityTrendDrawerContent, PROFITABILITY_TREND_DRAWER_IDS } from 
 import { ExpenseDepartmentDrawerContent, EXPENSE_DEPARTMENT_DRAWER_IDS } from "./expense-department-drawers"
 import { GrowthTrendDrawerContent, GROWTH_TREND_DRAWER_IDS } from "./growth-trend-drawers"
 import { CashTrendDrawerContent, CASH_TREND_DRAWER_IDS } from "./cash-trend-drawers"
+import { ClientsKpiDrawerContent, CLIENTS_KPI_DRAWER_IDS } from "./clients-kpi-drawers"
+import { AntiPnlSnapshotDrawer } from "./anti-pnl-snapshot-drawer"
 
 function DrawerContent({ drawer, setDrawer }: { drawer: string; setDrawer: (v: string | null) => void }) {
   switch (drawer) {
@@ -392,12 +394,12 @@ function DrawerContent({ drawer, setDrawer }: { drawer: string; setDrawer: (v: s
               <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
                 Active Exposure
               </h3>
-              <Table>
+              <Table className="table-fixed">
                 <TableHeader>
                   <TableRow className="border-border hover:bg-transparent">
-                    <TableHead className="text-muted-foreground">Invoice</TableHead>
-                    <TableHead className="text-muted-foreground">Status</TableHead>
-                    <TableHead className="text-right text-muted-foreground">Amount</TableHead>
+                    <TableHead className="text-sm font-medium text-muted-foreground border-b bg-transparent">Invoice</TableHead>
+                    <TableHead className="text-sm font-medium text-muted-foreground border-b bg-transparent">Status</TableHead>
+                    <TableHead className="text-right text-sm font-medium text-muted-foreground border-b bg-transparent">Amount</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -1204,60 +1206,14 @@ function DrawerContent({ drawer, setDrawer }: { drawer: string; setDrawer: (v: s
         </>
       )
 
-    case "clients-churn":
-      return (
-        <>
-          <SheetHeader className="pb-6 border-b border-border">
-            <SheetTitle>Gross MRR Churn</SheetTitle>
-            <SheetDescription>Monthly recurring revenue lost from downgrades and cancellations.</SheetDescription>
-          </SheetHeader>
-          <div className="p-6 space-y-4">
-            <div className="bg-muted/30 rounded-lg p-4">
-              <p className="text-sm text-muted-foreground">Gross churn isolates the bleeding — how much MRR walked out the door this period, before counting any expansion. A healthy agency keeps this under 5% monthly.</p>
-            </div>
-            <div className="text-sm font-mono tabular-nums text-muted-foreground">
-              <p>Formula: (Lost MRR / Prior Total MRR) × 100</p>
-            </div>
-          </div>
-        </>
-      )
+    case "clients-total-mrr":
+    case "clients-blended-margin":
+    case "clients-rev-concentration":
+    case "clients-profit-concentration":
+      return <ClientsKpiDrawerContent drawerId={drawer} />
 
     case "clients-concentration":
-      return (
-        <>
-          <SheetHeader className="pb-6 border-b border-border">
-            <SheetTitle>Top Client Concentration</SheetTitle>
-            <SheetDescription>Revenue dependency on your largest client.</SheetDescription>
-          </SheetHeader>
-          <div className="p-6 space-y-4">
-            <div className="bg-amber-500/5 border border-amber-500/20 rounded-lg p-4">
-              <p className="text-sm text-amber-700 dark:text-amber-400">When any single client exceeds 25% of total MRR, losing them becomes an existential risk to cash runway. Diversify by growing mid-tier accounts or adding new logos.</p>
-            </div>
-            <div className="text-sm font-mono tabular-nums text-muted-foreground">
-              <p>Formula: (Top Client MRR / Total MRR) × 100</p>
-            </div>
-          </div>
-        </>
-      )
-
-    case "clients-margin-ltv":
-      return (
-        <>
-          <SheetHeader className="pb-6 border-b border-border">
-            <SheetTitle>Average Margin LTV</SheetTitle>
-            <SheetDescription>Revenue-weighted lifetime gross profit value across active clients.</SheetDescription>
-          </SheetHeader>
-          <div className="p-6 space-y-4">
-            <div className="bg-muted/30 rounded-lg p-4">
-              <p className="text-sm text-muted-foreground">Margin LTV captures the total gross profit a client has generated over their tenure. Revenue-weighting ensures large clients appropriately influence the average. Higher Margin LTV means your retention and pricing are compounding effectively.</p>
-            </div>
-            <div className="text-sm font-mono tabular-nums text-muted-foreground">
-              <p>Formula: MRR × Margin × Tenure (months)</p>
-              <p>Weighted: Σ(LTV × MRR) / Σ(MRR)</p>
-            </div>
-          </div>
-        </>
-      )
+      return <ClientsKpiDrawerContent drawerId="clients-rev-concentration" />
 
     case "clients-churn-waterfall":
       return (
@@ -1273,6 +1229,9 @@ function DrawerContent({ drawer, setDrawer }: { drawer: string; setDrawer: (v: s
           </div>
         </>
       )
+
+    case "anti-pnl-snapshot":
+      return <AntiPnlSnapshotDrawer />
 
     default:
       return null
@@ -1295,7 +1254,7 @@ export function GlobalDrawers() {
     return () => document.removeEventListener('keydown', down);
   }, [setDrawer]);
 
-  const globalDrawerIds = ["test", "ar-intelligence", "action-center", "client-ledger", "action-insight"]
+  const globalDrawerIds = ["test", "ar-intelligence", "action-center", "client-ledger", "client-profile", "action-insight", "copilot-feed"]
   const isHandledByGlobalDrawer = globalDrawerIds.includes(drawer ?? "")
 
   return (
