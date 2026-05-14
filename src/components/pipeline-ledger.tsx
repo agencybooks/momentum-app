@@ -10,7 +10,7 @@ const currencyFmt = new Intl.NumberFormat("en-US", { style: "currency", currency
 
 function probabilityBadgeClass(prob: number): string {
   if (prob >= 80) return "bg-success/10 text-success border-success/20"
-  if (prob >= 20) return "bg-amber-500/10 text-amber-600 dark:text-amber-500 border-amber-500/20"
+  if (prob >= 20) return "bg-warning/10 text-warning dark:text-warning border-warning/20"
   return "bg-muted text-muted-foreground border-border"
 }
 

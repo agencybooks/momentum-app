@@ -20,7 +20,7 @@ export function SettingsNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="hidden md:block w-60 shrink-0 border-r border-border/40 dark:border-white/10 pr-6 sticky top-0 self-start">
+    <nav className="hidden md:block w-60 shrink-0 border-r border-border/50 pr-6 sticky top-0 self-start">
       <div>
         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-2 px-3">
           Personal Workspace
@@ -76,7 +76,7 @@ export function SettingsNavMobile() {
   const allItems = [...personalItems, ...adminItems]
 
   return (
-    <nav className="md:hidden flex overflow-x-auto gap-1 border-b border-border/40 dark:border-white/10 pb-3 mb-6 -mx-2 px-2">
+    <nav className="md:hidden flex overflow-x-auto gap-1 border-b border-border/50 pb-3 mb-6 -mx-2 px-2">
       {allItems.map(({ label, href, icon: Icon }) => {
         const isActive = pathname === href
         return (

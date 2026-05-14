@@ -4,7 +4,8 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
-import { ArrowRight, ArrowUp, ArrowDown } from "lucide-react"
+import { ArrowRight, ArrowUp, ArrowDown, FileText } from "lucide-react"
+import { EmptyState } from "@/components/ui/empty-state"
 
 const fmt = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -41,11 +42,11 @@ function TrendPill({ trend, isArchived = false }: { trend: string; isArchived?: 
   return (
     <span
       className={cn(
-        "inline-flex items-center justify-end min-w-[3.5rem] text-[10px] font-semibold tabular-nums",
-        isPositive && "text-emerald-600 dark:text-emerald-400",
+        "inline-flex items-center justify-end min-w-[3.5rem] text-xs font-semibold tabular-nums",
+        isPositive && "text-success dark:text-success",
         isNegative && "text-destructive",
         !isPositive && !isNegative && "text-muted-foreground",
-        isArchived && "opacity-50 group-hover/scorecard:opacity-100 transition-opacity duration-300 ease-in-out"
+        isArchived && "opacity-50 group-hover/scorecard:opacity-100 transition-opacity duration-200 ease-in-out"
       )}
     >
       {isPositive && <ArrowUp className="w-3 h-3 mr-0.5 shrink-0" />}
@@ -58,13 +59,13 @@ function TrendPill({ trend, isArchived = false }: { trend: string; isArchived?: 
 function MetricCell({ label, value, trend, isArchived = false }: { label: string; value: string; trend: string; isArchived?: boolean }) {
   return (
     <div className="flex flex-col gap-1">
-      <span className="uppercase text-[10px] text-muted-foreground tracking-wider font-medium">
+      <span className="uppercase text-xs text-muted-foreground tracking-wider font-medium">
         {label}
       </span>
       <div className="flex items-center gap-1.5 flex-wrap">
         <span className={cn(
           "font-mono tabular-nums text-lg font-medium",
-          isArchived && "text-muted-foreground group-hover/scorecard:text-foreground transition-colors duration-300 ease-in-out"
+          isArchived && "text-muted-foreground group-hover/scorecard:text-foreground transition-colors duration-200 ease-in-out"
         )}>
           {value}
         </span>
@@ -81,24 +82,24 @@ function ScorecardWidget({ scorecard: sc }: { scorecard: ScorecardMonth }) {
     <Link
       href={sc.href}
       className={cn(
-        "group/scorecard block rounded-xl border border-border/50 bg-muted/30 dark:bg-zinc-900/40 p-5",
+        "group/scorecard block rounded-xl border border-border/50 bg-muted/30 dark:bg-surface-inset p-5",
         isArchived
-          ? "transition-all duration-300 ease-in-out hover:bg-accent/20 hover:border-zinc-300 dark:hover:border-white/60"
-          : "transition-all duration-200 hover:bg-accent/20 hover:border-zinc-300 dark:hover:border-white/60",
-        "focus-visible:outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+          ? "transition-all duration-200 ease-in-out hover:bg-muted dark:hover:bg-white/10 hover:border-border"
+          : "transition-all duration-200 hover:bg-muted dark:hover:bg-white/10 hover:border-border",
+        "focus-visible:outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/75"
       )}
     >
       <div className="flex items-center justify-between mb-4">
         <span className={cn(
           "text-sm font-semibold",
-          isArchived && "text-muted-foreground group-hover/scorecard:text-foreground transition-colors duration-300 ease-in-out"
+          isArchived && "text-muted-foreground group-hover/scorecard:text-foreground transition-colors duration-200 ease-in-out"
         )}>
           {sc.month}
         </span>
         <Badge
           variant="secondary"
           className={cn(
-            "border-0 text-[10px] tracking-wider uppercase font-semibold",
+            "border-0 text-xs tracking-wider uppercase font-semibold",
             sc.isCurrent
               ? "bg-primary/10 text-primary hover:bg-primary/15"
               : "bg-muted text-muted-foreground"
@@ -118,7 +119,7 @@ function ScorecardWidget({ scorecard: sc }: { scorecard: ScorecardMonth }) {
         <span className={cn(
           "text-sm text-muted-foreground flex items-center gap-1 group-hover/scorecard:translate-x-1",
           isArchived
-            ? "transition-transform duration-300 ease-in-out"
+            ? "transition-transform duration-200 ease-in-out"
             : "transition-transform duration-200"
         )}>
           View Report
@@ -133,7 +134,7 @@ export function RecentScorecardsList({ scorecards }: { scorecards: ScorecardMont
   return (
     <Card className="border-border bg-card shadow-sm p-6">
       <div className="flex items-center justify-between mb-5">
-        <h3 className="text-base font-semibold tracking-tight">Recent Scorecards</h3>
+        <h3 className="text-lg font-medium text-foreground tracking-tight">Recent Scorecards</h3>
         <Link href="/scorecards">
           <Button variant="ghost" size="sm" className="text-muted-foreground">
             View Archive
@@ -141,10 +142,18 @@ export function RecentScorecardsList({ scorecards }: { scorecards: ScorecardMont
         </Link>
       </div>
 
-      <div className="flex flex-col gap-4">
-        {scorecards.map((sc) => (
-          <ScorecardWidget key={sc.month} scorecard={sc} />
-        ))}
+      <div className="flex flex-col gap-4 flex-1">
+        {scorecards.length > 0 ? (
+          scorecards.map((sc) => (
+            <ScorecardWidget key={sc.month} scorecard={sc} />
+          ))
+        ) : (
+          <EmptyState
+            icon={FileText}
+            title="No scorecards generated"
+            description="Scorecards are generated automatically at the end of each month."
+          />
+        )}
       </div>
     </Card>
   )

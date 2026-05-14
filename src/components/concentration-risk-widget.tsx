@@ -11,6 +11,8 @@ import {
 import { cn } from "@/lib/utils"
 import { formatCurrencyFull } from "@/lib/format"
 import type { EnrichedClient } from "@/lib/db/types"
+import { EmptyState } from "@/components/ui/empty-state"
+import { Users } from "lucide-react"
 
 type SegmentGroup = "top" | "mid" | "tail"
 
@@ -41,9 +43,9 @@ function getSegmentColor(seg: BarSegment): string {
 }
 
 function getSegmentTextColor(seg: BarSegment): string {
-  if (seg.breachesCeiling) return "text-white"
+  if (seg.breachesCeiling) return "text-primary-foreground"
   if (seg.group === "tail") return "text-muted-foreground"
-  return "text-white/90"
+  return "text-primary-foreground/90"
 }
 
 export function ConcentrationRiskWidget({
@@ -124,13 +126,17 @@ export function ConcentrationRiskWidget({
   if (segments.length === 0) {
     return (
       <Card>
-        <CardHeader className="p-6 pb-4">
+        <CardHeader>
           <CardTitle className="text-lg font-medium text-foreground tracking-tight">
             Concentration Risk
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">No active clients.</p>
+        <CardContent className="py-8">
+          <EmptyState 
+            icon={Users}
+            title="Add clients to see concentration risk" 
+            description="Your concentration risk will appear once you have active clients."
+          />
         </CardContent>
       </Card>
     )
@@ -138,7 +144,7 @@ export function ConcentrationRiskWidget({
 
   return (
     <Card>
-      <CardHeader className="p-6 pb-4">
+      <CardHeader>
         <CardTitle className="text-lg font-medium text-foreground tracking-tight">
           Concentration Risk
         </CardTitle>
@@ -155,7 +161,7 @@ export function ConcentrationRiskWidget({
               className="absolute -top-5 z-10 pointer-events-none"
               style={{ left: `${ceilingPercent}%` }}
             >
-              <span className="relative -translate-x-1/2 text-[10px] text-foreground font-medium whitespace-nowrap tabular-nums">
+              <span className="relative -translate-x-1/2 text-xs text-foreground font-medium whitespace-nowrap tabular-nums">
                 {ceilingPercent}% ceiling
               </span>
             </div>

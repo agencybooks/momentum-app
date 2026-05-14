@@ -19,7 +19,7 @@ function CashTooltipContent({ active, payload, label }: { active?: boolean; payl
   const point = payload[0]?.payload as { cash: number; inflows?: number; outflows?: number }
 
   return (
-    <div className="rounded-lg border bg-background px-3 py-2 shadow-md">
+    <div className="rounded-lg border border-border/50 bg-background px-3 py-2.5 shadow-xl min-w-[200px]">
       <p className="text-xs font-medium text-muted-foreground mb-2">{label}</p>
       <div className="flex flex-col gap-1.5">
         <div className="flex items-center gap-2">
@@ -72,9 +72,9 @@ function CashTooltipContent({ active, payload, label }: { active?: boolean; payl
 export function CashForecastChart() {
   return (
     <Card className="border-border bg-card">
-      <CardHeader className="p-6 pb-4">
-        <CardTitle className="text-lg font-medium text-foreground tracking-tight">13-Week Cash Forecast</CardTitle>
-        <CardDescription>Weekly cash position with inflow/outflow breakdown</CardDescription>
+      <CardHeader>
+        <CardTitle className="text-lg font-medium text-foreground tracking-tight">Cash Forecast</CardTitle>
+        <CardDescription>Next 90 days. Projected cash stays above payroll floor through [date].</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="w-full h-full min-h-[240px]">

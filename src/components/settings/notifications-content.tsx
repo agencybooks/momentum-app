@@ -23,7 +23,7 @@ export function NotificationsContent({
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-8">
       <Card>
         <CardHeader>
           <CardTitle>Email Digest</CardTitle>
@@ -86,6 +86,6 @@ export function NotificationsContent({
           </p>
         </CardContent>
       </Card>
-    </>
+    </div>
   )
 }

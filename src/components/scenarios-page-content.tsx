@@ -125,7 +125,7 @@ export function ScenariosPageContent() {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="p-6">
+        <Card>
           <div className="text-sm font-medium text-muted-foreground">RUNWAY IMPACT</div>
           <div
             className={cn(
@@ -140,7 +140,7 @@ export function ScenariosPageContent() {
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card>
           <div className="text-sm font-medium text-muted-foreground">MRR IMPACT</div>
           <div
             className={cn(
@@ -156,7 +156,7 @@ export function ScenariosPageContent() {
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card>
           <div className="text-sm font-medium text-muted-foreground">CASH IMPACT</div>
           <div
             className={cn(

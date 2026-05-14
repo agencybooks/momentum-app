@@ -236,31 +236,31 @@ const SPECS: Record<string, ExpenseDeptSpec> = {
 }
 
 const dotColorMap: Record<BreakdownItem["sentiment"], string> = {
-  positive: "bg-emerald-500",
+  positive: "bg-success",
   negative: "bg-destructive",
   neutral: "bg-muted-foreground",
 }
 
 const changeColorMap: Record<BreakdownItem["sentiment"], string> = {
-  positive: "text-emerald-600 dark:text-emerald-400",
+  positive: "text-success",
   negative: "text-destructive",
   neutral: "text-muted-foreground",
 }
 
 const alertStyles: Record<ExpenseDeptSpec["alertType"], { border: string; bg: string; icon: typeof AlertCircle; iconColor: string; textColor: string }> = {
   warning: {
-    border: "border-amber-500/20",
-    bg: "bg-amber-500/5 dark:bg-amber-500/10",
+    border: "border-warning/20",
+    bg: "bg-warning/5 dark:bg-warning/10",
     icon: AlertTriangle,
-    iconColor: "text-amber-600 dark:text-amber-500",
-    textColor: "text-amber-800 dark:text-amber-400",
+    iconColor: "text-warning dark:text-warning",
+    textColor: "text-warning",
   },
   success: {
-    border: "border-emerald-500/20",
-    bg: "bg-emerald-500/5 dark:bg-emerald-500/10",
+    border: "border-success/20",
+    bg: "bg-success/5 dark:bg-success/10",
     icon: CheckCircle2,
-    iconColor: "text-emerald-600 dark:text-emerald-500",
-    textColor: "text-emerald-800 dark:text-emerald-400",
+    iconColor: "text-success",
+    textColor: "text-success",
   },
   info: {
     border: "border-blue-500/20",
@@ -297,7 +297,7 @@ export function ExpenseDepartmentDrawerContent({ drawerId }: { drawerId: string 
                 "inline-flex items-center gap-1 text-sm font-semibold px-2 py-0.5 rounded-full",
                 spec.deltaDirection === "up"
                   ? "bg-destructive/10 text-destructive"
-                  : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                  : "bg-success/10 text-success"
               )}
             >
               {spec.deltaDirection === "up" ? (

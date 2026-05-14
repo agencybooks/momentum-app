@@ -72,7 +72,7 @@ export function CorrelationChart({ data, selectedMetrics, colorMap }: Correlatio
 
   if (selectedMetrics.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-[500px] border-2 border-dashed border-border/60 rounded-lg">
+      <div className="flex flex-col items-center justify-center h-[500px] border-2 border-dashed border-border/50 rounded-lg">
         <LineChartIcon className="h-10 w-10 text-muted-foreground/40 mb-3" />
         <p className="text-sm font-medium text-muted-foreground">No metrics selected</p>
         <p className="text-xs text-muted-foreground/60 mt-1">

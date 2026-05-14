@@ -9,9 +9,11 @@ import {
   ArrowDown,
   ChevronLeft,
   ChevronRight,
+  Users,
 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
 import {
   Table,
@@ -32,6 +34,7 @@ import { NrrMoversList } from "@/components/nrr-movers-list"
 import { ConcentrationRiskWidget } from "@/components/concentration-risk-widget"
 import { cn } from "@/lib/utils"
 import { formatCurrency, formatCurrencyFull } from "@/lib/format"
+import { EmptyState } from "@/components/ui/empty-state"
 import { LockedMarginCell } from "@/components/locked-margin-cell"
 import type { ClientsPageData, EnrichedClient } from "@/lib/db/types"
 
@@ -49,10 +52,10 @@ const FILTER_MAP: Record<FilterKey, (c: EnrichedClient) => boolean> = {
 }
 
 const STATUS_CONFIG = {
-  Active: { dot: "bg-emerald-500", text: "text-sm" },
+  Active: { dot: "bg-success", text: "text-sm" },
   "At Risk": {
-    dot: "bg-amber-500",
-    text: "text-sm text-amber-600 dark:text-amber-500 font-medium",
+    dot: "bg-warning",
+    text: "text-sm text-warning dark:text-warning font-medium",
   },
   Churned: { dot: "bg-zinc-400", text: "text-sm text-muted-foreground" },
 } as const
@@ -212,7 +215,7 @@ export function ClientsPageContent({ data }: { data: ClientsPageData }) {
 
       {/* Row 4: Tactical Roster Table */}
       <Card className="min-h-[600px]">
-        <CardHeader className="p-6 pb-4">
+        <CardHeader>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div className="relative w-full sm:max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -307,8 +310,19 @@ export function ClientsPageContent({ data }: { data: ClientsPageData }) {
                 ))}
                 {sortedClients.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={7} className="h-[400px] text-center align-middle text-muted-foreground">
-                      No clients match your filter.
+                    <TableCell colSpan={7} className="h-[400px] p-0 border-0">
+                      <div className="p-4 h-full flex items-center justify-center">
+                        <EmptyState
+                          icon={Users}
+                          title="No clients found"
+                          description="We couldn't find any clients matching your criteria."
+                          actionLabel="Clear Filters"
+                          onAction={() => {
+                            setSearchQuery("")
+                            setActiveFilter("all")
+                          }}
+                        />
+                      </div>
                     </TableCell>
                   </TableRow>
                 )}
@@ -339,7 +353,7 @@ export function ClientsPageContent({ data }: { data: ClientsPageData }) {
       {/* Row 4: Retained MRR by Cohort */}
       {data.cohortRetainedMrr.length > 0 && (
         <Card>
-          <CardHeader className="p-6 pb-4">
+          <CardHeader>
             <CardTitle className="text-lg font-medium text-foreground tracking-tight">Retained MRR by Cohort</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
@@ -353,12 +367,12 @@ export function ClientsPageContent({ data }: { data: ClientsPageData }) {
                   <span className="text-sm font-medium text-foreground w-12 shrink-0 tabular-nums">
                     {cohort.year}
                   </span>
-                  <div className="flex-1 h-6 bg-muted/30 rounded overflow-hidden">
-                    <div
-                      className={cn("h-full rounded transition-all", barClass)}
-                      style={{ width: `${barWidth}%` }}
-                    />
-                  </div>
+                  <Progress
+                    value={barWidth}
+                    className="flex-1 h-6"
+                    trackClassName="bg-muted/30 rounded"
+                    indicatorClassName={cn("rounded", barClass)}
+                  />
                   <span className="text-sm font-bold tabular-nums text-foreground w-24 text-right font-mono">
                     {formatCurrencyFull(cohort.retainedMrr)}
                   </span>
@@ -468,8 +482,11 @@ function ClientRow({
       </TableCell>
       <TableCell>
         <div className="flex items-center gap-2">
-          <div className={cn("w-2 h-2 rounded-full shrink-0", statusCfg.dot)} />
+          <div className={cn("w-2 h-2 rounded-full shrink-0", statusCfg.dot)}>
+            <span className="sr-only">{client.displayStatus}</span>
+          </div>
           <span className="font-medium text-foreground">{client.name}</span>
+          <span className={cn("text-xs hidden sm:inline-block", statusCfg.text)}>{client.displayStatus}</span>
         </div>
       </TableCell>
       <TableCell className="text-right">
@@ -509,7 +526,7 @@ function ClientRow({
                 className={cn(
                   "font-normal shadow-none text-xs",
                   tag.variant === "amber"
-                    ? "bg-amber-500/5 text-amber-600 dark:text-amber-500 border-amber-500/20"
+                    ? "bg-warning/5 text-warning dark:text-warning border-warning/20"
                     : "bg-destructive/5 text-destructive dark:text-red-400 border-destructive/20"
                 )}
               >

@@ -98,7 +98,7 @@ export function FinancialTargetsTab({ targets, onScoreChange }: FinancialTargets
         if (sectionTargets.length === 0) return null
 
         return (
-          <Card key={section.group} className={cn("p-6", sectionIdx > 0 && "mt-8")}>
+          <Card key={section.group} className={cn( sectionIdx > 0 && "mt-8")}>
             <h3 className="font-semibold mb-6 flex items-center gap-2">
               <section.Icon className="h-4 w-4" />
               {section.label}

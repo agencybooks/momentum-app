@@ -73,7 +73,7 @@ export function CalibrationContent({ data }: { data: CalibrationData }) {
         value={tab ?? "data-sync"}
         onValueChange={(val) => setTab(val as string)}
       >
-        <TabsList variant="line" className="mb-6 border-b border-border/40 pb-0">
+        <TabsList variant="line" className="mb-6 border-b border-border/50 pb-0">
           <TabsTrigger value="data-sync">Data Sync</TabsTrigger>
           <TabsTrigger value="coa-mapping">COA Mapping</TabsTrigger>
           <TabsTrigger value="margin-allocation">Margin Allocation</TabsTrigger>

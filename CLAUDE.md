@@ -83,7 +83,7 @@ When replacing with a real backend, swap the implementations in `services.ts` --
 
 ## Key Conventions
 
-- Fonts: Geist Sans (body) + Geist Mono (code), loaded via `next/font/google`
+- Fonts: Inter or system-ui (intentional) (body) + Geist Mono (code), loaded via `next/font/google`
 - `cn()` utility in `src/lib/utils.ts` for merging Tailwind classes (clsx + tailwind-merge)
 - Client components must have `"use client"` directive; prefer server components where possible
 - shadcn components live in `src/components/ui/`; app-level components in `src/components/`

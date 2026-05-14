@@ -64,8 +64,8 @@ export function MetricAnchor({
   return (
     <Card
       className={cn(
-        "relative overflow-hidden flex flex-col h-[140px] p-0 border-border/60 shadow-sm group",
-        onClick && "cursor-pointer hover:shadow-md active:scale-[0.98] transition-all duration-300",
+        "relative overflow-hidden flex flex-col h-[140px] p-0 border-border/50 shadow-sm group",
+        onClick && "cursor-pointer hover:shadow-md hover:border-border active:scale-[0.98] transition-all duration-200",
         className
       )}
       onClick={onClick}
@@ -73,7 +73,7 @@ export function MetricAnchor({
       <div className="flex flex-col p-4 pb-0 relative z-10 bg-gradient-to-b from-card via-card/90 to-transparent">
         <div className="flex justify-between items-start mb-1">
           <span
-            className="text-xs font-medium text-muted-foreground tracking-wider uppercase min-w-0 truncate"
+            className="text-xs font-medium text-muted-foreground tracking-wider uppercase min-w-0 line-clamp-1 pr-2"
             title={title}
           >
             {title}
@@ -94,7 +94,7 @@ export function MetricAnchor({
                 )
               })()}
               {target && (
-                <span className="text-[10px] text-muted-foreground font-medium whitespace-nowrap">
+                <span className="text-xs text-muted-foreground font-medium whitespace-nowrap">
                   (Goal: {condenseTarget(target)})
                 </span>
               )}

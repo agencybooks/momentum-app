@@ -24,7 +24,7 @@ export function GlobalDateRange({ value, onChange }: GlobalDateRangeProps) {
         <SelectItem value="ytd">Year to Date</SelectItem>
         <SelectItem value="custom" disabled>
           Custom Range
-          <span className="ml-1.5 text-[10px] text-muted-foreground">Soon</span>
+          <span className="ml-1.5 text-xs text-muted-foreground">Soon</span>
         </SelectItem>
       </SelectContent>
     </Select>

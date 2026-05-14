@@ -37,9 +37,9 @@ export const barStyles: Record<RowType, { bg: string; border: string; text: stri
     text: "text-destructive",
   },
   result: {
-    bg: "bg-emerald-500/10",
-    border: "border-emerald-500/30",
-    text: "text-emerald-700 dark:text-emerald-300",
+    bg: "bg-success/10",
+    border: "border-success/30",
+    text: "text-success",
   },
 }
 
@@ -65,7 +65,7 @@ export function BarCell({
             style.bg,
             style.border,
             "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]",
-            "hover:shadow-md",
+            "hover:shadow-md dark:hover:border-border",
             "min-w-[2rem]",
             "flex items-center justify-center"
           )}
@@ -82,7 +82,7 @@ export function BarCell({
             "absolute inset-0 rounded-md opacity-0 transition-opacity duration-300",
             row.type === "positive" && "bg-brand-500/10",
             row.type === "negative" && "bg-destructive/10",
-            row.type === "result" && "bg-emerald-500/10",
+            row.type === "result" && "bg-success/10",
             "group-hover/bar:opacity-100"
           )} />
 
@@ -108,7 +108,7 @@ export function BarCell({
             </p>
             {details && details.length > 0 && (
               <>
-                <div className="border-t border-border/40 my-1.5" />
+                <div className="border-t border-border/30 my-1.5" />
                 {details.map((item) => (
                   <div
                     key={item.label}

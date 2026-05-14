@@ -1,6 +1,8 @@
 "use client"
 
-import { Search, Sparkles, User, Bell, Lock, Users, CreditCard, LogOut } from "lucide-react"
+import { Search, Sparkles, User, Bell, Lock, Users, CreditCard, LogOut, Menu } from "lucide-react"
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
+import { SidebarContent } from "@/components/global-sidebar"
 import { useQueryState } from "nuqs"
 import {
   DropdownMenu,
@@ -16,19 +18,31 @@ export function TopHeader() {
   const [, setDrawer] = useQueryState("drawer")
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:bg-zinc-950 dark:border-white/10 flex h-14 items-center justify-between px-4 sm:px-6">
-      <button
-        onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
-        className="group relative flex h-9 w-full max-w-sm items-center justify-between rounded-md border border-border/50 bg-muted/40 px-3 text-sm text-muted-foreground shadow-sm transition-colors hover:bg-muted/80 hover:text-foreground cursor-pointer"
-      >
-        <div className="flex items-center gap-2">
-          <Search className="h-4 w-4 shrink-0 opacity-50" />
-          <span>Search or jump to...</span>
-        </div>
-        <kbd className="pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-background px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100 sm:flex shadow-sm">
-          <span className="text-xs">⌘</span>K
-        </kbd>
-      </button>
+    <header className="sticky top-0 z-40 border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 flex h-14 items-center justify-between px-4 sm:px-6">
+      <div className="flex items-center flex-1 gap-2">
+        <Sheet>
+          <SheetTrigger className="lg:hidden p-2 -ml-2 text-muted-foreground hover:text-foreground cursor-pointer">
+            <Menu className="h-5 w-5" />
+            <span className="sr-only">Toggle navigation menu</span>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-64 p-0 flex flex-col bg-sidebar border-r border-sidebar-border h-full sm:w-64" showCloseButton={false}>
+            <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+            <SidebarContent />
+          </SheetContent>
+        </Sheet>
+        <button
+          onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
+          className="group relative flex h-9 w-full max-w-sm items-center justify-between rounded-md border border-border/50 bg-muted/40 px-3 text-sm text-muted-foreground shadow-sm transition-colors hover:bg-muted/80 hover:text-foreground cursor-pointer"
+        >
+          <div className="flex items-center gap-2">
+            <Search className="h-4 w-4 shrink-0 opacity-50" />
+            <span>Search or jump to...</span>
+          </div>
+          <kbd className="pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-background px-1.5 font-mono text-xs font-medium text-muted-foreground opacity-100 sm:flex shadow-sm">
+            <span className="text-xs">⌘</span>K
+          </kbd>
+        </button>
+      </div>
 
       <div className="flex items-center gap-4">
         <button

@@ -24,7 +24,7 @@ export function ClientShockTest({
   newTopClientPct,
 }: ClientShockTestProps) {
   return (
-    <div className="bg-zinc-50/50 dark:bg-zinc-900/20 border-l-[3px] border-brand-500 p-6 shadow-inner flex flex-col gap-6">
+    <div className="bg-zinc-50/50 dark:bg-surface-inset border-l-[3px] border-brand-500 p-6 shadow-inner flex flex-col gap-6">
       <span className="text-sm font-medium text-foreground flex items-center gap-2">
         <TrendingDown className="w-4 h-4 text-muted-foreground" />
         What if {clientName} leaves?

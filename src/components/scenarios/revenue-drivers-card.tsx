@@ -18,7 +18,7 @@ export function RevenueDriversCard({ drivers, dispatch }: RevenueDriversCardProp
   const impliedMonthlyGrowth = Math.round(SCENARIO_CONSTANTS.currentMrr * drivers.mrrGrowthPct)
 
   return (
-    <Card className="p-6">
+    <Card>
       <div className="flex items-center gap-3 mb-6">
         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-muted">
           <TrendingUp className="h-4 w-4 text-muted-foreground" />

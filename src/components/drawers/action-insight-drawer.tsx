@@ -82,7 +82,7 @@ export function ActionInsightDrawer({ clientId }: ActionInsightDrawerProps) {
           </div>
           <div className="flex flex-col gap-1 p-3 rounded-lg bg-zinc-50 dark:bg-zinc-900/40 border border-border/50">
             <span className="text-xs text-muted-foreground">Health Score</span>
-            <Badge variant="secondary" className="bg-amber-500/10 text-amber-600 dark:text-amber-500 border-transparent hover:bg-amber-500/20 w-fit">At Risk</Badge>
+            <Badge variant="secondary" className="bg-warning/10 text-warning dark:text-warning border-transparent hover:bg-warning/20 w-fit">At Risk</Badge>
           </div>
           <div className="flex flex-col gap-1 p-3 rounded-lg bg-zinc-50 dark:bg-zinc-900/40 border border-border/50">
             <span className="text-xs text-muted-foreground">YTD Usage</span>
@@ -95,7 +95,7 @@ export function ActionInsightDrawer({ clientId }: ActionInsightDrawerProps) {
         <div className="flex flex-col gap-0 pb-6">
           <div className="group flex flex-col sm:flex-row sm:items-start justify-between py-4 border-b border-border/50 last:border-0">
             <div className="flex items-start gap-3">
-              <LifeBuoy className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
+              <LifeBuoy className="w-4 h-4 text-warning mt-0.5 shrink-0" />
               <div className="flex flex-col">
                 <span className="text-sm font-medium">Sev-1 Support Ticket</span>
                 <span className="text-xs text-muted-foreground mt-1">API latency issues escalated by CTO.</span>

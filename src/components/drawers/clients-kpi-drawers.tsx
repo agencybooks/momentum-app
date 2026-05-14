@@ -68,9 +68,9 @@ function TotalMrrDrawer() {
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 pb-6">
-        <div className="w-full border rounded-lg flex items-start gap-3 p-3 mb-6 border-emerald-500/20 bg-emerald-500/5 dark:bg-emerald-500/10">
-          <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-500 mt-0.5 shrink-0" />
-          <span className="text-sm font-medium text-emerald-800 dark:text-emerald-400">
+        <div className="w-full border rounded-lg flex items-start gap-3 p-3 mb-6 border-success/20 bg-success/5 dark:bg-success/10">
+          <TrendingUp className="w-4 h-4 text-success mt-0.5 shrink-0" />
+          <span className="text-sm font-medium text-success">
             MRR grew {growthPct > 0 ? "+" : ""}{growthPct.toFixed(1)}% month-over-month to {compactCurrency(current)}.
             6-month growth of {compactCurrency(current - mrrTrendData[0].totalMrr)} ({(((current - mrrTrendData[0].totalMrr) / mrrTrendData[0].totalMrr) * 100).toFixed(1)}%).
           </span>
@@ -116,18 +116,18 @@ function BlendedMarginDrawer() {
       <div className="flex-1 overflow-y-auto px-4 pb-6">
         <div className={`w-full border rounded-lg flex items-start gap-3 p-3 mb-6 ${
           aboveTarget
-            ? "border-emerald-500/20 bg-emerald-500/5 dark:bg-emerald-500/10"
-            : "border-amber-500/20 bg-amber-500/5 dark:bg-amber-500/10"
+            ? "border-success/20 bg-success/5 dark:bg-success/10"
+            : "border-warning/20 bg-warning/5 dark:bg-warning/10"
         }`}>
           {aboveTarget ? (
-            <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-500 mt-0.5 shrink-0" />
+            <TrendingUp className="w-4 h-4 text-success mt-0.5 shrink-0" />
           ) : (
-            <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-500 mt-0.5 shrink-0" />
+            <AlertTriangle className="w-4 h-4 text-warning dark:text-warning mt-0.5 shrink-0" />
           )}
           <span className={`text-sm font-medium ${
             aboveTarget
-              ? "text-emerald-800 dark:text-emerald-400"
-              : "text-amber-800 dark:text-amber-400"
+              ? "text-success"
+              : "text-warning"
           }`}>
             Blended margin at {(current * 100).toFixed(1)}% — {aboveTarget ? "+" : ""}{deltaPp}pp {aboveTarget ? "above" : "below"} the 50% target.
             {aboveTarget
@@ -176,9 +176,9 @@ function RevenueConcentrationDrawer() {
 
       <div className="flex-1 overflow-y-auto px-4 pb-6">
         {isAboveCeiling && (
-          <div className="w-full border rounded-lg flex items-start gap-3 p-3 mb-6 border-amber-500/20 bg-amber-500/5 dark:bg-amber-500/10">
-            <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-500 mt-0.5 shrink-0" />
-            <span className="text-sm font-medium text-amber-800 dark:text-amber-400">
+          <div className="w-full border rounded-lg flex items-start gap-3 p-3 mb-6 border-warning/20 bg-warning/5 dark:bg-warning/10">
+            <AlertTriangle className="w-4 h-4 text-warning dark:text-warning mt-0.5 shrink-0" />
+            <span className="text-sm font-medium text-warning">
               {sorted[0].name} holds {topPct.toFixed(0)}% of total MRR — above the {CONCENTRATION_CEILING}% risk ceiling.
               Losing this client would cut {compactCurrency(sorted[0].mrr)} in monthly revenue.
             </span>
@@ -215,7 +215,7 @@ function RevenueConcentrationDrawer() {
                     <td className="py-2.5 font-medium">{client.name}</td>
                     <td className="py-2.5 text-right font-mono tabular-nums">{compactCurrency(client.mrr)}</td>
                     <td className={`py-2.5 text-right font-mono tabular-nums font-semibold ${
-                      overCeiling ? "text-amber-600 dark:text-amber-400" : ""
+                      overCeiling ? "text-warning" : ""
                     }`}>
                       {pct.toFixed(0)}%
                     </td>
@@ -223,7 +223,7 @@ function RevenueConcentrationDrawer() {
                       <div className="w-full h-2 bg-muted/50 rounded-full overflow-hidden">
                         <div
                           className={`h-full rounded-full transition-all ${
-                            overCeiling ? "bg-amber-500" : "bg-brand-500/60"
+                            overCeiling ? "bg-warning" : "bg-brand-500/60"
                           }`}
                           style={{ width: `${barWidth}%` }}
                         />
@@ -328,7 +328,7 @@ function ProfitConcentrationDrawer() {
                     <td className="py-2.5 text-right font-mono tabular-nums">{profitPct.toFixed(1)}%</td>
                     <td className={`py-2.5 text-right font-mono tabular-nums font-semibold ${
                       delta > 0
-                        ? "text-emerald-600 dark:text-emerald-400"
+                        ? "text-success"
                         : delta < 0
                         ? "text-destructive"
                         : "text-muted-foreground"
@@ -343,7 +343,7 @@ function ProfitConcentrationDrawer() {
 
           <div className="mt-4 pt-3 border-t border-border/50 flex gap-4">
             <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
+              <span className="w-2 h-2 rounded-full bg-success inline-block" />
               More profitable than revenue share
             </span>
             <span className="flex items-center gap-1.5 text-xs text-muted-foreground">

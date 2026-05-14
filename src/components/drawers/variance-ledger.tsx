@@ -72,7 +72,7 @@ export function VarianceLedger({ data, dataKey, format, downIsGood }: VarianceLe
               deltaColor = isNeutral
                 ? "text-muted-foreground"
                 : isPositiveChange
-                ? "text-emerald-600 dark:text-emerald-400"
+                ? "text-success"
                 : "text-destructive"
             }
 

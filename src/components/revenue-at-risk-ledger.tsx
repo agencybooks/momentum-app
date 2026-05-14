@@ -1,6 +1,8 @@
 "use client"
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { EmptyState } from "@/components/ui/empty-state"
+import { AlertTriangle } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { renewalAtRiskData } from "@/lib/mock-data"
 import type { RenewalAtRisk } from "@/lib/db/types"
@@ -15,7 +17,7 @@ function urgencyColor(status: RenewalAtRisk["status"]): string {
 
 function RenewalRow({ renewal }: { renewal: RenewalAtRisk }) {
   return (
-    <div className="group grid grid-cols-[1fr_6rem_5.5rem] items-center py-3 px-3 border-b border-border/40 last:border-0 rounded-md transition-colors hover:bg-zinc-50/50 dark:hover:bg-white/5">
+    <div className="group grid grid-cols-[1fr_6rem_5.5rem] items-center py-3 px-3 border-b border-border/30 last:border-0 rounded-md transition-colors hover:bg-muted/50 dark:hover:bg-white/5">
       <span className="font-medium text-sm text-foreground truncate pr-2">
         {renewal.clientName}
       </span>
@@ -35,7 +37,7 @@ export function RevenueAtRiskLedger() {
 
   return (
     <Card className="flex flex-col border-border bg-card h-full">
-      <CardHeader className="p-6 pb-4">
+      <CardHeader>
         <CardTitle className="text-lg font-medium text-foreground tracking-tight">Revenue at Risk</CardTitle>
         <div className="flex items-center gap-3 flex-wrap mt-1">
           <span className="text-sm text-muted-foreground">
@@ -50,9 +52,17 @@ export function RevenueAtRiskLedger() {
         <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold text-right">Renews In</span>
       </div>
       <CardContent className="flex-1 overflow-y-auto px-4 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/30">
-        {sorted.map((renewal) => (
-          <RenewalRow key={renewal.id} renewal={renewal} />
-        ))}
+        {sorted.length === 0 ? (
+          <EmptyState 
+            icon={AlertTriangle}
+            title="No renewals in the next 90 days" 
+            description="You have no revenue at risk from upcoming renewals."
+          />
+        ) : (
+          sorted.map((renewal) => (
+            <RenewalRow key={renewal.id} renewal={renewal} />
+          ))
+        )}
       </CardContent>
     </Card>
   )

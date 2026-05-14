@@ -130,7 +130,7 @@ export default async function AnnualScorecardPage({ params }: Props) {
       </div>
 
       {/* Narrative */}
-      <div className="p-6 mb-8 bg-muted/30 border border-dashed rounded-xl space-y-4 text-sm leading-relaxed">
+      <div className="mb-8 bg-muted/30 border border-dashed rounded-xl space-y-4 text-sm leading-relaxed">
         {data.narrative.highlights.map((text, i) => (
           <div key={i} className="flex gap-3 items-start">
             <div className="w-2 h-2 rounded-full bg-success mt-1.5 shrink-0" />
@@ -167,12 +167,12 @@ export default async function AnnualScorecardPage({ params }: Props) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left: Bridge Charts */}
         <div className="lg:col-span-2 flex flex-col gap-6">
-          <Card className="p-6">
+          <Card>
             <h3 className="font-semibold mb-6 text-sm text-muted-foreground uppercase tracking-wider font-sans">Revenue Bridge</h3>
             <BridgeWaterfallChart steps={data.revenueBridge} />
           </Card>
 
-          <Card className="p-6">
+          <Card>
             <h3 className="font-semibold mb-6 text-sm text-muted-foreground uppercase tracking-wider font-sans">Cash Bridge</h3>
             <BridgeWaterfallChart steps={data.cashBridge} />
           </Card>

@@ -77,7 +77,7 @@ export function MetricControlBoard({
                   )}>
                     {metric.label}
                   </span>
-                  <span className="ml-auto text-[10px] text-muted-foreground/60 font-mono">
+                  <span className="ml-auto text-xs text-muted-foreground/60 font-mono">
                     {metric.unit === "$" ? "$" : metric.unit === "%" ? "%" : metric.unit === "ratio" ? "x" : "d"}
                   </span>
                 </button>

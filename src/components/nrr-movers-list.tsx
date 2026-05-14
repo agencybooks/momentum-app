@@ -45,7 +45,7 @@ export function NrrMoversList({ clients }: { clients: EnrichedClient[] }) {
 
   return (
     <Card>
-      <CardHeader className="p-6 pb-4">
+      <CardHeader>
         <CardTitle className="text-lg font-medium text-foreground tracking-tight">NRR Movers</CardTitle>
         <p className="text-sm text-muted-foreground">
           This month&apos;s expansion & contraction
@@ -64,7 +64,7 @@ export function NrrMoversList({ clients }: { clients: EnrichedClient[] }) {
             {expansions.map((row) => (
               <div
                 key={row.name}
-                className="rounded-md px-2 py-1.5 hover:bg-zinc-50/40 dark:hover:bg-white/5 transition-colors"
+                className="rounded-md px-2 py-1.5 hover:bg-muted/50 dark:hover:bg-white/5 transition-colors"
               >
                 <div className="flex items-center justify-between gap-3 mb-1">
                   <span className="text-sm font-medium text-foreground truncate">
@@ -74,7 +74,7 @@ export function NrrMoversList({ clients }: { clients: EnrichedClient[] }) {
                     +{formatCurrency(row.delta)}
                   </span>
                 </div>
-                <div className="h-1.5 bg-muted/30 rounded-full overflow-hidden">
+                <div className="h-2 bg-muted/30 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-success/60 rounded-full transition-all"
                     style={{ width: `${row.barPct}%` }}
@@ -103,7 +103,7 @@ export function NrrMoversList({ clients }: { clients: EnrichedClient[] }) {
             {contractions.map((row) => (
               <div
                 key={row.name}
-                className="rounded-md px-2 py-1.5 hover:bg-zinc-50/40 dark:hover:bg-white/5 transition-colors"
+                className="rounded-md px-2 py-1.5 hover:bg-muted/50 dark:hover:bg-white/5 transition-colors"
               >
                 <div className="flex items-center justify-between gap-3 mb-1">
                   <span className="text-sm font-medium text-foreground truncate">
@@ -113,7 +113,7 @@ export function NrrMoversList({ clients }: { clients: EnrichedClient[] }) {
                     {formatCurrency(row.delta)}
                   </span>
                 </div>
-                <div className="h-1.5 bg-muted/30 rounded-full overflow-hidden">
+                <div className="h-2 bg-muted/30 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-destructive/60 rounded-full transition-all"
                     style={{ width: `${row.barPct}%` }}

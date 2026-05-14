@@ -85,7 +85,7 @@ export interface PnLCategory {
   amount: number;
   children: PnLSubItem[];
   isHighlight?: boolean;
-  highlightColor?: 'brand' | 'emerald';
+  highlightColor?: 'brand' | 'success';
   variance?: { percent: number; direction: 'up' | 'flat' | 'down' };
 }
 

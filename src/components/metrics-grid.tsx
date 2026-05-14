@@ -20,7 +20,7 @@ export function MetricsGrid({ metrics, columns = 4 }: { metrics: MetricWithDrawe
   }[columns]
 
   return (
-    <div className="-mx-4 xl:mx-0">
+    <div className="relative -mx-4 xl:mx-0 after:absolute after:right-0 after:top-0 after:h-full after:w-8 after:bg-gradient-to-l after:from-background after:pointer-events-none xl:after:hidden">
       <div
         className={cn(
           "flex gap-4 overflow-x-auto px-4",

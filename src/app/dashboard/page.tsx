@@ -1,6 +1,7 @@
 import { Suspense } from "react"
 import { getDashboardMetrics, getAlerts, getTransactions, getOpenInvoices, getClients, getARAgingSummary, getRecentScorecards } from "@/lib/db/services"
 import { CoPilotAlert } from "@/components/co-pilot-alert"
+import { MetricsGridSkeleton } from "@/components/skeletons/metrics-grid-skeleton"
 import { MetricsGrid } from "@/components/metrics-grid"
 import { RecentScorecardsList } from "@/components/recent-scorecards-list"
 import { OpenInvoicesWidget } from "@/components/open-invoices-widget"
@@ -66,7 +67,7 @@ export default async function DashboardPage() {
           }
         />
 
-        <Suspense>
+        <Suspense fallback={<MetricsGridSkeleton />}>
           <MetricsGrid columns={5} metrics={metrics.map((metric) => ({
             id: metric.id,
             title: metric.title,
@@ -86,7 +87,7 @@ export default async function DashboardPage() {
         <Card className="lg:col-span-2 p-6 border-border bg-card shadow-sm flex flex-col">
           <div className="mb-6 flex flex-col gap-1">
             <h2 className="text-lg font-medium text-foreground tracking-tight">Revenue vs. Expenses</h2>
-            <p className="text-sm text-muted-foreground">Monthly revenue and expense trends over the trailing six months.</p>
+            <p className="text-sm text-muted-foreground">Trailing 6 Months. Revenue is consistently outpacing expenses, securing an 18% net margin.</p>
           </div>
           <div className="h-[300px] w-full relative">
             <FinancialChart data={mockChartData} series={REVENUE_EXPENSE_SERIES} />
@@ -95,7 +96,7 @@ export default async function DashboardPage() {
 
         {/* Right Side: Worth Doing This Week */}
         <Card className="lg:col-span-1 flex flex-col border-border bg-card shadow-sm">
-          <CardHeader className="p-6 pb-4">
+          <CardHeader>
             <CardTitle className="text-lg font-medium text-foreground tracking-tight">Worth Doing This Week</CardTitle>
           </CardHeader>
           <CardContent className="p-0 flex-1">
@@ -118,7 +119,7 @@ export default async function DashboardPage() {
                 scroll={false}
                 className="flex items-start gap-3 px-6 py-4 border-b border-border/40 hover:bg-accent/50 transition-colors group"
               >
-                <Flame className="h-4 w-4 shrink-0 text-amber-500 mt-0.5" />
+                <Flame className="h-4 w-4 shrink-0 text-warning mt-0.5" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground truncate">AWS Spikes</p>
                   <p className="text-xs text-muted-foreground truncate">Infrastructure spend up 40% vs prior month.</p>
@@ -144,7 +145,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Bottom Split: Scorecards + A/R */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:grid-rows-[440px]">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <RecentScorecardsList scorecards={scorecards} />
         <OpenInvoicesWidget
           agingSummary={agingSummary}

@@ -42,7 +42,7 @@ export function BillingContent({
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-8">
       <Card>
         <CardHeader>
           <CardTitle>Current Plan</CardTitle>
@@ -114,7 +114,7 @@ export function BillingContent({
                     <Badge variant={statusBadgeVariant[invoice.status]}>{invoice.status}</Badge>
                   </TableCell>
                   <TableCell>
-                    <Button variant="ghost" size="icon-xs">
+                    <Button variant="ghost" size="icon-xs" aria-label="Download invoice">
                       <Download className="h-4 w-4" />
                     </Button>
                   </TableCell>
@@ -124,6 +124,6 @@ export function BillingContent({
           </Table>
         </CardContent>
       </Card>
-    </>
+    </div>
   )
 }

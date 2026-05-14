@@ -13,7 +13,7 @@ import {
 export const DEPARTMENT_ORDER = ['Delivery', 'Marketing', 'Sales', 'Admin'] as const;
 
 function delay<T>(data: T): Promise<T> {
-  return new Promise((resolve) => setTimeout(() => resolve(data), 300));
+  return new Promise((resolve) => setTimeout(() => resolve(data), 2000));
 }
 
 export async function getClients(): Promise<Client[]> {
@@ -57,7 +57,7 @@ export async function getCashData(): Promise<MetricAnchor[]> {
     { id: 'ma_cash', title: 'Total Cash', value: 125000, target: 200000, isHealthy: false, trendUp: false, trendDirection: 'up-is-good' as const, trendText: '-$98K vs Mar' },
     { id: 'ma_burn', title: 'Net Burn/Mo', value: -15200, target: -8000, isHealthy: false, trendUp: true, trendDirection: 'down-is-good' as const, trendText: '+$7.2K vs avg' },
     { id: 'ma_runway', title: 'Runway', value: 5.4, target: 6.0, isHealthy: false, trendUp: false, trendDirection: 'up-is-good' as const, trendText: '-0.6 mos vs prior' },
-    { id: 'ma_dso', title: 'DSO (Days Sales Out)', value: 41, target: 45, isHealthy: false, trendUp: true, trendDirection: 'down-is-good' as const, trendText: '+3 days vs last mo' },
+    { id: 'ma_dso', title: "DSO", value: 41, target: 45, isHealthy: false, trendUp: true, trendDirection: 'down-is-good' as const, trendText: '+3 days vs last mo' },
   ]);
 }
 
@@ -134,7 +134,7 @@ export async function getProfitabilityData(): Promise<import('./types').Profitab
       { id: 'ma_gross_margin', title: 'Gross Margin', value: 0.501, target: 0.50, isHealthy: true, trendUp: false, trendDirection: 'up-is-good' as const, trendText: '-1.2pp vs prior' },
       { id: 'ma_op_margin', title: 'Operating Margin', value: 0.190, target: 0.20, isHealthy: false, trendUp: false, trendDirection: 'up-is-good' as const, trendText: '-2.1pp vs prior' },
       { id: 'ma_net_margin', title: 'Net Profit Margin', value: 0.164, target: 0.20, isHealthy: false, trendUp: false, trendDirection: 'up-is-good' as const, trendText: '-3.0pp vs prior' },
-      { id: 'ma_rev_per_fte', title: 'Revenue per FTE', value: 168500, target: 180000, isHealthy: false, trendUp: true, trendDirection: 'up-is-good' as const, trendText: '+$4,200 vs prior' },
+      { id: 'ma_rev_per_fte', title: "Rev per FTE", value: 168500, target: 180000, isHealthy: false, trendUp: true, trendDirection: 'up-is-good' as const, trendText: '+$4,200 vs prior' },
     ],
     pnl: [
       { id: 'pnl_1', name: 'Total Revenue', amount: 55000, isSubItem: false, isTotal: true },
@@ -188,7 +188,7 @@ export async function getProfitabilityData(): Promise<import('./types').Profitab
           { id: 'interest', name: 'Interest & Fees', amount: -1430, variance: { percent: 0, direction: 'flat' }, drawerId: 'interest', revenueWeight: 1430 / revenue },
         ],
       },
-      { id: 'net-total', name: 'Net Income', amount: 9020, variance: { percent: 3.0, direction: 'down' }, children: [], isHighlight: true, highlightColor: 'emerald' },
+      { id: 'net-total', name: 'Net Income', amount: 9020, variance: { percent: 3.0, direction: 'down' }, children: [], isHighlight: true, highlightColor: 'success' },
     ],
     expenses: [
       { id: 'ev_1', category: 'OPEX', name: 'Marketing & Ads', amount: 1000, priorAmount: 807, variancePercent: 23.9, trend: 'up' },

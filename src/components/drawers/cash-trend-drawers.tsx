@@ -190,7 +190,7 @@ export function CashTrendDrawerContent({ drawerId }: { drawerId: string }) {
             </span>
             <span className={`inline-flex items-center gap-1 text-sm font-semibold px-2 py-0.5 rounded-full ${
               deltaIsGood
-                ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                ? "bg-success/10 text-success"
                 : "bg-destructive/10 text-destructive"
             }`}>
               {spec.headerDeltaDirection === "down"
@@ -206,18 +206,18 @@ export function CashTrendDrawerContent({ drawerId }: { drawerId: string }) {
       <div className="flex-1 overflow-y-auto px-4 pb-6">
         <div className={`w-full border rounded-lg flex items-start gap-3 p-3 mb-6 ${
           isWarning
-            ? "border-amber-500/20 bg-amber-500/5 dark:bg-amber-500/10"
-            : "border-emerald-500/20 bg-emerald-500/5 dark:bg-emerald-500/10"
+            ? "border-warning/20 bg-warning/5 dark:bg-warning/10"
+            : "border-success/20 bg-success/5 dark:bg-success/10"
         }`}>
           {isWarning ? (
-            <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-500 mt-0.5 shrink-0" />
+            <AlertTriangle className="w-4 h-4 text-warning dark:text-warning mt-0.5 shrink-0" />
           ) : (
-            <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-500 mt-0.5 shrink-0" />
+            <TrendingUp className="w-4 h-4 text-success mt-0.5 shrink-0" />
           )}
           <span className={`text-sm font-medium ${
             isWarning
-              ? "text-amber-800 dark:text-amber-400"
-              : "text-emerald-800 dark:text-emerald-400"
+              ? "text-warning"
+              : "text-success"
           }`}>
             {spec.alertMessage}
           </span>

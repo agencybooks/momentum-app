@@ -7,7 +7,7 @@ import {
   ChartTooltip,
   type ChartConfig,
 } from "@/components/ui/chart"
-import { Card } from "@/components/ui/card"
+import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import type { ProjectionPoint } from "@/lib/scenarios/types"
 
 const chartConfig = {
@@ -84,10 +84,11 @@ export function OracleChart({ data }: OracleChartProps) {
   )
 
   return (
-    <Card className="p-6">
-      <h3 className="font-semibold tracking-tight mb-4">
-        Cash Trajectory — Baseline vs Sandbox
-      </h3>
+    <Card>
+      <CardHeader className="pb-2">
+        <CardTitle className="text-lg font-medium text-foreground tracking-tight">Cash Trajectory — Baseline vs Sandbox</CardTitle>
+        <CardDescription>Dynamic based on scenario inputs.</CardDescription>
+      </CardHeader>
       <div className="h-[400px]">
         <ChartContainer config={chartConfig} className="w-full h-full">
           <ComposedChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>

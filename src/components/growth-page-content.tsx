@@ -21,7 +21,7 @@ export function GrowthPageContent() {
       {/* Zone 1: Unit Economics KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricAnchor
-          title="NET REVENUE RETENTION"
+          title="REVENUE RETENTION (NRR)"
           value="112%"
           trendText="+2pp vs prior"
           trendUp={true}
@@ -32,7 +32,7 @@ export function GrowthPageContent() {
           onClick={() => setDrawer('nrr-trend')}
         />
         <MetricAnchor
-          title="BLENDED CAC"
+          title="CUSTOMER ACQUISITION COST"
           value="$13,200"
           trendText="-$1.1K vs prior"
           trendUp={false}
@@ -55,7 +55,7 @@ export function GrowthPageContent() {
           onClick={() => setDrawer('cac-payback-trend')}
         />
         <MetricAnchor
-          title="LTV:CAC RATIO"
+          title="LTV TO CAC RATIO"
           value="6.5x"
           trendText="+0.3x vs prior"
           target="> 3.0x"
@@ -72,7 +72,7 @@ export function GrowthPageContent() {
       <UnitEconomicsChart />
 
       {/* Zone 3: Action Zone — Leverage + Risk */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 flex flex-col">
           <LeverageMatrix />
         </div>

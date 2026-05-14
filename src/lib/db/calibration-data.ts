@@ -115,7 +115,7 @@ export const softwareItems: SoftwareItem[] = [
 export const financialTargets: FinancialTarget[] = [
   // Survival & Cash
   { id: 'ft_runway', metric: 'Cash Runway', group: 'cash', floor: 6.0, ceiling: null, unit: 'months', currentValue: 5.4 },
-  { id: 'ft_dso', metric: 'DSO', group: 'cash', floor: null, ceiling: 45, unit: 'days', currentValue: 41 },
+  { id: 'ft_dso', metric: 'Days to Get Paid (DSO)', group: 'cash', floor: null, ceiling: 45, unit: 'days', currentValue: 41 },
   { id: 'ft_concentration', metric: 'Top Client Concentration', group: 'cash', floor: null, ceiling: 25, unit: '%', currentValue: 33.0 },
   { id: 'ft_cash_balance', metric: 'Cash Balance', group: 'cash', floor: 200000, ceiling: null, unit: '$', currentValue: 125000 },
   { id: 'ft_burn', metric: 'Net Burn Rate', group: 'cash', floor: null, ceiling: -8000, unit: '$', currentValue: -15200 },
@@ -124,7 +124,7 @@ export const financialTargets: FinancialTarget[] = [
   { id: 'ft_gross_margin', metric: 'Gross Margin', group: 'profitability', floor: 50, ceiling: null, unit: '%', currentValue: 50.1 },
   { id: 'ft_op_margin', metric: 'Operating Margin', group: 'profitability', floor: 20, ceiling: null, unit: '%', currentValue: 19.0 },
   { id: 'ft_net_margin', metric: 'Net Profit Margin', group: 'profitability', floor: 20, ceiling: null, unit: '%', currentValue: 16.4 },
-  { id: 'ft_rev_fte', metric: 'Revenue per FTE', group: 'profitability', floor: 180000, ceiling: null, unit: '$', currentValue: 168500 },
+  { id: 'ft_rev_fte', metric: 'Revenue per Full-Time Equivalent', group: 'profitability', floor: 180000, ceiling: null, unit: '$', currentValue: 168500 },
 
   // Capital Efficiency
   { id: 'ft_ler', metric: 'Labor Efficiency Ratio (LER)', group: 'efficiency', floor: 2.0, ceiling: null, unit: 'x', currentValue: 2.10 },
@@ -133,6 +133,6 @@ export const financialTargets: FinancialTarget[] = [
   // Growth & Retention
   { id: 'ft_mrr', metric: 'MRR', group: 'growth', floor: 40000, ceiling: null, unit: '$', currentValue: 40000 },
   { id: 'ft_churn', metric: 'Monthly Churn', group: 'growth', floor: null, ceiling: 5, unit: '%', currentValue: 0.9 },
-  { id: 'ft_cac_payback', metric: 'CAC Payback', group: 'growth', floor: null, ceiling: 12, unit: 'months', currentValue: 8.5 },
-  { id: 'ft_ltv_cac', metric: 'LTV:CAC Ratio', group: 'growth', floor: 3.0, ceiling: null, unit: 'x', currentValue: 6.5 },
+  { id: 'ft_cac_payback', metric: 'Customer Acquisition Cost Payback', group: 'growth', floor: null, ceiling: 12, unit: 'months', currentValue: 8.5 },
+  { id: 'ft_ltv_cac', metric: 'LTV to Customer Acquisition Cost Ratio', group: 'growth', floor: 3.0, ceiling: null, unit: 'x', currentValue: 6.5 },
 ]

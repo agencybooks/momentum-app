@@ -50,7 +50,7 @@ export function ProfileContent({ profile }: { profile: UserProfile }) {
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-8">
       <Card>
         <CardHeader>
           <CardTitle>Profile Details</CardTitle>
@@ -137,6 +137,6 @@ export function ProfileContent({ profile }: { profile: UserProfile }) {
           </div>
         </CardContent>
       </Card>
-    </>
+    </div>
   )
 }

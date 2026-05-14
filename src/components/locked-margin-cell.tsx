@@ -41,7 +41,7 @@ export function LockedMarginCell({ margin, mrr, hasTimeTracking }: LockedMarginC
             margin < 0.40
               ? "text-destructive"
               : margin < 0.50
-                ? "text-amber-600 dark:text-amber-500"
+                ? "text-warning dark:text-warning"
                 : "text-foreground"
           )}
         >
@@ -81,7 +81,7 @@ export function LockedMarginCell({ margin, mrr, hasTimeTracking }: LockedMarginC
           </PopoverHeader>
           <Button
             size="sm"
-            className="w-full mt-2 bg-brand-600 hover:bg-brand-700 text-white dark:bg-brand-500 dark:hover:bg-brand-400"
+            className="w-full mt-2 bg-brand-600 hover:bg-brand-700 text-primary-foreground dark:bg-brand-500 dark:hover:bg-brand-400"
             onClick={(e) => {
               e.stopPropagation()
               router.push("/settings")

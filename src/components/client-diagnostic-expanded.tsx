@@ -93,7 +93,7 @@ export function UnitEconomicsLedger({
         <div className="flex justify-between items-start">
           <div className="flex flex-col">
             <span className="text-muted-foreground">Less: Direct Labor</span>
-            <span className="text-[10px] text-muted-foreground/60 leading-tight">
+            <span className="text-xs text-muted-foreground/60 leading-tight">
               Pulled from Toggl/Harvest
             </span>
           </div>
@@ -138,7 +138,7 @@ export function ClientDiagnosticExpanded({ client }: { client: EnrichedClient })
   return (
     <div
       className={cn(
-        "bg-zinc-50/50 dark:bg-zinc-900/50 border-l-2 p-6 shadow-[inset_0_2px_4px_rgba(0,0,0,0.06)]",
+        "bg-zinc-50/50 dark:bg-surface-inset border-l-2 p-6 shadow-[inset_0_2px_4px_rgba(0,0,0,0.06)]",
         client.margin < 0.4 ? "border-destructive" : "border-brand-500"
       )}
     >

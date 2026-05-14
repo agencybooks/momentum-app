@@ -2,12 +2,13 @@
 
 import { useMemo, useCallback } from "react"
 import { useQueryState, parseAsArrayOf, parseAsString } from "nuqs"
-import { Card } from "@/components/ui/card"
+import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { TREND_METRICS, TREND_COLORS, buildTrendsTimeline } from "@/lib/trends/trends-data"
 import type { TrendMetric } from "@/lib/trends/types"
 import { MetricControlBoard } from "@/components/trends/metric-control-board"
 import { GlobalDateRange } from "@/components/trends/global-date-range"
 import { CorrelationChart } from "@/components/trends/correlation-chart"
+import { PageHeader } from "@/components/page-header"
 
 const MAX_METRICS = 3
 
@@ -52,13 +53,11 @@ export function TrendsPageContent() {
   )
 
   return (
-    <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold tracking-tight">Trends</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Overlay up to 3 metrics to discover correlations and hidden business physics.
-        </p>
-      </div>
+    <div className="flex flex-col gap-8">
+      <PageHeader
+        title="Trends"
+        subtitle="Overlay up to 3 metrics to discover correlations and hidden business physics."
+      />
 
       <div className="flex gap-6">
         <div className="w-[280px] shrink-0">
@@ -76,7 +75,11 @@ export function TrendsPageContent() {
             <GlobalDateRange value={range} onChange={setRange} />
           </div>
 
-          <Card className="p-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg font-medium text-foreground tracking-tight">Correlation Analysis</CardTitle>
+              <CardDescription>Overlay up to 3 metrics to spot patterns across time.</CardDescription>
+            </CardHeader>
             <CorrelationChart
               data={filteredData}
               selectedMetrics={selectedMetrics}

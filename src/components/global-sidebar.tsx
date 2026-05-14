@@ -35,14 +35,14 @@ const bottomNavItems = [
   { label: "Settings", href: "/settings", icon: Settings },
 ] as const
 
-export function GlobalSidebar() {
+export function SidebarContent() {
   const pathname = usePathname()
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-30 flex w-64 flex-col border-r border-border/40 bg-background dark:bg-zinc-950 dark:border-white/10">
+    <>
       <div className="px-4 pt-4">
-        <div className="group flex items-center gap-3 px-2 py-2 mb-6 hover:bg-accent/50 rounded-lg cursor-pointer transition-colors">
-          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-foreground text-background shadow-sm dark:bg-zinc-800 dark:text-zinc-200">
+        <div className="group flex items-center gap-3 px-2 py-2 mb-6 hover:bg-muted/50 dark:hover:bg-white/5 rounded-lg cursor-pointer transition-colors">
+          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-foreground text-background shadow-sm dark:bg-muted dark:text-foreground">
             <Command className="h-3.5 w-3.5" />
           </div>
           <span className="font-semibold tracking-tight text-foreground text-sm">Momentum OS</span>
@@ -51,7 +51,7 @@ export function GlobalSidebar() {
       </div>
 
       <nav className="flex-1 flex flex-col px-1 py-2">
-        <div className="flex-1">
+        <div className="flex-1 flex flex-col gap-1">
           {mainNavItems.map(({ label, href, icon: Icon }) => {
             const isActive = pathname.startsWith(href)
             return (
@@ -59,10 +59,10 @@ export function GlobalSidebar() {
                 key={href}
                 href={href}
                 className={cn(
-                  "group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all cursor-pointer mb-1 mx-2",
+                  "group flex items-center gap-3 rounded-md px-3 py-3 text-sm font-medium transition-all cursor-pointer mx-2",
                   isActive
                     ? "bg-brand-500/10 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300 font-semibold"
-                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-white/5"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-white/5"
                 )}
               >
                 <Icon className={cn(
@@ -76,8 +76,8 @@ export function GlobalSidebar() {
             )
           })}
         </div>
-        <div className="border-t border-border/40 dark:border-white/10 mx-4 my-2" />
-        <div>
+        <div className="border-t border-border/50 mx-4 my-2" />
+        <div className="flex flex-col gap-1">
           {bottomNavItems.map(({ label, href, icon: Icon }) => {
             const isActive = pathname.startsWith(href)
             return (
@@ -85,10 +85,10 @@ export function GlobalSidebar() {
                 key={href}
                 href={href}
                 className={cn(
-                  "group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all cursor-pointer mb-1 mx-2",
+                  "group flex items-center gap-3 rounded-md px-3 py-3 text-sm font-medium transition-all cursor-pointer mx-2",
                   isActive
                     ? "bg-brand-500/10 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300 font-semibold"
-                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-white/5"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-white/5"
                 )}
               >
                 <Icon className={cn(
@@ -107,6 +107,14 @@ export function GlobalSidebar() {
       <div className="border-t border-sidebar-border px-3 py-3">
         <ThemeToggle />
       </div>
+    </>
+  )
+}
+
+export function GlobalSidebar() {
+  return (
+    <aside className="hidden lg:flex fixed inset-y-0 left-0 z-30 w-64 flex-col border-r border-sidebar-border bg-sidebar">
+      <SidebarContent />
     </aside>
   )
 }

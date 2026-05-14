@@ -170,7 +170,7 @@ function TreemapTooltipContent({
     const hb = data.healthBreakdown
 
     return (
-      <div className="w-64 rounded-lg border bg-background px-3 py-2 shadow-sm">
+      <div className="w-64 rounded-lg border border-border/50 bg-background px-3 py-2.5 shadow-xl">
         <p className="text-sm font-medium">
           All Other Clients ({data.count} accounts)
         </p>
@@ -233,7 +233,7 @@ function TreemapTooltipContent({
   }
 
   return (
-    <div className="rounded-lg border bg-background px-3 py-2 shadow-sm">
+    <div className="rounded-lg border border-border/50 bg-background px-3 py-2.5 shadow-xl min-w-[200px]">
       <p className="text-sm font-medium">{data.name}</p>
       <div className="flex justify-between gap-6 mt-1">
         <span className="text-xs text-muted-foreground">MRR</span>
@@ -331,7 +331,7 @@ export function MarginTreemap({ clients }: { clients: EnrichedClient[] }) {
   if (treemapData.length === 0) {
     return (
       <Card>
-        <CardHeader className="p-6 pb-4">
+        <CardHeader>
           <CardTitle className="text-lg font-medium text-foreground tracking-tight">
             Revenue × Margin Map
           </CardTitle>
@@ -347,7 +347,7 @@ export function MarginTreemap({ clients }: { clients: EnrichedClient[] }) {
 
   return (
     <Card>
-      <CardHeader className="p-6 pb-4">
+      <CardHeader>
         <CardTitle className="text-lg font-medium text-foreground tracking-tight">
           Revenue × Margin Map
         </CardTitle>

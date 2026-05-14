@@ -75,7 +75,7 @@ export function ActionCenterDrawer() {
                 <div className="flex items-start gap-3">
                   <div className="mt-0.5 shrink-0">
                     {isCritical && <AlertTriangle className="h-5 w-5 text-destructive" />}
-                    {isWarning && <AlertCircle className="h-5 w-5 text-amber-500" />}
+                    {isWarning && <AlertCircle className="h-5 w-5 text-warning" />}
                     {isSuccess && <CheckCircle className="h-5 w-5 text-success" />}
                   </div>
                   <div className="flex-1 space-y-1">

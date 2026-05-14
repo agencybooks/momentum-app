@@ -153,7 +153,7 @@ export function CashPageContent({ cashData, openInvoices, alerts, clients }: Cas
 
   const apColorMap: Record<string, string> = {
     "Due < 7 Days": "bg-destructive",
-    "8-14 Days": "bg-amber-500",
+    "8-14 Days": "bg-warning",
   }
 
   const handlePayableAction = (payableId: string, action: "paid" | "scheduled") => {
@@ -234,11 +234,11 @@ export function CashPageContent({ cashData, openInvoices, alerts, clients }: Cas
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="flex flex-col">
           <Card className="flex flex-col border-border bg-card h-full">
-            <CardHeader className="p-6 pb-4">
-              <CardTitle className="text-lg font-medium text-foreground tracking-tight">Cash Inflows (A/R)</CardTitle>
+            <CardHeader>
+              <CardTitle className="text-lg font-medium text-foreground tracking-tight">Cash Inflows (Receivables)</CardTitle>
               <div className="flex items-center gap-3 flex-wrap mt-2">
                 <span className="text-sm font-semibold text-foreground font-mono tabular-nums">
-                  OPEN A/R: {currencyFmt.format(totalOpenAR)}
+                  OPEN RECEIVABLES: {currencyFmt.format(totalOpenAR)}
                 </span>
                 {overdueTotal > 0 && (
                   <Badge variant="destructive" className="gap-1">
@@ -284,7 +284,7 @@ export function CashPageContent({ cashData, openInvoices, alerts, clients }: Cas
                               )} />
                               <span className="font-medium text-foreground truncate">{group.clientName}</span>
                               {group.hasOverdue && (
-                                <Badge variant="destructive" className="text-[10px] px-1.5 py-0 shrink-0">Overdue</Badge>
+                                <Badge variant="destructive" className="text-xs px-1.5 py-0 shrink-0">Overdue</Badge>
                               )}
                             </div>
                           </TableCell>
@@ -296,7 +296,7 @@ export function CashPageContent({ cashData, openInvoices, alerts, clients }: Cas
                           <td colSpan={2} className="p-0">
                             <div className="accordion-panel" data-open={isExpanded}>
                               <div>
-                                <div className="bg-zinc-50/40 dark:bg-zinc-900/30 border-l-[3px] border-brand-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.04)]">
+                                <div className="bg-zinc-50/40 dark:bg-surface-inset border-l-[3px] border-brand-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.04)]">
                                   {group.invoices.map((invoice) => (
                                     <div
                                       key={invoice.id}
@@ -310,7 +310,7 @@ export function CashPageContent({ cashData, openInvoices, alerts, clients }: Cas
                                             <Button
                                               variant="outline"
                                               size="sm"
-                                              className="h-5 text-[10px] px-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                                              className="h-5 text-xs px-1.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
                                               onClick={(e) => { e.stopPropagation(); setDrawer("u2") }}
                                             >
                                               Analyze
@@ -341,11 +341,11 @@ export function CashPageContent({ cashData, openInvoices, alerts, clients }: Cas
 
         <div className="flex flex-col">
           <Card className="flex flex-col border-border bg-card h-full">
-            <CardHeader className="p-6 pb-4">
-              <CardTitle className="text-lg font-medium text-foreground tracking-tight">Cash Outflows (A/P)</CardTitle>
+            <CardHeader>
+              <CardTitle className="text-lg font-medium text-foreground tracking-tight">Cash Outflows (Payables)</CardTitle>
               <div className="flex items-center gap-3 flex-wrap mt-2">
                 <span className="text-sm font-semibold text-foreground font-mono tabular-nums">
-                  OPEN A/P: {currencyFmt.format(totalOpenAP)}
+                  OPEN PAYABLES: {currencyFmt.format(totalOpenAP)}
                 </span>
                 {urgentAPTotal > 0 && (
                   <Badge variant="destructive" className="gap-1">
@@ -394,7 +394,7 @@ export function CashPageContent({ cashData, openInvoices, alerts, clients }: Cas
                               )} />
                               <span className="font-medium text-foreground">{p.vendor}</span>
                               {!p.canDelay && (
-                                <Badge variant="outline" className="text-[10px] px-1.5 py-0 text-destructive border-destructive/30">Fixed</Badge>
+                                <Badge variant="outline" className="text-xs px-1.5 py-0 text-destructive border-destructive/30">Fixed</Badge>
                               )}
                             </div>
                           </TableCell>
@@ -403,7 +403,7 @@ export function CashPageContent({ cashData, openInvoices, alerts, clients }: Cas
                             {currencyFmt.format(p.amount)}
                           </TableCell>
                           <TableCell className="py-2.5 px-4 text-right">
-                            <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                               <PayableActionGroup
                                 canDelay={p.canDelay}
                                 status={payableStates[p.id] || "idle"}
@@ -418,7 +418,7 @@ export function CashPageContent({ cashData, openInvoices, alerts, clients }: Cas
                           <td colSpan={4} className="p-0">
                             <div className="accordion-panel" data-open={isExpanded}>
                               <div>
-                                <div className="bg-zinc-50/40 dark:bg-zinc-900/30 border-l-[3px] border-brand-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.04)]">
+                                <div className="bg-zinc-50/40 dark:bg-surface-inset border-l-[3px] border-brand-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.04)]">
                                   <div className="grid grid-cols-[32%_20%_20%_28%] items-center hover:bg-muted/50 transition-colors py-2.5 px-4">
                                     <div className="pl-6">
                                       <span className="text-sm text-muted-foreground">

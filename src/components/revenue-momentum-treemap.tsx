@@ -7,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer, type ChartConfig } from "@/components/ui/chart"
 import { formatCurrency } from "@/lib/format"
 import type { EnrichedClient } from "@/lib/db/types"
+import { EmptyState } from "@/components/ui/empty-state"
+import { Clock } from "lucide-react"
 
 type MomentumStatus = "expanding" | "flat" | "contracting"
 
@@ -54,7 +56,7 @@ function getStatus(momentum: number): MomentumStatus {
   return "flat"
 }
 
-const FLAT_COLOR = "oklch(0.40 0.05 255)"
+const FLAT_COLOR = "var(--color-muted-foreground)"
 
 function getMomentumColor(status: MomentumStatus): string {
   switch (status) {
@@ -249,7 +251,7 @@ function MomentumTooltipContent({
       ? "bg-success"
       : data.status === "contracting"
         ? "bg-destructive"
-        : "bg-slate-500"
+        : "bg-muted-foreground"
 
   if (data.subClients) {
     const preview = data.subClients.slice(0, PREVIEW_COUNT)
@@ -257,7 +259,7 @@ function MomentumTooltipContent({
     const sb = data.statusBreakdown
 
     return (
-      <div className="w-72 rounded-lg border bg-background/95 backdrop-blur-sm px-3 py-2.5 shadow-md">
+      <div className="w-72 rounded-lg border border-border/50 bg-background/95 backdrop-blur-sm px-3 py-2.5 shadow-xl">
         <p className="text-sm font-medium">
           All Other Clients ({data.count} accounts)
         </p>
@@ -283,7 +285,7 @@ function MomentumTooltipContent({
             )}
             {sb.flat > 0 && (
               <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-slate-500 inline-block" />
+                <span className="w-2 h-2 rounded-full bg-muted-foreground inline-block" />
                 {sb.flat} Flat
               </span>
             )}
@@ -325,7 +327,7 @@ function MomentumTooltipContent({
   }
 
   return (
-    <div className="rounded-lg border bg-background/95 backdrop-blur-sm px-3 py-2.5 shadow-md">
+    <div className="rounded-lg border border-border/50 bg-background/95 backdrop-blur-sm px-3 py-2.5 shadow-xl min-w-[200px]">
       <p className="text-sm font-medium">{data.name}</p>
       <div className="flex justify-between gap-6 mt-1.5">
         <span className="text-xs text-muted-foreground">MRR</span>
@@ -354,7 +356,7 @@ function MomentumTooltipContent({
 
 const LEGEND_ITEMS = [
   { color: "bg-success", label: "Expanding" },
-  { colorStyle: FLAT_COLOR, label: "Flat (±2%)" },
+  { color: "bg-muted-foreground", label: "Flat (±2%)" },
   { color: "bg-destructive", label: "Contracting" },
 ]
 
@@ -442,15 +444,19 @@ export function RevenueMomentumTreemap({
   if (treemapData.length === 0) {
     return (
       <Card>
-        <CardHeader className="p-6 pb-4">
+        <CardHeader>
           <CardTitle className="text-lg font-medium text-foreground tracking-tight">
             Revenue × Momentum Map
           </CardTitle>
         </CardHeader>
-        <CardContent className="flex items-center justify-center min-h-[260px]">
-          <p className="text-sm text-muted-foreground">
-            No active clients to display.
-          </p>
+        <CardContent className="py-8">
+          <EmptyState 
+            icon={Clock}
+            title="Connect time tracking to see client health" 
+            description="Integrate Toggl or Harvest to analyze client profitability."
+            actionLabel="Connect Integration"
+            onAction={() => {}}
+          />
         </CardContent>
       </Card>
     )
@@ -458,7 +464,7 @@ export function RevenueMomentumTreemap({
 
   return (
     <Card>
-      <CardHeader className="p-6 pb-4">
+      <CardHeader>
         <CardTitle className="text-lg font-medium text-foreground tracking-tight">
           Revenue × Momentum Map
         </CardTitle>
@@ -497,16 +503,9 @@ export function RevenueMomentumTreemap({
               key={item.label}
               className="flex items-center gap-1.5 text-xs text-muted-foreground"
             >
-              {item.color ? (
                 <span
                   className={`w-2.5 h-2.5 rounded-sm ${item.color} inline-block`}
                 />
-              ) : (
-                <span
-                  className="w-2.5 h-2.5 rounded-sm inline-block"
-                  style={{ backgroundColor: item.colorStyle }}
-                />
-              )}
               {item.label}
             </span>
           ))}

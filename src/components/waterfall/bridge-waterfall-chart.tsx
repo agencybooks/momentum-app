@@ -72,7 +72,7 @@ function buildBridgeRows(steps: BridgeStep[]): { rows: WaterfallRow[]; connector
       percentLabel = {
         pct: `${sign}${netChange.toFixed(1)}%`,
         sub: "NET CHANGE",
-        colorClass: netChange >= 0 ? "text-emerald-500" : "text-destructive",
+        colorClass: netChange >= 0 ? "text-success" : "text-destructive",
       }
     } else if (step.type === "add") {
       left = (prevRunning / maxValue) * 100
@@ -164,7 +164,7 @@ export function BridgeWaterfallChart({ steps }: BridgeWaterfallProps) {
                 {row.percentLabel ? (
                   <div className="text-right">
                     <div className={cn("text-sm font-semibold tabular-nums", row.percentLabel.colorClass)}>{row.percentLabel.pct}</div>
-                    <div className="text-[10px] tracking-wider text-muted-foreground">{row.percentLabel.sub}</div>
+                    <div className="text-xs tracking-wider text-muted-foreground">{row.percentLabel.sub}</div>
                   </div>
                 ) : null}
               </div>

@@ -26,14 +26,14 @@ function formatVariance(v: { percent: number; direction: "up" | "flat" | "down" 
 
 function varianceColor(v: { percent: number; direction: "up" | "flat" | "down" }, isRevenue: boolean) {
   if (v.direction === "flat" || v.percent === 0) return "text-muted-foreground"
-  if (isRevenue) return v.direction === "up" ? "text-emerald-500" : "text-destructive"
-  return v.direction === "up" ? "text-destructive" : "text-emerald-500"
+  if (isRevenue) return v.direction === "up" ? "text-success" : "text-destructive"
+  return v.direction === "up" ? "text-destructive" : "text-success"
 }
 
 function fillColor(categoryId: string) {
   if (categoryId === "rev-total") return "bg-brand-500/10"
   if (categoryId === "cogs-total") return "bg-destructive/10"
-  if (categoryId === "opex-total") return "bg-amber-500/10"
+  if (categoryId === "opex-total") return "bg-warning/10"
   return "bg-muted-foreground/10"
 }
 
@@ -151,7 +151,7 @@ export function PnlTable({ categories, revenue, view }: PnlTableProps) {
 
           if (cat.isHighlight) {
             const highlightDrawerId = categoryTrendMap[cat.id]
-            const isNetIncome = cat.highlightColor === "emerald"
+            const isNetIncome = cat.highlightColor === "success"
             return (
               <TableRow
                 key={cat.id}
@@ -164,11 +164,11 @@ export function PnlTable({ categories, revenue, view }: PnlTableProps) {
               >
                 <TableCell className={cn(
                   "py-4 px-4",
-                  isNetIncome ? "font-bold text-emerald-600 dark:text-emerald-500" : "font-semibold text-brand-500 dark:text-brand-400"
+                  isNetIncome ? "font-bold text-success dark:text-success" : "font-semibold text-brand-500 dark:text-brand-400"
                 )}>{cat.name}</TableCell>
                 <TableCell className={cn(
                   "py-4 px-4 text-right font-mono tabular-nums",
-                  isNetIncome ? "font-bold text-emerald-600 dark:text-emerald-500" : "font-semibold text-brand-500 dark:text-brand-400"
+                  isNetIncome ? "font-bold text-success dark:text-success" : "font-semibold text-brand-500 dark:text-brand-400"
                 )}>
                   {currencyFmt.format(cat.amount)}
                 </TableCell>
@@ -188,14 +188,14 @@ export function PnlTable({ categories, revenue, view }: PnlTableProps) {
                       <div
                         className={cn(
                           "absolute inset-y-0 right-0",
-                          isNetIncome ? "bg-emerald-500/12" : "bg-brand-500/12"
+                          isNetIncome ? "bg-success/12" : "bg-brand-500/12"
                         )}
                         style={{ width: `${Math.min((Math.abs(cat.amount) / revenue) * 100, 100)}%` }}
                       />
                     )}
                     <span className={cn(
                       "relative text-sm font-mono tabular-nums text-right block",
-                      isNetIncome ? "font-bold text-emerald-600 dark:text-emerald-500" : "font-semibold text-brand-500 dark:text-brand-400"
+                      isNetIncome ? "font-bold text-success dark:text-success" : "font-semibold text-brand-500 dark:text-brand-400"
                     )}>
                       {revenue > 0
                         ? `${((Math.abs(cat.amount) / revenue) * 100).toFixed(1)}%`
@@ -218,7 +218,7 @@ export function PnlTable({ categories, revenue, view }: PnlTableProps) {
                 className={cn(
                   "group transition-colors border-0",
                   catDrawerId ? "cursor-pointer hover:bg-muted/50" : "hover:bg-transparent",
-                  !showChildren && !isSummationRow && "border-b border-border/40",
+                  !showChildren && !isSummationRow && "border-b border-border/30",
                   isSummationRow && "border-t border-border"
                 )}
                 onClick={catDrawerId ? () => setDrawer(catDrawerId) : undefined}

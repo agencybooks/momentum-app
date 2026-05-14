@@ -25,7 +25,7 @@ interface ScorecardsPageContentProps {
 
 function LivePulseHero({ data }: { data: LivePulseData }) {
   return (
-    <Card className="p-6 md:p-8 border-dashed bg-muted/30">
+    <Card className="md:p-8 border-dashed bg-muted/30">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2.5">
           <span className="inline-block w-2.5 h-2.5 rounded-full bg-success pulse-dot" />

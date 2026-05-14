@@ -32,12 +32,12 @@ const growthTrendData: GrowthTrendPoint[] = [
 export const TREND_METRICS: TrendMetric[] = [
   { id: "mrr", label: "MRR", unit: "$", group: "revenue", dataKey: "mrr", renderAs: "bar" },
   { id: "net-momentum", label: "Net Momentum", unit: "$", group: "revenue", dataKey: "netMomentum", renderAs: "bar" },
-  { id: "nrr", label: "NRR", unit: "%", group: "revenue", dataKey: "nrr", renderAs: "line" },
+  { id: "nrr", label: "Revenue Retention (NRR)", unit: "%", group: "revenue", dataKey: "nrr", renderAs: "line" },
   { id: "gross-margin", label: "Gross Margin", unit: "%", group: "profitability", dataKey: "grossMargin", renderAs: "line" },
   { id: "net-margin", label: "Net Margin", unit: "%", group: "profitability", dataKey: "netMargin", renderAs: "line" },
   { id: "labor-efficiency", label: "Labor Efficiency", unit: "ratio", group: "profitability", dataKey: "laborEfficiency", renderAs: "line" },
   { id: "cash-position", label: "Cash Position", unit: "$", group: "liquidity", dataKey: "cashPosition", renderAs: "bar" },
-  { id: "dso", label: "DSO", unit: "days", group: "liquidity", dataKey: "dso", renderAs: "line" },
+  { id: "dso", label: "Days to Get Paid (DSO)", unit: "days", group: "liquidity", dataKey: "dso", renderAs: "line" },
 ]
 
 export const TREND_COLORS = [

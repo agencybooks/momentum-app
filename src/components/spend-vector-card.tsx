@@ -53,7 +53,7 @@ export function SpendVectorCard({
 
   return (
     <Card
-      className="p-0 gap-0 border-border/60 shadow-sm cursor-pointer transition-colors duration-200 hover:bg-muted/50 dark:hover:bg-white/[0.02]"
+      className="p-0 gap-0 border-border/50 shadow-sm cursor-pointer transition-colors duration-200 hover:bg-muted dark:hover:bg-white/10"
       onClick={onToggle}
     >
       <div className={cn("grid items-center px-6 pt-4 pb-1", GRID_COLS)}>
@@ -78,7 +78,7 @@ export function SpendVectorCard({
         <div className="flex justify-end">
           <ChevronRight
             className={cn(
-              "h-4 w-4 text-muted-foreground transition-transform duration-200",
+              "h-4 w-4 text-muted-foreground transition-transform duration-300",
               expanded ? "rotate-90" : ""
             )}
           />
@@ -86,10 +86,10 @@ export function SpendVectorCard({
       </div>
       <div className={cn("grid items-start px-6 pt-0.5 pb-3", GRID_COLS)}>
         <span />
-        <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground/60 group-hover/card:text-muted-foreground transition-colors duration-200 text-right">
+        <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground/60 group-hover/card:text-muted-foreground transition-colors duration-200 text-right">
           Amount
         </span>
-        <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground/60 group-hover/card:text-muted-foreground transition-colors duration-200 text-right">
+        <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground/60 group-hover/card:text-muted-foreground transition-colors duration-200 text-right">
           % of Rev
         </span>
         <span />
@@ -105,7 +105,7 @@ export function SpendVectorCard({
                   onClick={(e) => { e.stopPropagation(); setDrawer(c.drawerId) }}
                   className={cn(
                     "group/item grid items-center py-2 px-1 -mx-1 rounded cursor-pointer transition-colors",
-                    "hover:bg-zinc-50/40 dark:hover:bg-zinc-900/40",
+                    "hover:bg-muted/50 dark:hover:bg-white/5",
                     GRID_COLS
                   )}
                 >

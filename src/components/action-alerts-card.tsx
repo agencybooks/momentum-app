@@ -17,7 +17,7 @@ const severityConfig: Record<CashActionAlert["severity"], {
   },
   warning: {
     icon: AlertCircle,
-    iconColor: "text-amber-500",
+    iconColor: "text-warning",
   },
   info: {
     icon: Info,
@@ -34,7 +34,7 @@ export function ActionAlertsCard({ alerts }: ActionAlertsCardProps) {
 
   return (
     <Card className="flex flex-col border-border bg-card h-full shadow-sm">
-      <CardHeader className="p-6 pb-4">
+      <CardHeader>
         <CardTitle className="text-lg font-medium text-foreground tracking-tight">Action Alerts</CardTitle>
       </CardHeader>
       <CardContent className="p-0 flex-1">
@@ -50,7 +50,7 @@ export function ActionAlertsCard({ alerts }: ActionAlertsCardProps) {
                 onClick={() => setDrawer(alert.actionDrawerId)}
                 className={cn(
                   "flex items-start gap-3 px-6 py-4 hover:bg-accent/50 transition-colors group cursor-pointer",
-                  !isLast && "border-b border-border/40"
+                  !isLast && "border-b border-border/30"
                 )}
               >
                 <Icon className={cn("h-4 w-4 shrink-0 mt-0.5", config.iconColor)} />

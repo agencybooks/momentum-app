@@ -14,6 +14,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer, type ChartConfig } from "@/components/ui/chart"
 import { formatCurrency, formatCurrencyFull } from "@/lib/format"
 import type { EnrichedClient } from "@/lib/db/types"
+import { EmptyState } from "@/components/ui/empty-state"
+import { Clock } from "lucide-react"
 
 interface ScatterPoint {
   name: string
@@ -50,7 +52,7 @@ function HealthTooltipContent({
   if (!d) return null
 
   return (
-    <div className="rounded-lg border bg-background/95 backdrop-blur-sm px-3 py-2.5 shadow-md">
+    <div className="rounded-lg border border-border/50 bg-background/95 backdrop-blur-sm px-3 py-2.5 shadow-xl">
       <p className="text-sm font-medium">{d.name}</p>
       <div className="flex justify-between gap-6 mt-1.5">
         <span className="text-xs text-muted-foreground">MRR</span>
@@ -94,15 +96,17 @@ export function ClientHealthMatrix({
   if (points.length === 0) {
     return (
       <Card>
-        <CardHeader className="p-6 pb-4">
+        <CardHeader>
           <CardTitle className="text-lg font-medium text-foreground tracking-tight">
             Client Health Matrix
           </CardTitle>
         </CardHeader>
-        <CardContent className="flex items-center justify-center min-h-[260px]">
-          <p className="text-sm text-muted-foreground">
-            No active clients to display.
-          </p>
+        <CardContent className="py-8">
+          <EmptyState 
+            icon={Clock}
+            title="Connect time tracking to see client health" 
+            description="Integrate Toggl or Harvest to analyze client profitability."
+          />
         </CardContent>
       </Card>
     )
@@ -119,7 +123,7 @@ export function ClientHealthMatrix({
 
   return (
     <Card>
-      <CardHeader className="p-6 pb-4">
+      <CardHeader>
         <CardTitle className="text-lg font-medium text-foreground tracking-tight">
           Client Health Matrix
         </CardTitle>

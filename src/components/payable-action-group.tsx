@@ -26,7 +26,7 @@ export function PayableActionGroup({
         variant="outline"
         size="xs"
         className={cn(
-          "text-[10px] px-2",
+          "text-xs px-2",
           status === "paid" && "bg-brand-500/10 text-brand-600 dark:text-brand-400 border-brand-500/30"
         )}
         onClick={(e) => { e.stopPropagation(); onPay() }}
@@ -37,8 +37,8 @@ export function PayableActionGroup({
         variant="outline"
         size="xs"
         className={cn(
-          "text-[10px] px-2",
-          status === "scheduled" && "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30"
+          "text-xs px-2",
+          status === "scheduled" && "bg-warning/10 text-warning border-amber-500/30"
         )}
         onClick={(e) => { e.stopPropagation(); onSchedule() }}
       >
@@ -47,7 +47,7 @@ export function PayableActionGroup({
       <Button
         variant="outline"
         size="xs"
-        className="text-[10px] px-2"
+        className="text-xs px-2"
         disabled={!canDelay}
         onClick={(e) => { e.stopPropagation(); onDelay() }}
       >

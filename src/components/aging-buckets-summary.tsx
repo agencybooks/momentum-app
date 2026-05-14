@@ -1,6 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
+import { Progress } from "@/components/ui/progress"
 
 const currencyFmt = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -23,7 +24,7 @@ interface AgingBucketsSummaryProps {
 
 const defaultColorMap: Record<string, string> = {
   "60+ Days": "bg-destructive",
-  "31-60 Days": "bg-amber-500",
+  "31-60 Days": "bg-warning",
 }
 
 export function AgingBucketsSummary({
@@ -33,6 +34,10 @@ export function AgingBucketsSummary({
   onBucketClick,
   colorMap = defaultColorMap,
 }: AgingBucketsSummaryProps) {
+  if (totalOutstanding === 0) {
+    return <span className="text-sm text-muted-foreground font-medium">No outstanding invoices</span>
+  }
+
   return (
     <div className="grid grid-cols-4 gap-3">
       {buckets.map((bucket) => {
@@ -51,21 +56,26 @@ export function AgingBucketsSummary({
               isActive && "bg-muted ring-1 ring-brand-500/30"
             )}
           >
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               {bucket.label}
             </span>
-            <span className="text-sm font-semibold font-mono tabular-nums text-foreground">
-              {currencyFmt.format(bucket.amount)}
-            </span>
-            <div className="h-[3px] w-full rounded-full bg-muted mt-0.5">
-              <div
-                className={cn(
-                  "h-full rounded-full transition-all",
-                  colorMap[bucket.label] || "bg-brand-500"
-                )}
-                style={{ width: `${barWidth}%` }}
-              />
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-semibold font-mono tabular-nums text-foreground">
+                {currencyFmt.format(bucket.amount)}
+              </span>
+              {colorMap[bucket.label] === "bg-destructive" && (
+                <span className="text-[10px] font-bold text-destructive tracking-tight uppercase">Critical</span>
+              )}
+              {colorMap[bucket.label] === "bg-warning" && (
+                <span className="text-[10px] font-bold text-warning tracking-tight uppercase">Warning</span>
+              )}
             </div>
+            <Progress
+              value={barWidth}
+              className="h-[3px] mt-0.5"
+              trackClassName="bg-muted"
+              indicatorClassName={colorMap[bucket.label] || "bg-brand-500"}
+            />
           </button>
         )
       })}

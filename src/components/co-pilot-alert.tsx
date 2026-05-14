@@ -24,14 +24,14 @@ export function CoPilotAlert({
       className={cn(
         "flex w-full items-center justify-between p-3 px-4 gap-6 text-sm transition-colors text-foreground",
         isCritical && "border border-destructive/20 bg-destructive/5 dark:bg-destructive/10 rounded-lg",
-        isWarning && "border border-amber-500/20 bg-amber-500/5 rounded-lg",
+        isWarning && "border border-warning/20 bg-warning/5 rounded-lg",
         isSuccess && "border border-success/20 bg-success/5 rounded-lg",
         !isCritical && !isWarning && !isSuccess && "bg-muted/50 rounded-lg"
       )}
     >
       <div className="flex items-start gap-3">
         {isCritical && <AlertTriangle className="w-4 h-4 text-destructive shrink-0 mt-0.5" />}
-        {isWarning && <AlertCircle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />}
+        {isWarning && <AlertCircle className="w-4 h-4 text-warning shrink-0 mt-0.5" />}
         {isSuccess && <CheckCircle className="w-4 h-4 text-success shrink-0 mt-0.5" />}
         <div className="flex flex-col gap-1">
           <p className="text-sm font-semibold leading-none text-foreground whitespace-nowrap">{title}</p>

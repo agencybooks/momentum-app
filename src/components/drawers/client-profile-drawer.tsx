@@ -229,7 +229,7 @@ export function ClientProfileDrawer({ clientId }: ClientProfileDrawerProps) {
               Open & Overdue
             </span>
             {openInvoices.length === 0 ? (
-              <div className="flex items-center gap-2 mt-3 text-sm text-emerald-600 dark:text-emerald-400">
+              <div className="flex items-center gap-2 mt-3 text-sm text-success">
                 <CheckCircle className="h-4 w-4" />
                 <span>All caught up</span>
               </div>

@@ -4,6 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { CheckCircle } from "lucide-react"
 import Link from "next/link"
+import { EmptyState } from "@/components/ui/empty-state"
 import { cn } from "@/lib/utils"
 
 const fmt = new Intl.NumberFormat("en-US", {
@@ -13,9 +14,9 @@ const fmt = new Intl.NumberFormat("en-US", {
 })
 
 const BUCKET_COLORS = [
-  "bg-emerald-500",
-  "bg-amber-400",
-  "bg-amber-500",
+  "bg-success",
+  "bg-warning",
+  "bg-warning",
   "bg-destructive",
 ]
 
@@ -40,7 +41,7 @@ export function OpenInvoicesWidget({
 
   return (
     <Card className="flex flex-col border-border bg-card h-full">
-      <CardHeader className="p-6 pb-4">
+      <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-medium text-foreground tracking-tight">Accounts Receivable</CardTitle>
           <Link href="/cash">
@@ -69,7 +70,7 @@ export function OpenInvoicesWidget({
           </div>
 
           {/* Concentration bar */}
-          <div className="flex h-1.5 rounded-full overflow-hidden mt-3 bg-muted">
+          <div className="flex h-2 rounded-full overflow-hidden mt-3 bg-muted">
             {agingSummary.buckets.map((bucket, i) => (
               <div
                 key={bucket.label}
@@ -91,15 +92,19 @@ export function OpenInvoicesWidget({
       {/* Invoice List */}
       <CardContent className="flex-1 overflow-y-auto px-4 pt-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/30">
         {sorted.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-8 text-muted-foreground gap-2">
-            <CheckCircle className="h-5 w-5 text-emerald-500" />
-            <p className="text-sm">All caught up. No open invoices.</p>
+          <div className="py-8">
+            <EmptyState
+              icon={CheckCircle}
+              title="All caught up"
+              description="You have no open invoices."
+              className="min-h-[200px]"
+            />
           </div>
         ) : (
           sorted.map((inv) => (
             <div
               key={inv.id}
-              className="group grid grid-cols-[1fr_6rem_6rem] items-center py-3 px-3 border-b border-border/40 last:border-0 rounded-md transition-colors hover:bg-zinc-50/50 dark:hover:bg-white/5"
+              className="group grid grid-cols-[1fr_6rem_6rem] items-center py-3 px-3 border-b border-border/30 last:border-0 rounded-md transition-colors hover:bg-muted/50 dark:hover:bg-white/5"
             >
               <div className="flex flex-col gap-0.5 min-w-0 pr-2">
                 <span className="font-medium text-sm text-foreground truncate">

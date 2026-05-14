@@ -36,7 +36,7 @@ export function SecurityContent({
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-8">
       <Card>
         <CardHeader>
           <CardTitle>Change Password</CardTitle>
@@ -104,6 +104,6 @@ export function SecurityContent({
           </div>
         </CardContent>
       </Card>
-    </>
+    </div>
   )
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { AlertTriangle, CheckCircle2 } from "lucide-react"
+import { Progress } from "@/components/ui/progress"
 
 interface ConfidenceScoreProps {
   score: number
@@ -22,12 +23,12 @@ export function ConfidenceScore({ score }: ConfidenceScoreProps) {
       <div className="text-sm font-semibold text-muted-foreground whitespace-nowrap">
         Data Confidence
       </div>
-      <div className="relative w-48 h-3 rounded-full bg-muted overflow-hidden">
-        <div
-          className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-brand-400 to-brand-600 transition-all duration-800 ease-out"
-          style={{ width: `${animatedWidth}%` }}
-        />
-      </div>
+      <Progress
+        value={animatedWidth}
+        className="w-48 h-3"
+        trackClassName="bg-muted"
+        indicatorClassName="bg-gradient-to-r from-brand-400 to-brand-600 duration-800 ease-out"
+      />
       <div className="flex items-center gap-1.5">
         {isFull ? (
           <CheckCircle2 className="h-4 w-4 text-success" />

@@ -6,7 +6,8 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { GlobalSidebar } from "@/components/global-sidebar"
 import { TopHeader } from "@/components/top-header"
 import { GlobalDrawer } from "@/components/global-drawer"
-import { GlobalDrawers } from "@/components/drawers/global-drawers"
+
+import { Toaster } from "sonner"
 import "./globals.css"
 
 export const dynamic = "force-dynamic"
@@ -45,17 +46,21 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-background focus:text-foreground focus:rounded-md focus:border focus:border-border focus:shadow-lg">
+              Skip to main content
+            </a>
             <div className="flex h-screen">
               <GlobalSidebar />
-              <div className="ml-64 flex-1 flex flex-col overflow-hidden">
+              <div className="lg:ml-64 flex-1 flex flex-col overflow-hidden">
                 <TopHeader />
-                <main className="flex-1 overflow-y-auto p-8 bg-zinc-50/40 dark:bg-black">
+                <main id="main-content" className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 bg-zinc-50/40 dark:bg-background">
                   {children}
                 </main>
               </div>
             </div>
             <Suspense><GlobalDrawer /></Suspense>
-            <Suspense fallback={null}><GlobalDrawers /></Suspense>
+
+            <Toaster position="bottom-right" theme="system" />
           </ThemeProvider>
         </NuqsAdapter>
       </body>

@@ -105,7 +105,7 @@ export function TeamContent({
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-8">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-semibold">Team & Access</h2>
@@ -165,7 +165,7 @@ export function TeamContent({
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger
-                        render={<Button variant="ghost" size="icon-xs" />}
+                        render={<Button variant="ghost" size="icon-xs" aria-label="Team member options" />}
                       >
                         <MoreHorizontal className="h-4 w-4" />
                       </DropdownMenuTrigger>
@@ -274,6 +274,6 @@ export function TeamContent({
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   )
 }

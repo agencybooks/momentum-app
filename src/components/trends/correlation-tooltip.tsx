@@ -27,7 +27,7 @@ export function CorrelationTooltip({
   const prior = monthIdx > 0 ? data[monthIdx - 1] : null
 
   return (
-    <div className="rounded-lg border bg-background px-3 py-2.5 shadow-md min-w-[220px]">
+    <div className="rounded-lg border border-border/50 bg-background px-3 py-2.5 shadow-xl min-w-[220px]">
       <p className="text-xs font-medium text-muted-foreground mb-2">{label}</p>
       <div className="space-y-1.5">
         {metrics.map((metric) => {
@@ -59,7 +59,7 @@ export function CorrelationTooltip({
                   {delta != null && (
                     <span
                       className={cn(
-                        "font-mono text-[10px] tabular-nums",
+                        "font-mono text-xs tabular-nums",
                         deltaFavorable ? "text-success" : "text-destructive"
                       )}
                     >

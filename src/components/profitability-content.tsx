@@ -2,8 +2,10 @@
 
 import { useState, useRef, useEffect } from "react"
 import { useQueryState } from "nuqs"
-import { Card } from "@/components/ui/card"
+import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { EmptyState } from "@/components/ui/empty-state"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { FileSpreadsheet } from "lucide-react"
 import { CoPilotAlert } from "@/components/co-pilot-alert"
 import { MetricAnchor } from "@/components/metric-anchor"
 import { PnlTable } from "@/components/pnl-table"
@@ -129,10 +131,11 @@ export function ProfitabilityContent({ data }: Props) {
 
       {/* Deep Dive Zone */}
       <Card className="overflow-hidden">
-        <div className="px-6 pt-6 pb-2">
-          <h3 className="text-sm font-semibold">Profit Waterfall</h3>
-        </div>
-        <div className="px-6 pb-6">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-lg font-medium text-foreground tracking-tight">Profit Waterfall</CardTitle>
+          <CardDescription>You keep $X of every $1 earned after all costs.</CardDescription>
+        </CardHeader>
+        <div className="pt-0">
           <PremiumWaterfallChart
             data={premiumWaterfallData}
             details={waterfallDetails}
@@ -143,21 +146,29 @@ export function ProfitabilityContent({ data }: Props) {
       {/* Zones 3+4: Spend Vectors (left) + P&L Statement (right) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="flex flex-col gap-6">
-          {data.spendVectors.map((sv) => (
-            <SpendVectorCard
-              key={sv.id}
-              {...sv}
-              revenue={data.revenue}
-              expanded={expandedCards.has(sv.id)}
-              onToggle={() => toggleCard(sv.id)}
+          {data.spendVectors.length === 0 ? (
+            <EmptyState 
+              icon={FileSpreadsheet}
+              title="Connect your accounting tool to see expenses" 
+              description="Integrate Xero or QuickBooks to track your spend vectors."
             />
-          ))}
+          ) : (
+            data.spendVectors.map((sv) => (
+              <SpendVectorCard
+                key={sv.id}
+                {...sv}
+                revenue={data.revenue}
+                expanded={expandedCards.has(sv.id)}
+                onToggle={() => toggleCard(sv.id)}
+              />
+            ))
+          )}
         </div>
 
         <Card ref={pnlCardRef} className="overflow-hidden scroll-mt-4">
           <Tabs value={pnlTab} onValueChange={setPnlTab}>
-            <div className="px-6 pt-5 pb-3 flex items-center justify-between border-b border-border">
-              <span className="text-sm font-semibold">Profit &amp; Loss Statement</span>
+            <div className="flex items-center justify-between border-b border-border">
+              <span className="text-lg font-medium text-foreground tracking-tight">Profit &amp; Loss Statement</span>
               <TabsList>
                 <TabsTrigger value="summary">Summary</TabsTrigger>
                 <TabsTrigger value="detailed">Detailed</TabsTrigger>

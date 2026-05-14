@@ -229,7 +229,7 @@ function formatDelta(
     diff === 0
       ? "text-muted-foreground"
       : isPositive
-        ? "text-emerald-600 dark:text-emerald-400"
+        ? "text-success"
         : "text-destructive"
 
   return { text, color }
@@ -430,9 +430,9 @@ export function LeverageDeepDiveDrawer({
 
           <div className="flex-1 overflow-y-auto px-4 pb-6">
             {/* Insight Banner */}
-            <div className="w-full border rounded-lg flex items-start gap-3 p-3 mb-6 border-emerald-500/20 bg-emerald-500/5 dark:bg-emerald-500/10">
-              <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-500 mt-0.5 shrink-0" />
-              <span className="text-sm font-medium text-emerald-800 dark:text-emerald-400">
+            <div className="w-full border rounded-lg flex items-start gap-3 p-3 mb-6 border-success/20 bg-success/5 dark:bg-success/10">
+              <TrendingUp className="w-4 h-4 text-success mt-0.5 shrink-0" />
+              <span className="text-sm font-medium text-success">
                 {alertMsg}
               </span>
             </div>

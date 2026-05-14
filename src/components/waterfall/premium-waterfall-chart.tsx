@@ -135,7 +135,7 @@ export function PremiumWaterfallChart({ data, details }: PremiumWaterfallProps) 
                 {row.percentLabel ? (
                   <div className="text-right">
                     <div className="text-sm font-semibold tabular-nums">{row.percentLabel.pct}</div>
-                    <div className="text-[10px] tracking-wider text-muted-foreground">{row.percentLabel.sub}</div>
+                    <div className="text-xs tracking-wider text-muted-foreground">{row.percentLabel.sub}</div>
                   </div>
                 ) : null}
               </div>

@@ -88,7 +88,7 @@ export function LeverageMatrix() {
   const drawerKey = activeDrawer ?? lastDrawerRef.current
 
   return (
-    <Card className="p-6">
+    <Card>
       <div className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-4">
         THE LEVERAGE MATRIX
       </div>

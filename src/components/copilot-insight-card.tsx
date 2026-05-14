@@ -30,9 +30,9 @@ const typeConfig: Record<InsightType, {
   },
   warning: {
     icon: AlertCircle,
-    borderClass: "border-amber-500/20",
-    bgClass: "bg-amber-500/[0.03]",
-    iconClass: "text-amber-500",
+    borderClass: "border-warning/20",
+    bgClass: "bg-warning/[0.03]",
+    iconClass: "text-warning",
   },
   insight: {
     icon: TrendingDown,
@@ -42,9 +42,9 @@ const typeConfig: Record<InsightType, {
   },
   win: {
     icon: Trophy,
-    borderClass: "border-emerald-500/20",
-    bgClass: "bg-emerald-500/[0.03]",
-    iconClass: "text-emerald-500",
+    borderClass: "border-success/20",
+    bgClass: "bg-success/[0.03]",
+    iconClass: "text-success",
   },
 }
 
@@ -70,8 +70,8 @@ export function CopilotInsightCard({ type, title, body, onDismiss, onDeepDive, o
         "group relative rounded-lg border p-4 transition-all duration-200 outline-none",
         config.borderClass,
         config.bgClass,
-        "hover:shadow-md",
-        onClick && "cursor-pointer focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50",
+        "hover:shadow-md dark:hover:border-border",
+        onClick && "cursor-pointer focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/75",
         cleared && "opacity-50 grayscale border-border bg-transparent hover:shadow-none"
       )}
     >

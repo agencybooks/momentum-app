@@ -2,6 +2,8 @@
 
 import { Area, ComposedChart, CartesianGrid, Line, Legend, XAxis, YAxis } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart"
+import { BarChart2 } from "lucide-react"
+import { EmptyState } from "@/components/ui/empty-state"
 import { cn } from "@/lib/utils"
 
 export interface ChartSeries {
@@ -18,8 +20,8 @@ export const CASH_BURN_SERIES: ChartSeries[] = [
 ]
 
 export const REVENUE_EXPENSE_SERIES: ChartSeries[] = [
-  { dataKey: "revenue", label: "Revenue", color: "#2AAADA", fillOpacity: 0.2 },
-  { dataKey: "expenses", label: "Expenses", color: "#a1a1aa", fillOpacity: 0.1, renderAs: "line" },
+  { dataKey: "revenue", label: "Revenue", color: "var(--color-brand-500)", fillOpacity: 0.2 },
+  { dataKey: "expenses", label: "Expenses", color: "var(--color-muted-foreground)", fillOpacity: 0.1, renderAs: "line" },
 ]
 
 export const GROSS_MARGIN_SERIES: ChartSeries[] = [
@@ -27,15 +29,15 @@ export const GROSS_MARGIN_SERIES: ChartSeries[] = [
 ]
 
 export const OP_MARGIN_SERIES: ChartSeries[] = [
-  { dataKey: "opMargin", label: "Operating Margin", color: "#f59e0b", fillOpacity: 0.2 },
+  { dataKey: "opMargin", label: "Operating Margin", color: "var(--color-warning)", fillOpacity: 0.2 },
 ]
 
 export const NET_MARGIN_SERIES: ChartSeries[] = [
-  { dataKey: "netMargin", label: "Net Margin", color: "#22c55e", fillOpacity: 0.2 },
+  { dataKey: "netMargin", label: "Net Margin", color: "var(--color-success)", fillOpacity: 0.2 },
 ]
 
 export const REVENUE_TREND_SERIES: ChartSeries[] = [
-  { dataKey: "revenue", label: "Revenue", color: "#2AAADA", fillOpacity: 0.2 },
+  { dataKey: "revenue", label: "Revenue", color: "var(--color-brand-500)", fillOpacity: 0.2 },
 ]
 
 export const COGS_TREND_SERIES: ChartSeries[] = [
@@ -48,11 +50,11 @@ export const GROSS_PROFIT_SERIES: ChartSeries[] = [
 ]
 
 export const REV_PER_FTE_SERIES: ChartSeries[] = [
-  { dataKey: "revPerFte", label: "Revenue per FTE", color: "#8b5cf6", fillOpacity: 0.2 },
+  { dataKey: "revPerFte", label: "Revenue per FTE", color: "var(--color-chart-4)", fillOpacity: 0.2 },
 ]
 
 export const NRR_SERIES: ChartSeries[] = [
-  { dataKey: "nrr", label: "Net Revenue Retention", color: "#22c55e", fillOpacity: 0.2 },
+  { dataKey: "nrr", label: "Net Revenue Retention", color: "var(--color-success)", fillOpacity: 0.2 },
 ]
 
 export const BLENDED_CAC_SERIES: ChartSeries[] = [
@@ -60,11 +62,11 @@ export const BLENDED_CAC_SERIES: ChartSeries[] = [
 ]
 
 export const CAC_PAYBACK_SERIES: ChartSeries[] = [
-  { dataKey: "cacPayback", label: "CAC Payback", color: "#f59e0b", fillOpacity: 0.2 },
+  { dataKey: "cacPayback", label: "CAC Payback", color: "var(--color-warning)", fillOpacity: 0.2 },
 ]
 
 export const LTV_CAC_RATIO_SERIES: ChartSeries[] = [
-  { dataKey: "ltvCacRatio", label: "LTV:CAC Ratio", color: "#8b5cf6", fillOpacity: 0.2 },
+  { dataKey: "ltvCacRatio", label: "LTV:CAC Ratio", color: "var(--color-chart-4)", fillOpacity: 0.2 },
 ]
 
 export const EXPENSE_AMOUNT_SERIES: ChartSeries[] = [
@@ -80,11 +82,11 @@ export const NET_BURN_TREND_SERIES: ChartSeries[] = [
 ]
 
 export const RUNWAY_SERIES: ChartSeries[] = [
-  { dataKey: "runway", label: "Runway", color: "#f59e0b", fillOpacity: 0.2 },
+  { dataKey: "runway", label: "Runway", color: "var(--color-warning)", fillOpacity: 0.2 },
 ]
 
 export const DSO_SERIES: ChartSeries[] = [
-  { dataKey: "dso", label: "Days Sales Outstanding", color: "#8b5cf6", fillOpacity: 0.2 },
+  { dataKey: "dso", label: "Days Sales Outstanding", color: "var(--color-chart-4)", fillOpacity: 0.2 },
 ]
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -104,6 +106,19 @@ export function FinancialChart({ data, series, xAxisKey = "date", yAxisFormat = 
   ) satisfies ChartConfig
 
   const colorMap = Object.fromEntries(series.map((s) => [s.dataKey, s.color]))
+
+  if (!data || data.length === 0) {
+    return (
+      <div className="w-full h-full min-h-[250px] flex items-center justify-center">
+        <EmptyState
+          icon={BarChart2}
+          title="No data available"
+          description="There is no data to display for this chart."
+          className="min-h-[200px] border-none shadow-none bg-transparent"
+        />
+      </div>
+    )
+  }
 
   return (
     <ChartContainer config={chartConfig} className="w-full h-full min-h-[250px]">
@@ -211,11 +226,11 @@ export function FinancialChart({ data, series, xAxisKey = "date", yAxisFormat = 
                 return (
                   <div className="flex flex-col w-full">
                     {row}
-                    <div className="flex items-center gap-2 border-t border-border/40 pt-1.5 mt-1.5">
+                    <div className="flex items-center gap-2 border-t border-border/30 pt-1.5 mt-1.5">
                       <div className="h-2.5 w-2.5 shrink-0" />
                       <div className="flex flex-1 items-center justify-between gap-4">
                         <span className="text-muted-foreground font-medium">Net</span>
-                        <span className={cn("font-mono font-medium tabular-nums", net >= 0 ? "text-emerald-500" : "text-destructive")}>
+                        <span className={cn("font-mono font-medium tabular-nums", net >= 0 ? "text-success" : "text-destructive")}>
                           {currencyFmt.format(net)}
                         </span>
                       </div>
